@@ -6,7 +6,9 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Bluetooth bluetooth = new Bluetooth("Avans Bike AC74", "Avans Bike AC74");
+            
+            Console.Read();
         }
     }
 }

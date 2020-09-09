@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\doguk\\Documents\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj": {}
+    "D:\\Avans\\Jaar2\\Periode1\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\doguk\\Documents\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj": {
+    "D:\\Avans\\Jaar2\\Periode1\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\doguk\\Documents\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj",
+        "projectUniqueName": "D:\\Avans\\Jaar2\\Periode1\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj",
         "projectName": "ConsoleApp1",
-        "projectPath": "C:\\Users\\doguk\\Documents\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj",
-        "packagesPath": "C:\\Users\\doguk\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\doguk\\Documents\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\obj\\",
+        "projectPath": "D:\\Avans\\Jaar2\\Periode1\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "D:\\Avans\\Jaar2\\Periode1\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\doguk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
