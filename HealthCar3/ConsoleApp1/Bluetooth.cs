@@ -10,10 +10,13 @@ namespace ConsoleApp1
     class Bluetooth
     {
         private int errorCode = 0;
+        private Decoder decoder;
         public BLE bleBike { get; }
         public BLE bleHeart { get; }
-        public Bluetooth(string bikeID, string heartMonitorID)
+        public Bluetooth(string bikeID, string heartMonitorID, Decoder decoder)
         {
+            this.decoder = decoder;
+
             // Create the BLE objects
             bleBike = new BLE();
             bleHeart = new BLE();
@@ -43,9 +46,18 @@ namespace ConsoleApp1
 
         private void BleBike_SubscriptionValueChanged(object sender, BLESubscriptionValueChangedEventArgs e)
         {
-            Console.WriteLine("Received from {0}: {1}, {2}", e.ServiceName,
-                BitConverter.ToString(e.Data).Replace("-", " "),
-                Encoding.UTF8.GetString(e.Data));
+            //Console.WriteLine("Received from {0}: {1}, {2}", e.ServiceName,
+            //    BitConverter.ToString(e.Data).Replace("-", " "),
+            //    Encoding.UTF8.GetString(e.Data));
+
+            if(e.Data[0] == 0x00)
+            {
+                decoder.DecodeHeartMonitor(e);
+            }
+            else if (e.Data[4] == 0x10)
+            {
+                decoder.DecodeBike(e);
+            }
         }
     }
 }
