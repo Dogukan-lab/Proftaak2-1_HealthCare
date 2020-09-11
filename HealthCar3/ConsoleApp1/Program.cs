@@ -6,8 +6,9 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            Bluetooth bluetooth = new Bluetooth("Avans Bike AC74", "Avans Bike AC74");
-            
+            Decoder decoder = new Decoder();
+            Bluetooth bluetooth = new Bluetooth("Avans Bike AC74", "Avans Bike AC74", decoder);
+
             Console.Read();
         }
     }
