@@ -58,5 +58,19 @@ namespace ConsoleApp1
                 SetNewSpeed(decoder.DecodeBike(e));
             }
         }
+
+        public async override void WriteResistance(float resistance)
+        {
+            base.WriteResistance(resistance);
+            byte byteResistance = Convert.ToByte(resistance * 2);
+            byte[] data = { 0x4A, 0x09, 0x4E, 0x05, 0x30, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, byteResistance, 0x00};
+            byte sumByte = data[0];
+            for(int i = 1; i < data.Length-1; i++)
+            {
+                sumByte ^= data[i];
+            }
+            data[data.Length - 1] = sumByte;
+            await bleBike.WriteCharacteristic("6e40fec3-b5a3-f393-e0a9-e50e24dcca9e", data);
+        }
     }
 }

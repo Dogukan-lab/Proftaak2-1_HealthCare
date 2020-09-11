@@ -16,6 +16,7 @@ namespace ConsoleApp1
         private float selectedSpeed;
         private int updateInterval = 200;
         private Random random;
+        private float resistance;
         public Thread updateThread { get; }
         public Simulator(IValueChangeListener listener) : base(listener)
         {
@@ -28,6 +29,7 @@ namespace ConsoleApp1
             heartRateSway = true;
             heartRateSwayAmount = 5;
 
+            resistance = 0;
             random = new Random();
 
             // Create a new thread that updates our values 
@@ -71,5 +73,10 @@ namespace ConsoleApp1
         public void SetSelectedSpeed(float newSelectedSpeed) { selectedSpeed = newSelectedSpeed; }
         public void SetSelectedHeartRate(int newSelectedHeartRate) { selectedHeartRate = newSelectedHeartRate; }
 
+        public override void WriteResistance(float resistance)
+        {
+            base.WriteResistance(resistance);
+            this.resistance = resistance;
+        }
     }
 }

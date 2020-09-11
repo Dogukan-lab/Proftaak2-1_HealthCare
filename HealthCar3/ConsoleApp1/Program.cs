@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace ConsoleApp1
 {
@@ -36,8 +37,11 @@ namespace ConsoleApp1
             }
             else
             {
+                Thread.Sleep(4000);
+                connector.WriteResistance(50f);
                 Console.Read();
             }
+
         }       
     }
 }

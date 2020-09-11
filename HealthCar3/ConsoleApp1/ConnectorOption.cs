@@ -28,5 +28,10 @@ namespace ConsoleApp1
             heartRate = newHeartRate;
             valueChangeListener.OnHeartRateChange(heartRate);
         }
+
+        public virtual void WriteResistance(float resistance)
+        {
+            Console.WriteLine($"Write {resistance}%");
+        }
     }
 }
