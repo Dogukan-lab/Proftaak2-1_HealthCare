@@ -7,17 +7,16 @@ using Avans.TI.BLE;
 
 namespace ConsoleApp1
 {
-    class Bluetooth
+    class Bluetooth : ConnectorOption
     {
         private int errorCode = 0;
         private Decoder decoder;
         public BLE bleBike { get; }
         public BLE bleHeart { get; }
-        public Bluetooth(string bikeID, string heartMonitorID, Decoder decoder)
+        public Bluetooth(string bikeID, string heartMonitorID, IValueChangeListener listener) : base(listener)
         {
-            this.decoder = decoder;
+            decoder = new Decoder();
 
-            // Create the BLE objects
             bleBike = new BLE();
             bleHeart = new BLE();
 
@@ -52,11 +51,11 @@ namespace ConsoleApp1
 
             if(e.Data[0] == 0x00)
             {
-                decoder.DecodeHeartMonitor(e);
+                SetNewHeartRate(decoder.DecodeHeartMonitor(e));
             }
             else if (e.Data[4] == 0x10)
             {
-                decoder.DecodeBike(e);
+                SetNewSpeed(decoder.DecodeBike(e));
             }
         }
     }

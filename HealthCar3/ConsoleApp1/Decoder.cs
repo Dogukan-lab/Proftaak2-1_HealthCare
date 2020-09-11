@@ -6,17 +6,15 @@ namespace ConsoleApp1
     class Decoder
     {
         private int sumByte;
-        public int heartRate { get; set; }
-        public float speed { get; set; }
 
-        public void DecodeHeartMonitor(BLESubscriptionValueChangedEventArgs e)
+        public int DecodeHeartMonitor(BLESubscriptionValueChangedEventArgs e)
         {
-            // Set the new heart rate value
-            heartRate = e.Data[1];
-            Console.WriteLine($"{heartRate} BPM");
+            // Get the new heart rate value
+            int heartRate = e.Data[1];
+            return heartRate;
         }
 
-        public void DecodeBike(BLESubscriptionValueChangedEventArgs e)
+        public float DecodeBike(BLESubscriptionValueChangedEventArgs e)
         {
             // Loop through all the received bytes except for the last one
             sumByte = e.Data[0];
@@ -27,11 +25,11 @@ namespace ConsoleApp1
             }
             // Check if the received sum is the same as our calculated one
             if (sumByte != e.Data[e.Data.Length - 1])
-                return;
+                return 0xFFFF;
 
             // Set the new speed value
-            speed = (e.Data[8] + (e.Data[9] << 8)) / 100f;
-            Console.WriteLine($"{speed} m/s");
+            float speed = (e.Data[8] + (e.Data[9] << 8)) / 100f;
+            return speed;
         }
     }
 }
