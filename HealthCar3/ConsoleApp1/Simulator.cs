@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimulatorGui;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -17,8 +18,9 @@ namespace ConsoleApp1
         private int updateInterval = 200;
         private Random random;
         private float resistance;
+        private SimForm simForm;
         public Thread updateThread { get; }
-        public Simulator(IValueChangeListener listener) : base(listener)
+        public Simulator(IValueChangeListener listener, SimForm simForm) : base(listener)
         {
             // Set the base values for the speed and the heart rate
             selectedSpeed = 0;
@@ -32,38 +34,46 @@ namespace ConsoleApp1
             resistance = 0;
             random = new Random();
 
+            this.simForm = simForm;
+
             // Create a new thread that updates our values 
             updateThread = new Thread(new ThreadStart(UpdateValues));
         }
 
         private void UpdateValues()
         {
-            if (speedSway)
+            if (simForm.SpeedSwayEnabled())
             {
                 // Get a random value between the selected speed +- the sway
-                int minValue = Convert.ToInt32(selectedSpeed - speedSwayAmount) * 100;
-                int maxValue = Convert.ToInt32(selectedSpeed + speedSwayAmount) * 100;
+                int minValue = Convert.ToInt32((simForm.GetSpeed() - simForm.GetSpeedSway()) * 100);
+                int maxValue = Convert.ToInt32((simForm.GetSpeed() + simForm.GetSpeedSway()) * 100);
                 // Clamp the value between 0 and 50 for realistic values
                 float newValue = Math.Clamp(random.Next(minValue, maxValue) / 100f, 0, 50);
                 SetNewSpeed(newValue);
             }
             else
             {
-                SetNewSpeed(selectedSpeed);
+                SetNewSpeed(simForm.GetSpeed());
             }
 
-            if (heartRateSway)
+            if (simForm.HeartRateSwayEnabled())
             {
                 // Get a random value between the selected heart rate +- the sway
-                int minValue = Convert.ToInt32(selectedHeartRate - heartRateSwayAmount) * 100;
-                int maxValue = Convert.ToInt32(selectedHeartRate + heartRateSwayAmount) * 100;
+                int minValue = simForm.GetHeartRate() - simForm.GetHeartRateSway();
+                int maxValue = simForm.GetHeartRate() + simForm.GetHeartRateSway();
                 // Clamp the value between 50 and 228 for realistic values
-                int newValue = Math.Clamp(random.Next(minValue, maxValue) / 100, 50, 228);
+                int newValue = Math.Clamp(random.Next(minValue, maxValue), 50, 228);
                 SetNewHeartRate(newValue);
             }
             else
             {
-                SetNewHeartRate(selectedHeartRate);
+                SetNewHeartRate(simForm.GetHeartRate());
+            }
+
+            if(resistance != simForm.GetResistance())
+            {
+                resistance = simForm.GetResistance();
+                WriteResistance(resistance);
             }
 
             // Wait an amount of time to update our values again
