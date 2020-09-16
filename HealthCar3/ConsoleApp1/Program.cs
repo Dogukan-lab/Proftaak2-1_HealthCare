@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading;
+using System.Windows.Forms;
+using SimulatorGui;
 
 namespace ConsoleApp1
 {
@@ -27,11 +29,20 @@ namespace ConsoleApp1
             var simulator = connector as Simulator;
             if (simulator != null)
             {
-                Console.WriteLine("Give a base speed:");
-                simulator.SetSelectedSpeed(float.Parse(Console.ReadLine()));
+                //Console.WriteLine("Give a base speed:");
+                //simulator.SetSelectedSpeed(float.Parse(Console.ReadLine()));
+                //
+                //Console.WriteLine("Give a base heart rate:");
+                //simulator.SetSelectedHeartRate(int.Parse(Console.ReadLine()));
 
-                Console.WriteLine("Give a base heart rate:");
-                simulator.SetSelectedHeartRate(int.Parse(Console.ReadLine()));
+                // Start the gui
+                Application.SetHighDpiMode(HighDpiMode.SystemAware);
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Form1 simForm = new Form1();
+                Application.Run(simForm);
+
+                
 
                 simulator.updateThread.Start();
             }

@@ -1,11 +1,33 @@
 {
   "version": 3,
   "targets": {
-    ".NETCoreApp,Version=v3.1": {}
+    ".NETCoreApp,Version=v3.1": {
+      "SimulatorGui/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v3.1",
+        "compile": {
+          "bin/placeholder/SimulatorGui.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SimulatorGui.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WindowsForms"
+        ]
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "SimulatorGui/1.0.0": {
+      "type": "project",
+      "path": "../SimulatorGui/SimulatorGui.csproj",
+      "msbuildProject": "../SimulatorGui/SimulatorGui.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    ".NETCoreApp,Version=v3.1": []
+    ".NETCoreApp,Version=v3.1": [
+      "SimulatorGui >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\user\\.nuget\\packages\\": {},
@@ -36,7 +58,11 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\Avans\\Jaar2\\Periode1\\Proftaak2-1_HealthCare\\HealthCar3\\SimulatorGui\\SimulatorGui.csproj": {
+              "projectPath": "D:\\Avans\\Jaar2\\Periode1\\Proftaak2-1_HealthCare\\HealthCar3\\SimulatorGui\\SimulatorGui.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -60,6 +86,9 @@
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
+          },
+          "Microsoft.WindowsDesktop.App.WindowsForms": {
+            "privateAssets": "none"
           }
         },
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.401\\RuntimeIdentifierGraph.json"
