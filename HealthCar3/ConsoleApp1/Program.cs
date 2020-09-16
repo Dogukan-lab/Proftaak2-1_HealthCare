@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace ConsoleApp1
 {
@@ -6,9 +7,41 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            double planckConstant = 6.62607004 * Math.Pow(10, -34);
-            Console.WriteLine("Hello World!");
-            Console.WriteLine("The constant of planck is: {0}m2 kg/s", planckConstant);
-        }
+            TempListenerClass listener = new TempListenerClass();
+
+            // Select connector option
+            ConnectorOption connector = null;
+            string input = "";
+            while (input == string.Empty) {
+                Console.WriteLine("Select bluetooth or simulator: |B|S|");
+                input = Console.ReadLine();
+                if (input.ToUpper() == "B")
+                    connector = new Bluetooth("Avans Bike AC74", "Avans Bike AC74", listener);
+                else if (input.ToUpper() == "S")
+                    connector = new Simulator(listener);
+                else
+                    input = "";
+            }
+
+
+            var simulator = connector as Simulator;
+            if (simulator != null)
+            {
+                Console.WriteLine("Give a base speed:");
+                simulator.SetSelectedSpeed(float.Parse(Console.ReadLine()));
+
+                Console.WriteLine("Give a base heart rate:");
+                simulator.SetSelectedHeartRate(int.Parse(Console.ReadLine()));
+
+                simulator.updateThread.Start();
+            }
+            else
+            {
+                Thread.Sleep(4000);
+                connector.WriteResistance(50f);
+                Console.Read();
+            }
+
+        }       
     }
 }
