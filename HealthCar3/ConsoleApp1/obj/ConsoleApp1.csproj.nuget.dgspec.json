@@ -1,23 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Avans\\Jaar2\\Periode1\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj": {}
+    "E:\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj": {}
   },
   "projects": {
-    "D:\\Avans\\Jaar2\\Periode1\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj": {
+    "E:\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Avans\\Jaar2\\Periode1\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj",
+        "projectUniqueName": "E:\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj",
         "projectName": "ConsoleApp1",
-        "projectPath": "D:\\Avans\\Jaar2\\Periode1\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj",
-        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "D:\\Avans\\Jaar2\\Periode1\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\obj\\",
+        "projectPath": "E:\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\ConsoleApp1.csproj",
+        "packagesPath": "C:\\Users\\Mick\\.nuget\\packages\\",
+        "outputPath": "E:\\Proftaak2-1_HealthCare\\HealthCar3\\ConsoleApp1\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Mick\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -40,6 +37,12 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "dependencies": {
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
