@@ -45,10 +45,27 @@ namespace SimulatorGui
             return heartRateSway.Text.Length > 0? int.Parse(heartRateSway.Text) : 0;
         }
 
-        // Resistance data
-        public float GetResistance()
+        // Setting resistance thread safe
+        private delegate void SetResistanceCallBack(float resistance);
+        
+        private void SetResistanceCB(float resistance)
         {
-            return resistanceBox.Text.Length > 0? float.Parse(resistanceBox.Text) : 0;
+            resistanceBox.Text = resistance.ToString();
+        }
+
+        public void SetResistance(float resistance)
+        {
+            // if accessed from a different thread, invoke
+            if (resistanceBox.InvokeRequired)
+            {
+                SetResistanceCallBack res = new SetResistanceCallBack(SetResistanceCB);
+                this.Invoke(res, new object[] { resistance });
+            }
+            // if it is one the same thread no need to invoke
+            else
+            {
+                resistanceBox.Text = resistance.ToString();
+            }
         }
     }
 }
