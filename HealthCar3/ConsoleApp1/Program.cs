@@ -1,5 +1,7 @@
-﻿using System;
+﻿using SimulatorGui;
+using System;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace ConsoleApp1
 {
@@ -9,6 +11,7 @@ namespace ConsoleApp1
         {
             /*
             TempListenerClass listener = new TempListenerClass();
+            SimForm simForm = null;
 
             // Select connector option
             ConnectorOption connector = null;
@@ -19,7 +22,14 @@ namespace ConsoleApp1
                 if (input.ToUpper() == "B")
                     connector = new Bluetooth("Avans Bike AC74", "Avans Bike AC74", listener);
                 else if (input.ToUpper() == "S")
-                    connector = new Simulator(listener);
+                {
+                    // Do the gui setup
+                    Application.SetHighDpiMode(HighDpiMode.SystemAware);
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    simForm = new SimForm();
+                    connector = new Simulator(listener, simForm);
+                }
                 else
                     input = "";
             }
@@ -28,13 +38,12 @@ namespace ConsoleApp1
             var simulator = connector as Simulator;
             if (simulator != null)
             {
-                Console.WriteLine("Give a base speed:");
-                simulator.SetSelectedSpeed(float.Parse(Console.ReadLine()));
-
-                Console.WriteLine("Give a base heart rate:");
-                simulator.SetSelectedHeartRate(int.Parse(Console.ReadLine()));
-
+                // Start the update thread
                 simulator.updateThread.Start();
+
+                // Start the gui
+                Application.Run(simForm);
+
             }
             else
             {
