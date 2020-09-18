@@ -9,6 +9,7 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
+            
             TempListenerClass listener = new TempListenerClass();
             SimForm simForm = null;
 
@@ -50,7 +51,11 @@ namespace ConsoleApp1
                 connector.WriteResistance(50f);
                 Console.Read();
             }
-
+            
+            /*
+            VpnConnector connector = new VpnConnector();
+            connector.Send(new Id("session/list"));
+            */
         }       
     }
 }
