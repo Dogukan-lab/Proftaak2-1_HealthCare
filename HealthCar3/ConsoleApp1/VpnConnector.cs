@@ -80,7 +80,7 @@ namespace ConsoleApp1
                 //temp code, needs to be amplified with overflow protection, message buffering and parser calls.
                 int received = stream.Read(bytes, 0, bytes.Length);
                 Console.WriteLine(received);
-                Console.WriteLine(Encoding.Unicode.GetString(bytes));
+                Console.WriteLine(Encoding.UTF8.GetString(bytes));
             }
         }
 

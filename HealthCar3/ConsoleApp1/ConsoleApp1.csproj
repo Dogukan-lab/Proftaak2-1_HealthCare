@@ -10,6 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SimulatorGui\SimulatorGui.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="BLELibrary">
       <HintPath>BLELibrary.dll</HintPath>
     </Reference>
