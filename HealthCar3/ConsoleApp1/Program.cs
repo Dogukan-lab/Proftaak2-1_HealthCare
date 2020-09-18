@@ -40,6 +40,7 @@ namespace ConsoleApp1
                 // Start the update thread
                 simulator.updateThread.Start();
 
+                // Start the command thread
                 Thread consoleThread = new Thread(new ParameterizedThreadStart(ReadInput));
                 consoleThread.Start(connector);
 
@@ -49,6 +50,7 @@ namespace ConsoleApp1
             else
             {
                 Thread.Sleep(4000);
+                // No need to run this on this different thread
                 ReadInput(connector);
             }
         }
@@ -67,15 +69,15 @@ namespace ConsoleApp1
                 input = Console.ReadLine();
                 switch (input)
                 {
-                    case "quit":
+                    case "quit": // Quit the application
                         return;
-                    case "res":
+                    case "res": // Send resistance to the bike
                         Console.WriteLine("Amount of resistance: ");
                         input = Console.ReadLine();
                         connector.WriteResistance(float.Parse(input));
                         Console.WriteLine("");
                         break;
-                    default:
+                    default: // Unknown command
                         Console.WriteLine("Not a valid command.");
                         break;
                 }
