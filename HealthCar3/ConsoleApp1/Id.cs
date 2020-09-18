@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace ConsoleApp1
 {
-    class Id : Payload
+    class Id : IPayload
     {
         public string id;
 

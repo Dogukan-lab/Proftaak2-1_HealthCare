@@ -37,7 +37,7 @@ namespace ConsoleApp1
             }
         }
 
-        public void Send(Payload payload)
+        public void Send(IPayload payload)
         {
             if (connected)
             {
