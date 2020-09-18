@@ -57,8 +57,8 @@ namespace ConsoleApp1
 
         public async override void WriteResistance(float resistance)
         {
-            base.WriteResistance(resistance);
-            byte byteResistance = Convert.ToByte(resistance * 2);
+            byte byteResistance = Convert.ToByte(Math.Clamp(resistance * 2, 0, 200));
+            base.WriteResistance(byteResistance / 2f);
             byte[] data = { 0x4A, 0x09, 0x4E, 0x05, 0x30, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, byteResistance, 0x00};
             // Calculate our sumbyte
             byte sumByte = data[0];

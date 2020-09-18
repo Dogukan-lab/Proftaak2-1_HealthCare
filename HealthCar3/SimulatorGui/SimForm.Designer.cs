@@ -136,6 +136,7 @@
             this.resistanceBox.Name = "resistanceBox";
             this.resistanceBox.Size = new System.Drawing.Size(100, 23);
             this.resistanceBox.TabIndex = 2;
+            this.resistanceBox.ReadOnly = true;
             // 
             // Form1
             // 

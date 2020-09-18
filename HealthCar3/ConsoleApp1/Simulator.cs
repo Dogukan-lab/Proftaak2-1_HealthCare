@@ -70,12 +70,6 @@ namespace ConsoleApp1
                 SetNewHeartRate(simForm.GetHeartRate());
             }
 
-            if(resistance != simForm.GetResistance())
-            {
-                resistance = simForm.GetResistance();
-                WriteResistance(resistance);
-            }
-
             // Wait an amount of time to update our values again
             Thread.Sleep(updateInterval);
             UpdateValues();
@@ -85,8 +79,9 @@ namespace ConsoleApp1
 
         public override void WriteResistance(float resistance)
         {
-            base.WriteResistance(resistance);
-            this.resistance = resistance;
+            this.resistance = Math.Clamp(resistance, 0, 100);
+            base.WriteResistance(this.resistance);
+            simForm.SetResistance(this.resistance);
         }
     }
 }
