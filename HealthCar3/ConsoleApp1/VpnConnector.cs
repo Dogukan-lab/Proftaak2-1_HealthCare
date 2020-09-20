@@ -5,7 +5,9 @@ using Newtonsoft.Json;
 
 namespace ConsoleApp1
 {
-    
+    /**
+     * Connects to the remote server and manages this connection
+     */
     class VpnConnector
     {
         private TcpClient client;
@@ -24,6 +26,9 @@ namespace ConsoleApp1
             Connect();
         }
 
+        /**
+         * Connects to the server.
+         */
         private void Connect()
         {
             try
@@ -37,6 +42,9 @@ namespace ConsoleApp1
             }
         }
 
+        /**
+         * Sends a payload to the server.
+         */
         public void Send(IPayload payload)
         {
             if (connected)
@@ -71,6 +79,9 @@ namespace ConsoleApp1
             
         }
 
+        /**
+         * Listens for a message to receive.
+         */
         private void Listen()
         {
             const int bytesize = 4096;

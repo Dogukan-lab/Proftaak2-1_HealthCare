@@ -4,6 +4,9 @@ using System.Text;
 
 namespace ConsoleApp1
 {
+    /**
+     * Parses any messages received by the VpnConnector.
+     */
     class MessageParser
     {
         private VpnConnector connector;
