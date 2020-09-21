@@ -17,6 +17,8 @@ namespace ConsoleApp1
         private static readonly string address = "145.48.6.10";
         private static readonly int port = 6666;
         private bool connected;
+        private int timeoutCounter;
+        private readonly int timeoutMax = 3;
 
         public NetworkStream Stream { get; private set; }
 
@@ -24,35 +26,56 @@ namespace ConsoleApp1
         {
             parser = new MessageParser(this);
             connected = false;
+            timeoutCounter = 0;
             Connect();
         }
 
+        /**
+         * Connects the client to the server and prints an error on failure.
+         */
         private void Connect()
         {
             try
             {
                 client = new TcpClient();
-                client.Connect(address, port);
+                client.Connect(address, port); //attempts to connect to the VPN server.
                 connected = true;
             } catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message); //Writes message on failure.
+                timeoutCounter++;
+                if (timeoutCounter < timeoutMax) //Retries the connection up to the given maximum.
+                {
+                    Connect();
+                } else
+                {
+                    Disconnect();
+                }
+            }
+
+            if (connected)
+            {
+
+            } else
+            {
+
             }
         }
 
+        /**
+         * Sends a message in the form of a payload to the server.
+         */
         public void Send(IPayload payload)
         {
             if (connected)
             {
-                byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(payload));
-                string message = JsonConvert.SerializeObject(payload);
-                //Console.WriteLine(message);
+                byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(payload)); //converts the payload to bytes.
                 try
                 {
                     stream = client.GetStream();
-                    stream.Write(BitConverter.GetBytes(bytes.Length), 0, 4);
-                    stream.Write(bytes, 0, bytes.Length);
-                    Listen();
+                    stream.Write(BitConverter.GetBytes(bytes.Length), 0, 4); //writes the length of the message to the server.
+                    stream.Write(bytes, 0, bytes.Length); //writes the message to the server.
+                    Listen(); //listens for a response.
                 }
                 catch (Exception ex)
                 {
@@ -60,7 +83,7 @@ namespace ConsoleApp1
                 }
             } else
             {
-                Console.WriteLine("Connection error. Attempting to reconnect.");
+                Console.WriteLine("Connection error. Attempting to reconnect."); //if not connected will attempt to reconnect once before failing.
                 Connect();
                 if (connected)
                 {
@@ -74,19 +97,21 @@ namespace ConsoleApp1
             
         }
 
+        /**
+         * Listens for a response from the server.
+         */
         public void Listen()
         {
-            byte[] lengthBuffer = new byte[4];
+            byte[] lengthBuffer = new byte[4]; //first four bytes indicate length.
             for (int i = 0; i < lengthBuffer.Length; i++)
             {
                 lengthBuffer[i] = (byte)stream.ReadByte();
             }
-            int bytesize = BitConverter.ToInt32(lengthBuffer);
+            int bytesize = BitConverter.ToInt32(lengthBuffer); //converts the length to a readable number.
 
             byte[] bytes = new byte[bytesize];
             while (stream.CanRead)
             {
-                //temp code, needs to be amplified with overflow protection, message buffering and parser calls.
                 int received = stream.Read(bytes, 0, bytes.Length);
                 Console.WriteLine(received);
                 JsonData = Encoding.ASCII.GetString(bytes);
@@ -94,5 +119,15 @@ namespace ConsoleApp1
             }    
         }
 
+        /**
+         * Disconnects the client from the server.
+         */
+        private void Disconnect()
+        {
+            client.Dispose();
+            stream.Close();
+            connected = false;
+
+        }
     }
 }
