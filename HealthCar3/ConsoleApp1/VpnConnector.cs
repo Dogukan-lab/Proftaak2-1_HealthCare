@@ -8,21 +8,25 @@ namespace ConsoleApp1
     
     class VpnConnector
     {
-        public string JsonData { get; set; }
+        private string jsonData;
+        private JsonSerializerSettings serializerSettings;
         private TcpClient client;
         private MessageParser parser;
         private NetworkStream stream = default;
         private static readonly string address = "145.48.6.10";
         private static readonly int port = 6666;
-        private String responseId;
+        private string responseId;
         private bool connected;
         private int timeoutCounter;
         private readonly int timeoutMax = 3;
 
         public NetworkStream Stream { get; private set; }
 
-        public VpnConnector()
+        public VpnConnector(JsonSerializerSettings jsonSerializerSettings)
         {
+            serializerSettings = jsonSerializerSettings;
+            serializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            serializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
             parser = new MessageParser(this);
             connected = false;
             timeoutCounter = 0;
@@ -61,7 +65,8 @@ namespace ConsoleApp1
         {
             if (connected)
             {
-                byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(command)); //converts the command to bytes.
+                Console.WriteLine(JsonConvert.SerializeObject(command, serializerSettings));
+                byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(command, serializerSettings)); //converts the command to bytes.
                 try
                 {
                     stream = client.GetStream();
@@ -106,8 +111,8 @@ namespace ConsoleApp1
             while (stream.CanRead) 
             {
                 stream.Read(bytes, 0, bytes.Length); //reads the expected response in bytes.
-                JsonData = Encoding.ASCII.GetString(bytes); //converts the response bytes to string data.
-                parser.Parse(responseId, JsonData); //sends the response to the parser.
+                jsonData = Encoding.ASCII.GetString(bytes); //converts the response bytes to string data.
+                parser.Parse(responseId, jsonData); //sends the response to the parser.
             }    
         }
 

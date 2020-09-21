@@ -1,4 +1,5 @@
-﻿using SimulatorGui;
+﻿using Newtonsoft.Json;
+using SimulatorGui;
 using System;
 using System.Drawing;
 using System.Threading;
@@ -88,7 +89,7 @@ namespace ConsoleApp1
                     }*/
 
 
-            VpnConnector connector = new VpnConnector();
+            VpnConnector connector = new VpnConnector(new JsonSerializerSettings());
         }
     }
 }
