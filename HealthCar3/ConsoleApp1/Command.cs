@@ -4,9 +4,9 @@ using System.Text;
 
 namespace ConsoleApp1
 {
+    //(Not finished) Class that is supposed to be used to send commands to the server.
     class Command
     {
-
         private String id;
 
         private List<String> data;

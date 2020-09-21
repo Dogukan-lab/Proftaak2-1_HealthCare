@@ -23,9 +23,17 @@ namespace ConsoleApp1
         public void GetSession(String data)
         {    
             dynamic jsonData = JsonConvert.DeserializeObject(data);
+            Console.WriteLine(Environment.MachineName);
+            Console.WriteLine(jsonData);
+
             for (int i = 0; i < jsonData.data.Count; i++)
             {
-                if (jsonData.data[i].clientinfo.host == Environment.MachineName)
+                /*if (jsonData.data[i].clientinfo.host == Environment.MachineName)
+                {
+                    this.id = (string)jsonData.data[i].id;
+                    Console.WriteLine(id);
+                }*/
+                if (jsonData.data[i].clientinfo.user == Environment.UserName)
                 {
                     this.id = (string)jsonData.data[i].id;
                     Console.WriteLine(id);
