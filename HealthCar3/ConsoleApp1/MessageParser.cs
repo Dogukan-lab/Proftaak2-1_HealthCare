@@ -36,7 +36,7 @@ namespace ConsoleApp1
             
         }
 
-        public void Parse(byte[] message)
+        public void Parse(String data)
         {
 
         }

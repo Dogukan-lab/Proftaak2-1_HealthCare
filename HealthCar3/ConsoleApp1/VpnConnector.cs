@@ -16,6 +16,7 @@ namespace ConsoleApp1
         private NetworkStream stream = default;
         private static readonly string address = "145.48.6.10";
         private static readonly int port = 6666;
+        private Id responseId;
         private bool connected;
         private int timeoutCounter;
         private readonly int timeoutMax = 3;
