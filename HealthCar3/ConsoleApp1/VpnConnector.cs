@@ -52,14 +52,9 @@ namespace ConsoleApp1
                     Disconnect();
                 }
             }
+            Send(new Id("session/list"));
 
-            if (connected)
-            {
 
-            } else
-            {
-
-            }
         }
 
         /**
