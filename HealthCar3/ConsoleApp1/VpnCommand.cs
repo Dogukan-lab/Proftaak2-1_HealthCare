@@ -3,11 +3,11 @@ using Newtonsoft.Json;
 
 namespace ConsoleApp1
 {
-    class Id : IPayload
+    class VpnCommand : IPayload
     {
         public string id;
 
-        public Id(string id)
+        public VpnCommand(string id)
         {
             this.id = id;
         }

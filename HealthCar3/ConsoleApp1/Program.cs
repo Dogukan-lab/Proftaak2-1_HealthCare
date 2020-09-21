@@ -89,8 +89,6 @@ namespace ConsoleApp1
 
 
             VpnConnector connector = new VpnConnector();
-            connector.Send(new Id("session/list"));
-
         }
     }
 }

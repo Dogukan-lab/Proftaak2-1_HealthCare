@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading;
 using Newtonsoft.Json;
 
 namespace ConsoleApp1
@@ -16,7 +14,7 @@ namespace ConsoleApp1
         private NetworkStream stream = default;
         private static readonly string address = "145.48.6.10";
         private static readonly int port = 6666;
-        private Id responseId;
+        private String responseId;
         private bool connected;
         private int timeoutCounter;
         private readonly int timeoutMax = 3;
@@ -53,24 +51,23 @@ namespace ConsoleApp1
                     Disconnect();
                 }
             }
-            Send(new Id("session/list"));
-
-
+            Send(new VpnCommand("session/list"));
         }
 
         /**
-         * Sends a message in the form of a payload to the server.
+         * Sends a message in the form of a command to the server.
          */
-        public void Send(IPayload payload)
+        public void Send(VpnCommand command)
         {
             if (connected)
             {
-                byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(payload)); //converts the payload to bytes.
+                byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(command)); //converts the command to bytes.
                 try
                 {
                     stream = client.GetStream();
-                    stream.Write(BitConverter.GetBytes(bytes.Length), 0, 4); //writes the length of the message to the server.
+                    stream.Write(BitConverter.GetBytes(bytes.Length), 0, 4); //writes the length of the command to the server.
                     stream.Write(bytes, 0, bytes.Length); //writes the message to the server.
+                    responseId = command.id;
                     Listen(); //listens for a response.
                 }
                 catch (Exception ex)
@@ -106,12 +103,11 @@ namespace ConsoleApp1
             int bytesize = BitConverter.ToInt32(lengthBuffer); //converts the length to a readable number.
 
             byte[] bytes = new byte[bytesize];
-            while (stream.CanRead)
+            while (stream.CanRead) 
             {
-                int received = stream.Read(bytes, 0, bytes.Length);
-                Console.WriteLine(received);
-                JsonData = Encoding.ASCII.GetString(bytes);
-                parser.getSession();
+                stream.Read(bytes, 0, bytes.Length); //reads the expected response in bytes.
+                JsonData = Encoding.ASCII.GetString(bytes); //converts the response bytes to string data.
+                parser.Parse(responseId, JsonData); //sends the response to the parser.
             }    
         }
 
@@ -123,7 +119,6 @@ namespace ConsoleApp1
             client.Dispose();
             stream.Close();
             connected = false;
-
         }
     }
 }

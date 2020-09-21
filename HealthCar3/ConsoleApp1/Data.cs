@@ -1,16 +1,15 @@
 ﻿using System;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Transactions;
 
 namespace ConsoleApp1
 {
-    class Data : IPayload
+    class Data : VpnCommand
     {
-        public string id;
         public List<String> data;
 
-        public Data(string id, String session, String key)         {
-            this.id = id;
+        public Data(string id, String session, String key) : base(id)        {
             data = new List<string>();
             data.Add(session);
             data.Add(key);
