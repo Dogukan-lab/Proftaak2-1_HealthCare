@@ -8,15 +8,22 @@ using System.Diagnostics.Eventing.Reader;
 namespace ConsoleApp1
 {
     /**
-     * This class is used to parse the necessary data.
+     * This class is used to store the parcable data.
      */
-    class VpnData : VpnCommand
+    class VpnData
     {
-        public new VpnData data;
+        public string id;
+        public VpnData data;
         public string session, key, dest;
 
-        public VpnData(string id) : base(id)
+        public VpnData()
         {
+
+        }
+
+        public VpnData(string id)
+        {
+            this.id = id;
         }
 
         /**

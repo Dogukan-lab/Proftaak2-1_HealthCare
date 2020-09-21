@@ -21,9 +21,8 @@ namespace ConsoleApp1
          * This method checks the current session for your computer name.
          * Then it gets the id en sets it inside of the for loop.
          */
-        public void GetSession(string data)
+        public void GetSession(dynamic jsonData)
         {
-            dynamic jsonData = JsonConvert.DeserializeObject(data);
             for (int i = 0; i < jsonData.data.Count; i++)
             {
                 if (jsonData.data[i].clientinfo.user == Environment.UserName)
@@ -37,9 +36,8 @@ namespace ConsoleApp1
          * Gets the response. From the response it gets
          * the id for the tunnel/send
          */
-        public void GetTunnelId(string data)
+        public void GetTunnelId(dynamic jsonData)
         {
-            dynamic jsonData = JsonConvert.DeserializeObject(data);
             for (int i = 0; i < jsonData.data.Count; i++)
             {
                 if (jsonData.data[0].status == "ok")
@@ -52,23 +50,22 @@ namespace ConsoleApp1
         /**
          * Parses the data received based on the given response id.
          */
-        public void Parse(string id, string data)
+        public void Parse(string id, dynamic jsonData)
         {
             switch (id)
             {
                 case "session/list":
-                    GetSession(data);
-                    tempData = new VpnData("tunnel/create");
+                    GetSession(jsonData);
+                    tempData = new VpnData();
                     tempData.SetSession(this.id);
                     tempData.SetKey("");
-                    connector.Send(tempData);
+                    VpnCommand command = new VpnCommand("tunnel/create", tempData); //sends a new command including a data object to the connector.
+                    connector.Send(command);
                     break;
                 case "tunnel/create":
-                    GetTunnelId(data);
+                    GetTunnelId(jsonData);
                     break;
             }
         }
-
-
     }
 }

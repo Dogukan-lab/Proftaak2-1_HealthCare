@@ -8,7 +8,7 @@ namespace ConsoleApp1
     
     class VpnConnector
     {
-        private string jsonData;
+        private dynamic jsonData;
         private JsonSerializerSettings serializerSettings;
         private TcpClient client;
         private MessageParser parser;
@@ -65,7 +65,6 @@ namespace ConsoleApp1
         {
             if (connected)
             {
-                Console.WriteLine(JsonConvert.SerializeObject(command, serializerSettings));
                 byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(command, serializerSettings)); //converts the command to bytes.
                 try
                 {
@@ -111,7 +110,7 @@ namespace ConsoleApp1
             while (stream.CanRead) 
             {
                 stream.Read(bytes, 0, bytes.Length); //reads the expected response in bytes.
-                jsonData = Encoding.ASCII.GetString(bytes); //converts the response bytes to string data.
+                jsonData = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(bytes), serializerSettings); //converts the response bytes to string data.
                 parser.Parse(responseId, jsonData); //sends the response to the parser.
             }    
         }
