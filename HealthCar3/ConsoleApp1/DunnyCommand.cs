@@ -11,9 +11,9 @@ namespace ConsoleApp1
             this.data = generateData();
         }
 
-        private VpnData generateData()
+        private DunnyData generateData()
         {
-            return new VpnData();
+            return new DunnyData("test");
         }
     }
 }
