@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ConsoleApp1.data;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,8 +9,9 @@ namespace ConsoleApp1
     {
         public DunnyTunnel() : base(id: "tunnel/send")
         {
-            this.data = new VpnData();
-            this.data.SetDestination("halloikbeneenbestemming!!!!");
+            ConnectData data = new ConnectData();
+            data.SetDestination("halloikbeneenbestemming!!!!");
+            this.data = data;
         }
     }
 }
