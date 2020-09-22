@@ -6,8 +6,8 @@ namespace ConsoleApp1.data
 {
     class TerrainData : VpnData
     {
-        private int[] size;
-        private int[] height;
+        public int[] size;
+        public int[] height;
 
         public int[] GetSize()
         {

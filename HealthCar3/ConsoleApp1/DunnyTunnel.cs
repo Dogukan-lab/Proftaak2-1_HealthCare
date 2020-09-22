@@ -7,10 +7,10 @@ namespace ConsoleApp1
 {
     class DunnyTunnel : VpnCommand
     {
-        public DunnyTunnel() : base(id: "tunnel/send")
+        public DunnyTunnel(string dest) : base(id: "tunnel/send")
         {
             ConnectData data = new ConnectData();
-            data.SetDestination("halloikbeneenbestemming!!!!");
+            data.SetDestination(dest);
             this.data = data;
         }
     }
