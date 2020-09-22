@@ -110,8 +110,18 @@ namespace ConsoleApp1
             while (stream.CanRead) 
             {
                 stream.Read(bytes, 0, bytes.Length); //reads the expected response in bytes.
-                jsonData = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(bytes), serializerSettings); //converts the response bytes to string data.
-                parser.Parse(responseId, jsonData); //sends the response to the parser.
+                Console.WriteLine(Encoding.ASCII.GetString(bytes));
+                try
+                {
+                    jsonData = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(bytes), serializerSettings); //converts the response bytes to string data.
+                } catch (Exception ex)
+                {
+                    Console.WriteLine(ex.StackTrace + "\nMake sure you connect to the network application.");
+                }
+                finally
+                {
+                    parser.Parse(responseId, jsonData); //sends the response to the parser.
+                }
             }    
         }
 

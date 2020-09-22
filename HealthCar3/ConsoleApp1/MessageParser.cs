@@ -30,6 +30,10 @@ namespace ConsoleApp1
                     this.id = (string)jsonData.data[i].id;
                 }
             }
+            if (this.id == null) 
+            {
+                Console.WriteLine("Error: Session not found. Please make sure you are connected to the network application!");
+            }
         }
 
         /**
@@ -38,12 +42,10 @@ namespace ConsoleApp1
          */
         public void GetTunnelId(dynamic jsonData)
         {
-            for (int i = 0; i < jsonData.data.Count; i++)
+
+            if (jsonData.data.status == "ok")
             {
-                if (jsonData.data[0].status == "ok")
-                {
-                    Console.WriteLine("The status of the response has been reached!");
-                }
+                Console.WriteLine("The status of the response has been reached!");
             }
         }
 
@@ -56,11 +58,14 @@ namespace ConsoleApp1
             {
                 case "session/list":
                     GetSession(jsonData);
-                    tempData = new VpnData();
-                    tempData.SetSession(this.id);
-                    tempData.SetKey("");
-                    VpnCommand command = new VpnCommand("tunnel/create", tempData); //sends a new command including a data object to the connector.
-                    connector.Send(command);
+                    if (this.id != null)
+                    {
+                        tempData = new VpnData();
+                        tempData.SetSession(this.id);
+                        tempData.SetKey("");
+                        VpnCommand command = new VpnCommand("tunnel/create", tempData); //sends a new command including a data object to the connector.
+                        connector.Send(command);
+                    }
                     break;
                 case "tunnel/create":
                     GetTunnelId(jsonData);
