@@ -11,6 +11,7 @@ namespace ConsoleApp1
     {
         private VpnConnector connector;
         private string id;
+        private string destination;
 
         public MessageParser(VpnConnector connector)
         {
@@ -45,15 +46,19 @@ namespace ConsoleApp1
 
             if (jsonData.data.status == "ok")
             {
-                Console.WriteLine("The status of the response has been reached!");
+                this.destination = (string)jsonData.data.id;
             }
         }
 
         /**
          * Parses the data received based on the given response id.
+         * TODO first switch-case needs to be refactored. 
+         * This will be based off of the 
          */
         public void Parse(string id, dynamic jsonData)
         {
+            CommandCenter cc;
+
             switch (id)
             {
                 case "session/list":
@@ -68,7 +73,7 @@ namespace ConsoleApp1
                     }
                     break;
                 case "tunnel/create":
-                    GetTunnelId(jsonData);
+                    cc = new CommandCenter(GetTunnelId(jsonData));
                     break;
             }
         }

@@ -4,6 +4,9 @@ using System.Text;
 
 namespace ConsoleApp1.data
 {
+    /**
+     * This data structure is for sending connection based commands.
+     */
     class ConnectData : VpnData
     {
         public string session, key, dest;
