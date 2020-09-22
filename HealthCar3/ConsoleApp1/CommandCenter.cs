@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using ConsoleApp1.command.scene.terrain;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace ConsoleApp1
 {
@@ -17,12 +17,11 @@ namespace ConsoleApp1
             serializerSettings.NullValueHandling = NullValueHandling.Ignore;
             serializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
 
-            VpnCommand dunny = new DunnyCommand("scene/");
-            VpnCommand dunny = new DunnyCommandAdd("scene/");
+            
 
             VpnCommand tunnel = new DunnyTunnel();
-
-            tunnel.data.SetData(dunny);
+            VpnCommand terrainAdd = new TerrainAdd();
+            tunnel.data.SetData(terrainAdd);
 
             Console.WriteLine(JsonConvert.SerializeObject(tunnel, serializerSettings));  
         }

@@ -55,9 +55,19 @@ namespace ConsoleApp1
             return this.size;
         }
 
-        public void SetSize()
+        public int[] GetHeight()
         {
-            
+            return this.height;
+        }
+
+        public void SetHeight(int val)
+        {
+            this.height = new int[] { val };
+        }
+
+        public void SetSize(int width, int height)
+        {
+            this.size = new int[] { width, height };
         }
 
         public void SetSession(string session)
