@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ConsoleApp1.data;
 
 namespace ConsoleApp1.command.scene.node
 {
     class NodeAdd : VpnCommand
     {
-        public NodeAdd() : base(id: "scene/node/add")
+        public NodeAdd(NodeData data) : base(id: "scene/node/add", data: data)
         {
         }
     }
