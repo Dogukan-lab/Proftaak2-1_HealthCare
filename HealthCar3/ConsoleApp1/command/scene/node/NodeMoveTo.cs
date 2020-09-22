@@ -4,7 +4,10 @@ using System.Text;
 
 namespace ConsoleApp1.command.scene.node
 {
-    class Moveto
+    class NodeMoveTo : VpnCommand
     {
+        public NodeMoveTo() : base(id : "scene/node/moveto")
+        {
+        }
     }
 }

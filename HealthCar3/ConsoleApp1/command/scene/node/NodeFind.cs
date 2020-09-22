@@ -4,7 +4,10 @@ using System.Text;
 
 namespace ConsoleApp1.command.scene.node
 {
-    class NodeFind
+    class NodeFind : VpnCommand
     {
+        public NodeFind() : base(id : "scene/node/find")
+        {
+        }
     }
 }

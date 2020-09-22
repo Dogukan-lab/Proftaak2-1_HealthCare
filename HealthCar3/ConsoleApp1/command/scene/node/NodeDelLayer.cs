@@ -4,7 +4,10 @@ using System.Text;
 
 namespace ConsoleApp1.command.scene.node
 {
-    class NodeDellayer
+    class NodeDellayer : VpnCommand
     {
+        public NodeDellayer() : base(id: "scene/node/dellayer")
+        {
+        }
     }
 }

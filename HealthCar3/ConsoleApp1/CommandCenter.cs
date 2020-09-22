@@ -17,9 +17,7 @@ namespace ConsoleApp1
             serializerSettings.NullValueHandling = NullValueHandling.Ignore;
             serializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
 
-            VpnCommand dunny = new DunnyCommand("scene/");
-            VpnCommand dunny = new DunnyCommandAdd("scene/");
-
+            VpnCommand dunny = new DunnyCommand();
             VpnCommand tunnel = new DunnyTunnel();
 
             tunnel.data.SetData(dunny);
