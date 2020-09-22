@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ConsoleApp1.data;
+using Newtonsoft.Json;
 using System;
 
 namespace ConsoleApp1
@@ -10,7 +11,6 @@ namespace ConsoleApp1
     {
         private VpnConnector connector;
         private string id;
-        private VpnData tempData;
 
         public MessageParser(VpnConnector connector)
         {
@@ -60,7 +60,7 @@ namespace ConsoleApp1
                     GetSession(jsonData);
                     if (this.id != null)
                     {
-                        tempData = new VpnData();
+                        ConnectData tempData = new ConnectData();
                         tempData.SetSession(this.id);
                         tempData.SetKey("");
                         VpnCommand command = new VpnCommand("tunnel/create", tempData); //sends a new command including a data object to the connector.

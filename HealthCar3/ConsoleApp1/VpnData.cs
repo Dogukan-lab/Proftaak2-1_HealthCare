@@ -12,11 +12,8 @@ namespace ConsoleApp1
      */
     class VpnData : IPayload
     {
-        public string id;
-        public string session, key, dest;
-        public IPayload data;
-        public int[] size;
-        public int[] height;
+        private readonly string id;
+        private IPayload data;
 
         public VpnData()
         {
@@ -35,56 +32,7 @@ namespace ConsoleApp1
         {
             return this.data;
         }
-        public string GetSession()
-        {
-            return this.session;
-        }
-
-        public string GetKey()
-        {
-            return this.key;
-        }
-
-        public string GetDestination()
-        {
-            return this.dest;
-        }
-
-        public int[] GetSize()
-        {
-            return this.size;
-        }
-
-        public int[] GetHeight()
-        {
-            return this.height;
-        }
-
-        public void SetHeight(int val)
-        {
-            this.height = new int[] { val };
-        }
-
-        public void SetSize(int width, int height)
-        {
-            this.size = new int[] { width, height };
-        }
-
-        public void SetSession(string session)
-        {
-            this.session = session;
-        }
-
-        public void SetKey(string key)
-        {
-            this.key = key;
-        }
-
-        public void SetDestination(string destination)
-        {
-            this.dest = destination;
-        }
-
+        
         public void SetData(IPayload data)
         {
             this.data = data;
