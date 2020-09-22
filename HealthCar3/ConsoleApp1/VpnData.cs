@@ -13,8 +13,10 @@ namespace ConsoleApp1
     class VpnData
     {
         public string id;
-        public VpnData data;
         public string session, key, dest;
+        public IPayload data;
+        public int[] size;
+        public int[] height;
 
         public VpnData()
         {
@@ -29,7 +31,7 @@ namespace ConsoleApp1
         /**
          * Simple getters and setters for the attributes
          */
-        public VpnData GetData()
+        public IPayload GetData()
         {
             return this.data;
         }
@@ -47,7 +49,27 @@ namespace ConsoleApp1
         {
             return this.dest;
         }
-        
+
+        public int[] GetSize()
+        {
+            return this.size;
+        }
+
+        public int[] GetHeight()
+        {
+            return this.height;
+        }
+
+        public void SetHeight(int val)
+        {
+            this.height = new int[] { val };
+        }
+
+        public void SetSize(int width, int height)
+        {
+            this.size = new int[] { width, height };
+        }
+
         public void SetSession(string session)
         {
             this.session = session;
@@ -63,7 +85,7 @@ namespace ConsoleApp1
             this.dest = destination;
         }
 
-        public void SetData(VpnData data)
+        public void SetData(IPayload data)
         {
             this.data = data;
         }
