@@ -10,7 +10,7 @@ namespace ConsoleApp1
     /**
      * This class is used to store the parcable data.
      */
-    class VpnData
+    class VpnData : IPayload
     {
         public string id;
         public string session, key, dest;
