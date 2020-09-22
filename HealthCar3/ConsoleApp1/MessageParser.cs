@@ -42,12 +42,10 @@ namespace ConsoleApp1
          */
         public void GetTunnelId(dynamic jsonData)
         {
-            for (int i = 0; i < jsonData.data.Count; i++)
+
+            if (jsonData.data.status == "ok")
             {
-                if (jsonData.data[0].status == "ok")
-                {
-                    Console.WriteLine("The status of the response has been reached!");
-                }
+                Console.WriteLine("The status of the response has been reached!");
             }
         }
 
