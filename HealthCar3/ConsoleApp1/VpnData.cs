@@ -13,8 +13,8 @@ namespace ConsoleApp1
     class VpnData
     {
         public string id;
-        public VpnData data;
         public string session, key, dest;
+        public IPayload data;
 
         public VpnData()
         {
@@ -29,7 +29,7 @@ namespace ConsoleApp1
         /**
          * Simple getters and setters for the attributes
          */
-        public VpnData GetData()
+        public IPayload GetData()
         {
             return this.data;
         }
@@ -63,7 +63,7 @@ namespace ConsoleApp1
             this.dest = destination;
         }
 
-        public void SetData(VpnData data)
+        public void SetData(IPayload data)
         {
             this.data = data;
         }
