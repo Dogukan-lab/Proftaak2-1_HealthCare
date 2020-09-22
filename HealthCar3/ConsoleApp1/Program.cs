@@ -88,8 +88,8 @@ namespace ConsoleApp1
                         }
                     }*/
 
-            VpnConnector connector = new VpnConnector(new JsonSerializerSettings());
-            //CommandCenter commandCenter = new CommandCenter();
+            //VpnConnector connector = new VpnConnector(new JsonSerializerSettings());
+            CommandCenter commandCenter = new CommandCenter();
         }
     }
 }

@@ -26,7 +26,6 @@ namespace ConsoleApp1
         {
             serializerSettings = jsonSerializerSettings;
             serializerSettings.NullValueHandling = NullValueHandling.Ignore;
-            serializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
             parser = new MessageParser(this);
             connected = false;
             timeoutCounter = 0;
