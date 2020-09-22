@@ -15,6 +15,8 @@ namespace ConsoleApp1
         public string id;
         public string session, key, dest;
         public IPayload data;
+        public int[] size;
+        public int[] height;
 
         public VpnData()
         {
@@ -47,7 +49,17 @@ namespace ConsoleApp1
         {
             return this.dest;
         }
-        
+
+        public int[] GetSize()
+        {
+            return this.size;
+        }
+
+        public void SetSize()
+        {
+            
+        }
+
         public void SetSession(string session)
         {
             this.session = session;
