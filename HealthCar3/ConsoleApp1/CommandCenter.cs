@@ -4,6 +4,7 @@ using ConsoleApp1.data.components;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Windows.Forms;
 
 namespace ConsoleApp1
 {
@@ -35,6 +36,16 @@ namespace ConsoleApp1
             Console.WriteLine(JsonConvert.SerializeObject(tunnel, serializerSettings));
         }
 
+
+        private dynamic buildTransform(float x, float y, float z)
+        {
+            return new
+            {
+                position = new[] { x, y, z },
+                scale = new[] { 1, 1, 1 }
+            };
+        }
+
         /**
          * TestFunction for generating an object.
          */
@@ -53,7 +64,37 @@ namespace ConsoleApp1
                 new WaterComponent(20, 20, 0.1)));
 
             Encapsulate(addObject);
-            Console.WriteLine(JsonConvert.SerializeObject(tunnel, serializerSettings));
+
+
+           
+
+            dynamic packetData = new
+            {
+                name = "B2-Object-Add-Test",
+                data = new
+                {
+                    transform = new
+                    {
+                        position = new[] { 0, 0, 0 },
+                        scale = new[] { 1, 1, 1 }
+                    },
+                    transform2 = buildTransform(0, 0, 0)
+                }
+            };
+
+
+            dynamic tunnelWrapper = new
+            {
+                id = "tunnel/send",
+                data = new
+                {
+                    dest = "1238492348234jr89j",
+                    data = packetData
+                }
+            };
+
+
+            Console.WriteLine(JsonConvert.SerializeObject(tunnelWrapper, serializerSettings));
         }
 
         private void Encapsulate(IPayload payload)

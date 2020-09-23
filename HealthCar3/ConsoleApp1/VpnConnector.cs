@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using ConsoleApp1.data;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ConsoleApp1
 {
@@ -95,35 +98,43 @@ namespace ConsoleApp1
             
         }
 
+
+        byte[] readTotalBytes(int count)
+        {
+            byte[] buffer = new byte[count];
+            int received = 0;
+            while(received < count)
+                received += stream.Read(buffer, received, count-received);
+            return buffer;
+        }
+
         /**
          * Listens for a response from the server.
          */
         public void Listen()
         {
-            byte[] lengthBuffer = new byte[4]; //first four bytes indicate length.
+            byte[] lengthBuffer = readTotalBytes(4);/* new byte[4]; //first four bytes indicate length.
             for (int i = 0; i < lengthBuffer.Length; i++)
             {
                 lengthBuffer[i] = (byte)stream.ReadByte();
-            }
+            }*/
             int bytesize = BitConverter.ToInt32(lengthBuffer); //converts the length to a readable number.
 
-            byte[] bytes = new byte[bytesize];
-            while (stream.CanRead) 
+            byte[] bytes = readTotalBytes(bytesize);
+            try
             {
-                stream.Read(bytes, 0, bytes.Length); //reads the expected response in bytes.
-                Console.WriteLine(Encoding.ASCII.GetString(bytes));
-                try
-                {
-                    jsonData = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(bytes), serializerSettings); //converts the response bytes to string data.
-                } catch (Exception ex)
-                {
-                    Console.WriteLine(ex.StackTrace + "\nMake sure you connect to the network application.");
-                }
-                finally
-                {
-                    parser.Parse(responseId, jsonData); //sends the response to the parser.
-                }
-            }    
+                jsonData = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(bytes), serializerSettings); //converts the response bytes to string data.
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace + "\nMake sure you connect to the network application.");
+            }
+            finally
+            {
+                parser.Parse(responseId, jsonData); //sends the response to the parser.
+            }
+
+
+
         }
 
         /**
@@ -135,5 +146,56 @@ namespace ConsoleApp1
             stream.Close();
             connected = false;
         }
+
+
+        Dictionary<int, Action<JObject>> callbacks = new Dictionary<int, Action<JObject>>();
+        int currentSerial = 1;
+        public void SendPacket(string id, dynamic data, Action<JObject> callback)
+        {
+            dynamic packet = new
+            {
+                id = "tunnel/send",
+                data = new
+                {
+                    dest = this.tunnelId,
+                    data = new
+                    {
+                        id = id,
+                        serial = currentSerial,
+                        data = data
+                    }
+                }
+            };
+
+            Send(packet);
+            callbacks[currentSerial] = callback;
+            currentSerial++;
+        }
+        public void recv()
+        {
+            while(true)
+            {
+//                recv data;
+                JObject packetData;
+
+                int receivedSerial = packetData["serial"].ToObject<int>();
+                callbacks[receivedSerial].Invoke(packetData["data"]);
+
+            }
+        }
+
+
+        public void ergensanders()
+        {
+
+            SendPacket("scene/node/add", new { transform = new[] { } }, (data) =>
+            {
+                Console.WriteLine("Model got added");
+            });
+        }
+
+
+
+
     }
 }
