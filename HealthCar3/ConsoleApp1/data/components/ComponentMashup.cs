@@ -21,5 +21,30 @@ namespace ConsoleApp1.data.components
             this.panel = panel;
             this.water = water;
         }
+
+        public void SetTransformComponent(TransformComponent transform)
+        {
+            this.transform = transform;
+        }
+
+        public void SetModelComponent(ModelComponent model)
+        {
+            this.model = model;
+        }
+
+        public void SetTerrainComponent(TerrainComponent terrain)
+        {
+            this.terrain = terrain;
+        }
+
+        public void SetPanelComponent(PanelComponent panel)
+        {
+            this.panel = panel;
+        }
+
+        public void SetWaterComponent(WaterComponent water)
+        {
+            this.water = water;
+        }
     }
 }

@@ -1,19 +1,69 @@
 ﻿using ConsoleApp1.data;
+using ConsoleApp1.data.components;
 
 namespace ConsoleApp1.command.scene.node
 {
     class NodeAdd : VpnCommand
     {
+        new NodeData data;
+
         /**
          * Generates a command to spawn an object based on the node Data using Components.
          */
-        public NodeAdd(NodeData data) : base(id: "scene/node/add", data: data)
+        public NodeAdd() : base(id: "scene/node/add")
         {
+            this.data = new NodeData();
         }
 
-        public void AddModelComponent()
+        public void SetName(string name)
         {
+            GetData().SetName(name);
+        }
 
+        public void SetParent(string parent)
+        {
+            GetData().SetParent(parent);
+        }
+
+        public void SetModelComponent(ModelComponent model)
+        {
+            GetData().components.SetModelComponent(model);
+        }
+
+        public void SetPanelComponent(PanelComponent panel)
+        {
+            GetData().components.SetPanelComponent(panel);
+        }
+
+        public void SetTerrainComponent(TerrainComponent terrain)
+        {
+            GetData().components.SetTerrainComponent(terrain);
+        }
+
+        public void SetTransformComponent(TransformComponent transform)
+        {
+            GetData().components.SetTransformComponent(transform);
+        }
+
+        public void SetWaterComponent(WaterComponent water)
+        {
+            GetData().components.SetWaterComponent(water);
+        }
+
+        public bool Verify()
+        {
+            if (GetData().GetName() != null)
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+
+        private NodeData GetData()
+        {
+            return (NodeData)this.data;
         }
     }
 }

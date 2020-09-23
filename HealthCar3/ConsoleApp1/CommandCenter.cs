@@ -9,6 +9,7 @@ namespace ConsoleApp1
     class CommandCenter
     {
         private VpnConnector connector;
+        private VpnCommand tunnel;
         private JsonSerializerSettings serializerSettings;
 
         /**
@@ -18,6 +19,7 @@ namespace ConsoleApp1
         {
             serializerSettings = new JsonSerializerSettings();
             serializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            this.tunnel = new DunnyTunnel("dest");
 
             GenerateObject();
         }
@@ -28,10 +30,7 @@ namespace ConsoleApp1
         private void TestTunnel()
         {
             VpnCommand dunny = new DunnyCommand();
-            VpnCommand tunnel = new DunnyTunnel("dest");
-
-            tunnel.data.SetData(dunny);
-
+            Encapsulate(dunny);
             Console.WriteLine(JsonConvert.SerializeObject(tunnel, serializerSettings));
         }
 
@@ -40,8 +39,6 @@ namespace ConsoleApp1
          */
         private void GenerateObject()
         {
-            VpnCommand tunnel = new DunnyTunnel("dest");
-
             NodeData data = new NodeData();
             data.SetName("B2-Object-Add-Test");
             
@@ -53,10 +50,13 @@ namespace ConsoleApp1
                 new WaterComponent(20, 20, 0.1)));
 
             VpnCommand addObject = new NodeAdd(data);
-            tunnel.data.SetData(addObject);
-
+            Encapsulate(addObject);
             Console.WriteLine(JsonConvert.SerializeObject(tunnel, serializerSettings));
+        }
 
+        private void Encapsulate(IPayload payload)
+        {
+            this.tunnel.data.SetData(payload);
         }
     }
 }
