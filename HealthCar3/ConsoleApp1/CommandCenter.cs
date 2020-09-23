@@ -3,8 +3,6 @@ using ConsoleApp1.data;
 using ConsoleApp1.data.components;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ConsoleApp1
 {
@@ -13,6 +11,9 @@ namespace ConsoleApp1
         private VpnConnector connector;
         private JsonSerializerSettings serializerSettings;
 
+        /**
+         * Controller for managing construction and management of commands.
+         */
         public CommandCenter()
         {
             serializerSettings = new JsonSerializerSettings();
@@ -21,25 +22,26 @@ namespace ConsoleApp1
             GenerateObject();
         }
 
+        /**
+         * Testfunction for testing tunnel command.
+         */
         private void TestTunnel()
         {
             VpnCommand dunny = new DunnyCommand();
-            VpnCommand tunnel = new DunnyTunnel();
+            VpnCommand tunnel = new DunnyTunnel("dest");
 
             tunnel.data.SetData(dunny);
 
             Console.WriteLine(JsonConvert.SerializeObject(tunnel, serializerSettings));
         }
 
+        /**
+         * TestFunction for generating an object.
+         */
         private void GenerateObject()
         {
             NodeData data = new NodeData();
             data.SetName("B2-Object-Add-Test");
-
-            
-            
-            
-            ;
             
             data.SetComponents(new ComponentMashup(
                 new TransformComponent(0, 0, 0, 1, 0, 0, 0),
@@ -52,7 +54,5 @@ namespace ConsoleApp1
 
             Console.WriteLine(JsonConvert.SerializeObject(addObject, serializerSettings));
         }
-
-
     }
 }
