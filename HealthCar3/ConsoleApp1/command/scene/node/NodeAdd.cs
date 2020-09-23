@@ -1,13 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using ConsoleApp1.data;
 
 namespace ConsoleApp1.command.scene.node
 {
     class NodeAdd : VpnCommand
     {
-        public NodeAdd() : base(id: "scene/node/add")
+        /**
+         * Generates a command to spawn an object based on the node Data using Components.
+         */
+        public NodeAdd(NodeData data) : base(id: "scene/node/add", data: data)
         {
+        }
+
+        public void AddModelComponent()
+        {
+
         }
     }
 }

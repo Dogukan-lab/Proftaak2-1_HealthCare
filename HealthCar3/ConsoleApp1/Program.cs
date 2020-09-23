@@ -89,7 +89,7 @@ namespace ConsoleApp1
                     }*/
 
             //VpnConnector connector = new VpnConnector(new JsonSerializerSettings());
-            CommandCenter cc = new CommandCenter("23490wsekjlfhgdjklgr90");
+            CommandCenter cc = new CommandCenter();
         }
     }
 }
