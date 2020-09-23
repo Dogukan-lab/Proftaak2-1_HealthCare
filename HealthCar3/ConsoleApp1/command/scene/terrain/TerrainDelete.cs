@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ConsoleApp1.command.scene.terrain
 {
-    class TerrainDelete : VpnCommand
+    class TerrainDelete : VpnCommand<TerrainData>
     {
         public TerrainDelete() : base(id : "scene/terrain/delete")
         {

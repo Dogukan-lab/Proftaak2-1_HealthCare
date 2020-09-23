@@ -68,7 +68,7 @@ namespace ConsoleApp1
                         ConnectData tempData = new ConnectData();
                         tempData.SetSession(this.id);
                         tempData.SetKey("");
-                        VpnCommand command = new VpnCommand("tunnel/create", tempData); //sends a new command including a data object to the connector.
+                        VpnCommand<ConnectData> command = new VpnCommand<ConnectData>("tunnel/create", tempData); //sends a new command including a data object to the connector.
                         connector.Send(command);
                     }
                     break;

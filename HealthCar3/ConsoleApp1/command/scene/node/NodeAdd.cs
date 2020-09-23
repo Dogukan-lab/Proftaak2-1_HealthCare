@@ -3,16 +3,13 @@ using ConsoleApp1.data.components;
 
 namespace ConsoleApp1.command.scene.node
 {
-    class NodeAdd : VpnCommand
+    class NodeAdd : VpnCommand<NodeData>
     {
-        new NodeData data;
-
         /**
          * Generates a command to spawn an object based on the node Data using Components.
          */
         public NodeAdd() : base(id: "scene/node/add")
         {
-            this.data = new NodeData();
         }
 
         public void SetName(string name)
@@ -55,15 +52,11 @@ namespace ConsoleApp1.command.scene.node
             if (GetData().GetName() != null)
             {
                 return true;
-            } else
+            }
+            else
             {
                 return false;
             }
-        }
-
-        private NodeData GetData()
-        {
-            return (NodeData)this.data;
         }
     }
 }

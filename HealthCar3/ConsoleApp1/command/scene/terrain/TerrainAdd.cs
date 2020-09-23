@@ -8,7 +8,7 @@ namespace ConsoleApp1.command.scene.terrain
     /**
      * This Class is to add the terrain into the network application
      */
-    class TerrainAdd : VpnCommand
+    class TerrainAdd : VpnCommand<TerrainData>
     {
         public TerrainAdd() : base(id : "scene/terrain/add")
         {

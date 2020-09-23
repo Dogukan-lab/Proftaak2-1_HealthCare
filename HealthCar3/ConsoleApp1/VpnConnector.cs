@@ -1,6 +1,8 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Net.Sockets;
 using System.Text;
+using ConsoleApp1.data;
 using Newtonsoft.Json;
 
 namespace ConsoleApp1
@@ -54,13 +56,13 @@ namespace ConsoleApp1
                     Disconnect();
                 }
             }
-            Send(new VpnCommand("session/list"));
+            Send(new VpnCommand<ConnectData>("session/list"));
         }
 
         /**
          * Sends a message in the form of a command to the server.
          */
-        public void Send(VpnCommand command)
+        public void Send(VpnCommand<ConnectData> command)
         {
             if (connected)
             {

@@ -8,7 +8,7 @@ namespace ConsoleApp1.command.scene.node
     /**
      * Deletes a node from the scene.
      */
-    class NodeDel : VpnCommand
+    class NodeDel : VpnCommand<NodeData>
     {
 
         public NodeDel() : base(id: "scene/node/delete")

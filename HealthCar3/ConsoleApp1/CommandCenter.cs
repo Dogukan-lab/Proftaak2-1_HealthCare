@@ -3,13 +3,14 @@ using ConsoleApp1.data;
 using ConsoleApp1.data.components;
 using Newtonsoft.Json;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace ConsoleApp1
 {
     class CommandCenter
     {
         private VpnConnector connector;
-        private VpnCommand tunnel;
+        private VpnCommand<ConnectData> tunnel;
         private JsonSerializerSettings serializerSettings;
 
         /**
@@ -29,7 +30,7 @@ namespace ConsoleApp1
          */
         private void TestTunnel()
         {
-            VpnCommand dunny = new DunnyCommand();
+            VpnCommand<DunnyData> dunny = new DunnyCommand();
             Encapsulate(dunny);
             Console.WriteLine(JsonConvert.SerializeObject(tunnel, serializerSettings));
         }
@@ -40,16 +41,17 @@ namespace ConsoleApp1
         private void GenerateObject()
         {
             NodeData data = new NodeData();
-            data.SetName("B2-Object-Add-Test");
             
-            data.SetComponents(new ComponentMashup(
+
+            VpnCommand<NodeData> addObject = new NodeAdd();
+            addObject.data.SetName("B2-Object-Add-Test");
+            addObject.data.SetComponents(new ComponentMashup(
                 new TransformComponent(0, 0, 0, 1, 0, 0, 0),
                 new ModelComponent("filelocation", true, false, "AnimationLocation"),
-                new TerrainComponent(true), 
-                new PanelComponent(1, 1, 512, 512, 1, 1, 1, 1, true), 
+                new TerrainComponent(true),
+                new PanelComponent(1, 1, 512, 512, 1, 1, 1, 1, true),
                 new WaterComponent(20, 20, 0.1)));
 
-            VpnCommand addObject = new NodeAdd(data);
             Encapsulate(addObject);
             Console.WriteLine(JsonConvert.SerializeObject(tunnel, serializerSettings));
         }
