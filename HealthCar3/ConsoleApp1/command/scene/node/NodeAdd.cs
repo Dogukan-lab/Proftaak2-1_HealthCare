@@ -10,5 +10,10 @@ namespace ConsoleApp1.command.scene.node
         public NodeAdd(NodeData data) : base(id: "scene/node/add", data: data)
         {
         }
+
+        public void AddModelComponent()
+        {
+
+        }
     }
 }

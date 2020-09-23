@@ -40,6 +40,8 @@ namespace ConsoleApp1
          */
         private void GenerateObject()
         {
+            VpnCommand tunnel = new DunnyTunnel("dest");
+
             NodeData data = new NodeData();
             data.SetName("B2-Object-Add-Test");
             
@@ -51,8 +53,10 @@ namespace ConsoleApp1
                 new WaterComponent(20, 20, 0.1)));
 
             VpnCommand addObject = new NodeAdd(data);
+            tunnel.data.SetData(addObject);
 
-            Console.WriteLine(JsonConvert.SerializeObject(addObject, serializerSettings));
+            Console.WriteLine(JsonConvert.SerializeObject(tunnel, serializerSettings));
+
         }
     }
 }
