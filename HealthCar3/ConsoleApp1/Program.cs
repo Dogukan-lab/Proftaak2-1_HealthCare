@@ -88,8 +88,14 @@ namespace ConsoleApp1
                         }
                     }*/
 
-            //VpnConnector connector = new VpnConnector(new JsonSerializerSettings());
-            CommandCenter cc = new CommandCenter();
+            VpnConnector connector = new VpnConnector(new JsonSerializerSettings());
+
+            Thread listenThread = new Thread(new ThreadStart(connector.Listen));
+            listenThread.Start();
+
+            //CommandCenter cc = new CommandCenter();
+
+            Console.Read();
         }
     }
 }

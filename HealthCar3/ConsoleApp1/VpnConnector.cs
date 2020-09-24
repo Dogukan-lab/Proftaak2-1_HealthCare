@@ -26,7 +26,7 @@ namespace ConsoleApp1
         private readonly int timeoutMax = 3;
 
         public NetworkStream Stream { get; private set; }
-
+        public bool IsConnected() { return this.connected; }
         public VpnConnector(JsonSerializerSettings jsonSerializerSettings)
         {
             serializerSettings = jsonSerializerSettings;
@@ -59,13 +59,13 @@ namespace ConsoleApp1
                     Disconnect();
                 }
             }
-            Send(new VpnCommand<ConnectData>("session/list"));
+            Send(new { id = "session/list" });
         }
 
         /**
          * Sends a message in the form of a command to the server.
          */
-        public void Send(VpnCommand<ConnectData> command)
+        public void Send(dynamic command)
         {
             if (connected)
             {
@@ -76,7 +76,6 @@ namespace ConsoleApp1
                     stream.Write(BitConverter.GetBytes(bytes.Length), 0, 4); //writes the length of the command to the server.
                     stream.Write(bytes, 0, bytes.Length); //writes the message to the server.
                     responseId = command.id;
-                    Listen(); //listens for a response.
                 }
                 catch (Exception ex)
                 {
@@ -93,12 +92,12 @@ namespace ConsoleApp1
                 {
                     Console.WriteLine("Reconnection failed, check connection settings.");
                 }
-            }
-            
-            
+            }  
         }
 
-
+        /**
+         * Read count amount of bytes
+         */
         byte[] readTotalBytes(int count)
         {
             byte[] buffer = new byte[count];
@@ -113,28 +112,29 @@ namespace ConsoleApp1
          */
         public void Listen()
         {
-            byte[] lengthBuffer = readTotalBytes(4);/* new byte[4]; //first four bytes indicate length.
-            for (int i = 0; i < lengthBuffer.Length; i++)
-            {
-                lengthBuffer[i] = (byte)stream.ReadByte();
-            }*/
+            byte[] lengthBuffer = readTotalBytes(4); //first four bytes indicate length.
+
             int bytesize = BitConverter.ToInt32(lengthBuffer); //converts the length to a readable number.
 
-            byte[] bytes = readTotalBytes(bytesize);
+            byte[] bytes = readTotalBytes(bytesize); //read the all the bytes
             try
             {
                 jsonData = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(bytes), serializerSettings); //converts the response bytes to string data.
-            } catch (Exception ex)
+                Console.WriteLine(jsonData);
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.StackTrace + "\nMake sure you connect to the network application.");
             }
             finally
             {
-                parser.Parse(responseId, jsonData); //sends the response to the parser.
+                // if init command, no callback
+                if (responseId == "session/list" || responseId == "tunnel/create") 
+                    parser.Parse(responseId, jsonData); //sends the response to the parser.
+                else
+                    HandleCallBack(jsonData);
             }
-
-
-
+            Listen();
         }
 
         /**
@@ -147,9 +147,16 @@ namespace ConsoleApp1
             connected = false;
         }
 
-
+        // Dictionary to keep track of the callbacks
         Dictionary<int, Action<JObject>> callbacks = new Dictionary<int, Action<JObject>>();
         int currentSerial = 1;
+        /**
+         * Wrap the data in the tunnel and set the destination and serial.
+         * Syntax for SendPacket
+         * SendPacket("scene/node/add", new { transform = new[] { } }, (data) => {
+         *     Console.WriteLine("Model got added");
+         * });
+         */
         public void SendPacket(string id, dynamic data, Action<JObject> callback)
         {
             dynamic packet = new
@@ -157,7 +164,7 @@ namespace ConsoleApp1
                 id = "tunnel/send",
                 data = new
                 {
-                    dest = this.tunnelId,
+                    dest = this.parser.GetDestination(),
                     data = new
                     {
                         id = id,
@@ -167,35 +174,24 @@ namespace ConsoleApp1
                 }
             };
 
+            // Send the whole packet
             Send(packet);
+            // Add serial to callbacks
             callbacks[currentSerial] = callback;
             currentSerial++;
         }
-        public void recv()
+
+        /**
+         * Find serial and execute callback
+         */
+        private void HandleCallBack(dynamic data)
         {
-            while(true)
-            {
-//                recv data;
-                JObject packetData;
-
-                int receivedSerial = packetData["serial"].ToObject<int>();
-                callbacks[receivedSerial].Invoke(packetData["data"]);
-
-            }
-        }
-
-
-        public void ergensanders()
-        {
-
-            SendPacket("scene/node/add", new { transform = new[] { } }, (data) =>
-            {
-                Console.WriteLine("Model got added");
-            });
-        }
-
-
-
-
+            JObject packetData = data as JObject;
+            
+            // Find the matching serial number 
+            int receivedSerial = packetData["data"].ToObject<JObject>()["data"].ToObject<JObject>()["serial"].ToObject<int>();
+            // Execute the corresponding callback
+            callbacks[receivedSerial].Invoke(packetData["data"] as JObject);
+        }       
     }
 }

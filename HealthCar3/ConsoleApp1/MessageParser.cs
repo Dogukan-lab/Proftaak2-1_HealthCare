@@ -18,6 +18,8 @@ namespace ConsoleApp1
             this.connector = connector;
         }
 
+        public string GetDestination() { return this.destination; }
+
         /*
          * This method checks the current session for your computer name.
          * Then it gets the id en sets it inside of the for loop.
@@ -65,15 +67,22 @@ namespace ConsoleApp1
                     GetSession(jsonData);
                     if (this.id != null)
                     {
-                        ConnectData tempData = new ConnectData();
-                        tempData.SetSession(this.id);
-                        tempData.SetKey("");
-                        VpnCommand<ConnectData> command = new VpnCommand<ConnectData>("tunnel/create", tempData); //sends a new command including a data object to the connector.
-                        connector.Send(command);
+                        // Create the tunnel
+                        connector.Send(new { id = "tunnel/create", data = new { session = this.id, key = "" } });
                     }
                     break;
                 case "tunnel/create":
-                    cc = new CommandCenter();
+                    GetTunnelId(jsonData);
+                    // Scene is now fully initialized and can now execute commands 
+                    //cc = new CommandCenter();
+
+                    // test
+                    //connector.SendPacket("scene/node/add", new { name = "test", components = new { transform = new { position = new[] { 1, 1, 1 }, scale = 1, rotation = new[] { 0, 0, 0 } } } }, data => {
+                    //    Console.WriteLine("Added a new node to the scene.");
+                    //    connector.SendPacket("scene/node/add", new { name = "test", components = new { transform = new { position = new[] { 1, 1, 1 }, scale = 1, rotation = new[] { 0, 0, 0 } } } }, data => {
+                    //        Console.WriteLine("Added a new node to the scene.");
+                    //    });
+                    //});
                     break;
             }
         }
