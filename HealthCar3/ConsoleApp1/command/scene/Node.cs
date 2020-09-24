@@ -13,20 +13,6 @@ namespace ConsoleApp1.command.scene
     {
         private static string prefix = "scene/node/";
 
-     
-        /**
-         * This wrap method wraps the node data into a command.
-         */
-        private static dynamic wrap(dynamic nodeData, string id)
-        {
-            dynamic packet = new
-            {
-                id = id,
-                data = nodeData
-            };
-            return packet;
-        }
-
         /**
          * This method adds a model such a tree, bike or house.
          */
@@ -41,7 +27,7 @@ namespace ConsoleApp1.command.scene
                     model = model
                 }
             };
-            return wrap(packetData, prefix + "add");
+            return SceneUtils.Wrap(packetData, prefix + "add");
         }
 
         /**
@@ -62,7 +48,7 @@ namespace ConsoleApp1.command.scene
                     }
                 }
             };
-            return wrap(packetData, prefix + "add");
+            return SceneUtils.Wrap(packetData, prefix + "add");
         }
 
         /**
@@ -79,7 +65,7 @@ namespace ConsoleApp1.command.scene
                     panel = panel
                 }
             };
-            return wrap(packetData, prefix + "add");
+            return SceneUtils.Wrap(packetData, prefix + "add");
         }
 
         /**
@@ -96,7 +82,7 @@ namespace ConsoleApp1.command.scene
                 maxHeight = maxHeight,
                 fadeDist = fadeDist
             };
-            return wrap(packetData, prefix + "add");
+            return SceneUtils.Wrap(packetData, prefix + "add");
         }
 
         /**
@@ -108,7 +94,7 @@ namespace ConsoleApp1.command.scene
             {
 
             };
-            return wrap(packetData, prefix + "dellayer");
+            return SceneUtils.Wrap(packetData, prefix + "dellayer");
         }
 
         /**
@@ -120,7 +106,7 @@ namespace ConsoleApp1.command.scene
             {
                 name = objectName
             };
-            return wrap(packetData, prefix + "find");
+            return SceneUtils.Wrap(packetData, prefix + "find");
         }
 
         /**
@@ -139,7 +125,7 @@ namespace ConsoleApp1.command.scene
                 followheight = followheight,
                 speed = speed
             };
-            return wrap(packetData, prefix + "moveto");
+            return SceneUtils.Wrap(packetData, prefix + "moveto");
         }
 
         /**
@@ -158,7 +144,7 @@ namespace ConsoleApp1.command.scene
                     speed = speed
                 }
             };
-            return wrap(packetData, prefix + "update");
+            return SceneUtils.Wrap(packetData, prefix + "update");
         }
 
         /**
@@ -170,7 +156,7 @@ namespace ConsoleApp1.command.scene
             {
                 id = guid
             };
-            return wrap(packetData, prefix + "delete");
+            return SceneUtils.Wrap(packetData, prefix + "delete");
 
         }
     }

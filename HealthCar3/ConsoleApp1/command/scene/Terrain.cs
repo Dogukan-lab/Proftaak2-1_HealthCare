@@ -8,16 +8,9 @@ namespace ConsoleApp1.command.scene
     {
         static string prefix = "scene/terrain/";
 
-        private static dynamic wrap(dynamic terrainData, string id)
-        {
-            dynamic packet = new
-            {
-                id = id,
-                data = terrainData
-            };
-            return packet;
-        }
-
+        /**
+         * This method adds a skeleton terrain for the terrain textures.
+         */
         public static dynamic AddTerrain(int[] size, int[] height)
         {
             dynamic packetData = new
@@ -25,27 +18,36 @@ namespace ConsoleApp1.command.scene
                 size = size,
                 height = height
             };
-            return wrap(packetData, prefix + "add");
+            return SceneUtils.Wrap(packetData, prefix + "add");
         }
 
+        /**
+         * This method updates the terrain
+         */
         public static dynamic Update()
         {
             dynamic packetData = new
             {
 
             };
-            return wrap(packetData, prefix + "update");
+            return SceneUtils.Wrap(packetData, prefix + "update");
         }
 
+        /**
+         * This method deletes the terrain
+         */
         public static dynamic Delete()
         {
             dynamic packetData = new
             {
 
             };
-            return wrap(packetData, prefix + "delete");
+            return SceneUtils.Wrap(packetData, prefix + "delete");
         }
 
+        /**
+         * This method gets the height map of the terrain
+         */
         public static dynamic GetHeight(int[] position, int[,] positions)
         {
             dynamic packetData = new
@@ -53,7 +55,7 @@ namespace ConsoleApp1.command.scene
                 position = position,
                 positions = positions
             };
-            return wrap(packetData, prefix + "update");
+            return SceneUtils.Wrap(packetData, prefix + "update");
         }
     }
 }

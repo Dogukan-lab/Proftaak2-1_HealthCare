@@ -8,25 +8,21 @@ namespace ConsoleApp1.command.scene
     {
         static string prefix = "scene/skybox/";
 
-        private static dynamic Wrap(dynamic skyboxData, string id)
-        {
-            dynamic packet = new
-            {
-                id = id,
-                data = skyboxData
-            };
-            return packet;
-        }
-
+        /**
+         * This method sets the time inside of the vr environment
+         */
         public static dynamic SetTime(int time)
         {
             dynamic packetData = new
             {
                 time = time
             };
-            return Wrap(packetData, prefix + "settime");
+            return SceneUtils.Wrap(packetData, prefix + "settime");
         }
 
+        /**
+         * This method updates or changes the skybox. For instance update the time to change the skybox to night.
+         */
         public static dynamic Update(string type, string xPos, string xNeg, string yPos, string yNeg, string zPos, string zNeg )
         {
             dynamic packetData = new
@@ -42,7 +38,7 @@ namespace ConsoleApp1.command.scene
                     zneg = zNeg
                 }
             };
-            return Wrap(packetData, prefix + "update");
+            return SceneUtils.Wrap(packetData, prefix + "update");
         }
 
     }

@@ -9,16 +9,9 @@ namespace ConsoleApp1.command.scene
     {
         static string prefix = "scene/road/";
 
-        private static dynamic Wrap(dynamic roadData, string id)
-        {
-            dynamic packet = new
-            {
-                id = id,
-                data = roadData
-            };
-            return packet;
-        }
-
+        /**
+         * This method adds a route to the vr system
+         */
         public static dynamic AddRoute(string routeId, string diffuse, string normal, string specular, double heightoffset)
         {
             dynamic packetData = new
@@ -29,9 +22,12 @@ namespace ConsoleApp1.command.scene
                 specular = specular,
                 heightoffset = heightoffset
             };
-            return Wrap(packetData, prefix + "add");
+            return SceneUtils.Wrap(packetData, prefix + "add");
         }
 
+        /**
+         * This method updates the route that has been set.
+         */
         public static dynamic Update(string roadId, string routeId, string diffuse, string normal, string specular, double heightoffset)
         {
             dynamic packetData = new
@@ -43,7 +39,7 @@ namespace ConsoleApp1.command.scene
                 specular = specular,
                 heightoffset = heightoffset
             };
-            return Wrap(packetData, prefix + "update");
+            return SceneUtils.Wrap(packetData, prefix + "update");
         }
     }
 }

@@ -4,38 +4,41 @@ using System.Text;
 
 namespace ConsoleApp1.command.scene
 {
+    /**
+     * This class is used to create a panel
+     * TODO Utils class for the wrapper.
+     */ 
     static class Panel
     {
         static string prefix = "scene/panel/";
 
-        private static dynamic Wrap(dynamic panelData, string id)
-        {
-            dynamic packet = new
-            {
-                id = id,
-                data = panelData
-            };
-            return packet;
-        }
-
+        /**
+         * Clears the desired panel
+         */
         public static dynamic Clear(string id)
         {
             dynamic packetData = new
             {
                 id = id
             };
-            return Wrap(packetData, prefix + "clear");                          
+            return SceneUtils.Wrap(packetData, prefix + "clear");                          
         }
 
+        /**
+         * This method swaps the buffers for the desired panel
+         */
         public static dynamic Swap(string id)
         {
             dynamic packetData = new
             {
                 id = id
             };
-            return Wrap(packetData, prefix + "swap");
+            return SceneUtils.Wrap(packetData, prefix + "swap");
         }
 
+        /**
+         * This method draws multiple lines on the the backbuffer for the desired panel
+         */
         public static dynamic DrawLines(string id, int width, int[,] lines)
         {
             dynamic packetData = new
@@ -44,9 +47,12 @@ namespace ConsoleApp1.command.scene
                 widht = width,
                 lines = lines
             };
-            return Wrap(packetData, prefix + "drawlines");
+            return SceneUtils.Wrap(packetData, prefix + "drawlines");
         }
 
+        /**
+         * This method changes the clear color on the desired panel
+         */
         public static dynamic SetClearColor(string id, int[] color)
         {
             dynamic packetData = new
@@ -54,9 +60,12 @@ namespace ConsoleApp1.command.scene
                 id = id,
                 color = color
             };
-            return Wrap(packetData, prefix + "setclearcolor");
+            return SceneUtils.Wrap(packetData, prefix + "setclearcolor");
         }
 
+        /**
+         * This method draws a text on the desired panel
+         */
         public static dynamic DrawText(string id, string text, double[] position, double size, int[] color, string font)
         {
             dynamic packetData = new
@@ -68,9 +77,12 @@ namespace ConsoleApp1.command.scene
                 color = color,
                 font = font
             };
-            return Wrap(packetData, prefix + "drawtext");
+            return SceneUtils.Wrap(packetData, prefix + "drawtext");
         }
 
+        /**
+         * This method draws an image on the desired panel
+         */
         public static dynamic Image(string id, string image, double[] position, double[] size)
         {
             dynamic packetData = new
@@ -81,7 +93,7 @@ namespace ConsoleApp1.command.scene
                 size = size
 
             };
-            return Wrap(packetData, prefix + "image");
+            return SceneUtils.Wrap(packetData, prefix + "image");
         }
 
         
