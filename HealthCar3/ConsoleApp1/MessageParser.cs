@@ -60,7 +60,7 @@ namespace ConsoleApp1
         public void Parse(string id, dynamic jsonData)
         {
             CommandCenter cc;
-
+            Console.WriteLine(id);
             switch (id)
             {
                 case "session/list":
@@ -73,6 +73,12 @@ namespace ConsoleApp1
                     break;
                 case "tunnel/create":
                     GetTunnelId(jsonData);
+                    Console.WriteLine(destination);
+                    /*if (this.destination != null)
+                    {
+                        connector.Send(new { id = "tunnel/send", data = new { dest = this.destination, data = new { } } });
+                    }*/
+                    break;
                     // Scene is now fully initialized and can now execute commands 
                     //cc = new CommandCenter();
 
@@ -80,7 +86,9 @@ namespace ConsoleApp1
                     //connector.SendPacket("scene/node/add", new { name = "test1", components = new { transform = new { position = new[] { 1, 1, 1 }, scale = 1, rotation = new[] { 0, 0, 0 } }, model = new { file = @"D:\Avans\Jaar2\Periode1\Proftaak2-1_HealthCare\HealthCar3\ConsoleApp1\resources\NetworkEngine\models\cars\cartoon\Pony_cartoon2.obj", cullbackfaces = true, animated = false } } }, data => {
                     //    Console.WriteLine("Added a new node to the scene.");              
                     //});
-                    break;
+                /*case "tunnel/send":
+                    
+                    break;*/
             }
         }
     }

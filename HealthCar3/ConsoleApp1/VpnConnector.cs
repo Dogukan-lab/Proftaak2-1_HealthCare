@@ -7,10 +7,11 @@ using System.Text;
 using ConsoleApp1.data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Threading;
 
 namespace ConsoleApp1
 {
-    
+
     class VpnConnector
     {
         private dynamic jsonData;
@@ -21,18 +22,16 @@ namespace ConsoleApp1
         private static readonly string address = "145.48.6.10";
         private static readonly int port = 6666;
         private string responseId;
-        private bool connected;
         private int timeoutCounter;
-        private readonly int timeoutMax = 3;
+        private static readonly int timeoutMax = 3;
 
         public NetworkStream Stream { get; private set; }
-        public bool IsConnected() { return this.connected; }
+        public bool IsConnected() { return client.Connected; }
         public VpnConnector(JsonSerializerSettings jsonSerializerSettings)
         {
             serializerSettings = jsonSerializerSettings;
             serializerSettings.NullValueHandling = NullValueHandling.Ignore;
             parser = new MessageParser(this);
-            connected = false;
             timeoutCounter = 0;
             Connect();
         }
@@ -46,20 +45,36 @@ namespace ConsoleApp1
             {
                 client = new TcpClient();
                 client.Connect(address, port); //attempts to connect to the VPN server.
-                connected = true;
-            } catch (Exception ex)
+                if (client.Connected)
+                {
+                    Send(new { id = "session/list" });
+                    Thread listenThread = new Thread(new ThreadStart(Listen));
+                    listenThread.Start();
+
+                }
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message); //Writes message on failure.
                 timeoutCounter++;
                 if (timeoutCounter < timeoutMax) //Retries the connection up to the given maximum.
                 {
-                    Connect();
-                } else
+                    if (client.Connected)
+                    {
+                        Console.WriteLine("Connection restored. Sending message.");
+                    }
+                    else
+                    {
+                        Connect();
+                    }
+                }
+                else
                 {
+                    Console.WriteLine("Connection failed, check connection settings.");
                     Disconnect();
                 }
             }
-            Send(new { id = "session/list" });
+
         }
 
         /**
@@ -67,32 +82,25 @@ namespace ConsoleApp1
          */
         public void Send(dynamic command)
         {
-            if (connected)
+            byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(command, serializerSettings)); //converts the command to bytes.
+            try
             {
-                byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(command, serializerSettings)); //converts the command to bytes.
-                try
-                {
-                    stream = client.GetStream();
-                    stream.Write(BitConverter.GetBytes(bytes.Length), 0, 4); //writes the length of the command to the server.
-                    stream.Write(bytes, 0, bytes.Length); //writes the message to the server.
-                    responseId = command.id;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            } else
+                stream = client.GetStream();
+                stream.Write(BitConverter.GetBytes(bytes.Length), 0, 4); //writes the length of the command to the server.
+                stream.Write(bytes, 0, bytes.Length); //writes the message to the server.
+                responseId = command.id;
+
+            }
+            catch (Exception ex)
             {
-                Console.WriteLine("Connection error. Attempting to reconnect."); //if not connected will attempt to reconnect once before failing.
-                Connect();
-                if (connected)
+                Console.WriteLine(ex.Message);
+                if (!client.Connected)
                 {
-                    Console.WriteLine("Connection restored. Sending message.");
-                } else
-                {
-                    Console.WriteLine("Reconnection failed, check connection settings.");
+                    Console.WriteLine("Connection error. Attempting to reconnect."); //if not connected will attempt to reconnect once before failing.
+                    Connect();
                 }
-            }  
+            }
+
         }
 
         /**
@@ -102,8 +110,8 @@ namespace ConsoleApp1
         {
             byte[] buffer = new byte[count];
             int received = 0;
-            while(received < count)
-                received += stream.Read(buffer, received, count-received);
+            while (received < count)
+                received += stream.Read(buffer, received, count - received);
             return buffer;
         }
 
@@ -120,7 +128,7 @@ namespace ConsoleApp1
             try
             {
                 jsonData = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(bytes), serializerSettings); //converts the response bytes to string data.
-                Console.WriteLine(jsonData);
+                /*Console.WriteLine(jsonData);*/
             }
             catch (Exception ex)
             {
@@ -129,7 +137,7 @@ namespace ConsoleApp1
             finally
             {
                 // if init command, no callback
-                if (responseId == "session/list" || responseId == "tunnel/create") 
+                if (responseId == "session/list" || responseId == "tunnel/create")
                     parser.Parse(responseId, jsonData); //sends the response to the parser.
                 else
                     HandleCallBack(jsonData);
@@ -143,8 +151,8 @@ namespace ConsoleApp1
         private void Disconnect()
         {
             client.Dispose();
-            stream.Close();
-            connected = false;
+            if (stream != null)
+                stream.Close();
         }
 
         // Dictionary to keep track of the callbacks
@@ -195,6 +203,6 @@ namespace ConsoleApp1
             int receivedSerial = packetData["data"].ToObject<JObject>()["data"].ToObject<JObject>()["serial"].ToObject<int>();
             // Execute the corresponding callback
             callbacks[receivedSerial].Invoke(packetData["data"] as JObject);
-        }       
+        }
     }
 }
