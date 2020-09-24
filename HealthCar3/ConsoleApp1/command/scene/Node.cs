@@ -6,11 +6,17 @@ using System.Windows.Forms;
 
 namespace ConsoleApp1.command.scene
 {
+    /**
+     *  This class creates, finds and deletes nodes.
+     */
     static class Node
     {
         private static string prefix = "scene/node/";
 
      
+        /**
+         * This wrap method wraps the node data into a command.
+         */
         private static dynamic wrap(dynamic nodeData, string id)
         {
             dynamic packet = new
@@ -20,6 +26,10 @@ namespace ConsoleApp1.command.scene
             };
             return packet;
         }
+
+        /**
+         * This method adds a model such a tree, bike or house.
+         */
         public static dynamic AddModel(string objectName, string objectFile, TransformComponent transform, ModelComponent model)
         {
             dynamic packetData = new
@@ -34,6 +44,9 @@ namespace ConsoleApp1.command.scene
             return wrap(packetData, prefix + "add");
         }
 
+        /**
+         * This method adds a terrain node to be used for texturing.
+         */
         public static dynamic AddTerrain(string name, string parent, ModelComponent model, Boolean smoothnormals )
         {
             dynamic packetData = new
@@ -52,6 +65,9 @@ namespace ConsoleApp1.command.scene
             return wrap(packetData, prefix + "add");
         }
 
+        /**
+         * This method adds a panel as a node.
+         */
         public static dynamic AddPanel(string name, string parent, PanelComponent panel)
         {
             dynamic packetData = new
@@ -66,6 +82,9 @@ namespace ConsoleApp1.command.scene
             return wrap(packetData, prefix + "add");
         }
 
+        /**
+         * This method can add a layer to the vr system
+         */
         public static dynamic AddLayer(string id, object diffuse, object normal, int minHeight, int maxHeight, int fadeDist)
         {
             dynamic packetData = new
@@ -80,6 +99,9 @@ namespace ConsoleApp1.command.scene
             return wrap(packetData, prefix + "add");
         }
 
+        /**
+         * This method can delete a layer.
+         */
         public static dynamic DelLayer()
         {
             dynamic packetData = new
@@ -89,7 +111,10 @@ namespace ConsoleApp1.command.scene
             return wrap(packetData, prefix + "dellayer");
         }
 
-        public static dynamic FindLayer(string objectName)
+        /**
+         * This method can find a specified node to be edited or used.
+         */
+        public static dynamic Find(string objectName)
         {
             dynamic packetData = new
             {
@@ -98,6 +123,9 @@ namespace ConsoleApp1.command.scene
             return wrap(packetData, prefix + "find");
         }
 
+        /**
+         * This method can move a node.
+         */
         public static dynamic MoveTo(string id, string stop, int[] position, string rotate, string interpolate, Boolean followheight, double speed)
         {
             dynamic packetData = new
@@ -114,6 +142,9 @@ namespace ConsoleApp1.command.scene
             return wrap(packetData, prefix + "moveto");
         }
 
+        /**
+         * This method updates the position of a node.
+         */
         public static dynamic Update(string id, object parent, TransformComponent transform, string name, double speed)
         {
             dynamic packetData = new
@@ -130,6 +161,9 @@ namespace ConsoleApp1.command.scene
             return wrap(packetData, prefix + "update");
         }
 
+        /**
+         * This method deletes a specified node.
+         */
         public static dynamic Delete(string guid)
         {
             dynamic packetData = new
