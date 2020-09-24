@@ -10,12 +10,10 @@ namespace ConsoleApp1.command.scene.terrain
      */
     class TerrainAdd : VpnCommand
     {
-        public TerrainAdd() : base(id : "scene/terrain/add")
+        public TerrainAdd(TerrainData data) : base(id : "scene/terrain/add", data : data)
         {
-            TerrainData data = new TerrainData();
-            data.SetSize(256, 256);
-            data.SetHeight(0);
-            this.data = data;
+
+
         }
     }
 }

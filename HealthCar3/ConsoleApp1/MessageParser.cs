@@ -73,7 +73,8 @@ namespace ConsoleApp1
                     }
                     break;
                 case "tunnel/create":
-                    cc = new CommandCenter();
+                    GetTunnelId(jsonData);
+                    cc = new CommandCenter(this.destination );
                     break;
             }
         }

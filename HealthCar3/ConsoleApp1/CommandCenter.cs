@@ -1,4 +1,5 @@
 ﻿using ConsoleApp1.command.scene.node;
+using ConsoleApp1.command.scene.terrain;
 using ConsoleApp1.data;
 using ConsoleApp1.data.components;
 using Newtonsoft.Json;
@@ -14,12 +15,20 @@ namespace ConsoleApp1
         /**
          * Controller for managing construction and management of commands.
          */
-        public CommandCenter()
+        public CommandCenter(String dest, VpnConnector vpn)
         {
             serializerSettings = new JsonSerializerSettings();
             serializerSettings.NullValueHandling = NullValueHandling.Ignore;
-
+            connector = vpn;
+            
             GenerateObject();
+
+            VpnCommand tunnel = new DunnyTunnel(dest);
+            CreateTerrain(tunnel);
+
+            connector.Send(tunnel);
+
+            
         }
 
         /**
@@ -58,5 +67,18 @@ namespace ConsoleApp1
             Console.WriteLine(JsonConvert.SerializeObject(tunnel, serializerSettings));
 
         }
+
+        private void CreateTerrain(VpnCommand tunnel)
+        {
+            TerrainData data = new TerrainData();
+
+            data.SetSize(256, 256);
+            data.SetHeight(0);
+            VpnCommand terraiAdd = new TerrainAdd(data);
+
+            tunnel.data.SetData(terraiAdd);
+        }
+
+
     }
 }
