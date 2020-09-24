@@ -77,11 +77,8 @@ namespace ConsoleApp1
                     //cc = new CommandCenter();
 
                     // test
-                    //connector.SendPacket("scene/node/add", new { name = "test", components = new { transform = new { position = new[] { 1, 1, 1 }, scale = 1, rotation = new[] { 0, 0, 0 } } } }, data => {
-                    //    Console.WriteLine("Added a new node to the scene.");
-                    //    connector.SendPacket("scene/node/add", new { name = "test", components = new { transform = new { position = new[] { 1, 1, 1 }, scale = 1, rotation = new[] { 0, 0, 0 } } } }, data => {
-                    //        Console.WriteLine("Added a new node to the scene.");
-                    //    });
+                    //connector.SendPacket("scene/node/add", new { name = "test1", components = new { transform = new { position = new[] { 1, 1, 1 }, scale = 1, rotation = new[] { 0, 0, 0 } }, model = new { file = @"D:\Avans\Jaar2\Periode1\Proftaak2-1_HealthCare\HealthCar3\ConsoleApp1\resources\NetworkEngine\models\cars\cartoon\Pony_cartoon2.obj", cullbackfaces = true, animated = false } } }, data => {
+                    //    Console.WriteLine("Added a new node to the scene.");              
                     //});
                     break;
             }

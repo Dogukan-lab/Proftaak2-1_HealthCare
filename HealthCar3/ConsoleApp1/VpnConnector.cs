@@ -187,7 +187,10 @@ namespace ConsoleApp1
         private void HandleCallBack(dynamic data)
         {
             JObject packetData = data as JObject;
-            
+
+            if (packetData["data"].ToObject<JObject>()["data"].ToObject<JObject>()["id"].ToObject<string>() == "callback")
+                return;
+
             // Find the matching serial number 
             int receivedSerial = packetData["data"].ToObject<JObject>()["data"].ToObject<JObject>()["serial"].ToObject<int>();
             // Execute the corresponding callback
