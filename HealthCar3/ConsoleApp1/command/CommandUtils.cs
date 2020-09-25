@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ConsoleApp1.command.scene
 {
-    static class SceneUtils
+    static class CommandUtils
     {
         /**
          * This method wraps the data into the send message.

@@ -18,7 +18,7 @@ namespace ConsoleApp1.command.scene
                 size = size,
                 height = height
             };
-            return SceneUtils.Wrap(packetData, prefix + "add");
+            return CommandUtils.Wrap(packetData, prefix + "add");
         }
 
         /**
@@ -30,7 +30,7 @@ namespace ConsoleApp1.command.scene
             {
 
             };
-            return SceneUtils.Wrap(packetData, prefix + "update");
+            return CommandUtils.Wrap(packetData, prefix + "update");
         }
 
         /**
@@ -42,7 +42,7 @@ namespace ConsoleApp1.command.scene
             {
 
             };
-            return SceneUtils.Wrap(packetData, prefix + "delete");
+            return CommandUtils.Wrap(packetData, prefix + "delete");
         }
 
         /**
@@ -55,7 +55,7 @@ namespace ConsoleApp1.command.scene
                 position = position,
                 positions = positions
             };
-            return SceneUtils.Wrap(packetData, prefix + "update");
+            return CommandUtils.Wrap(packetData, prefix + "update");
         }
     }
 }
