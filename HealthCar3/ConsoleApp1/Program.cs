@@ -92,13 +92,6 @@ namespace ConsoleApp1
                     }*/
 
             /*VpnConnector connector = new VpnConnector(new JsonSerializerSettings());*/
-
-
-            var v = Path.Combine(Directory.GetCurrentDirectory(), @"\resources\NetworkEngine\models\cars\cartoon\Body_dDo_d_orange.obj");
-            String u = new Uri(v).LocalPath;
-            Console.WriteLine();
-          
-            Console.Read();
         }
     }
 }

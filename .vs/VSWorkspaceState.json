@@ -3,8 +3,14 @@
     "",
     "\\HealthCar3",
     "\\HealthCar3\\ConsoleApp1",
-    "\\HealthCar3\\SimulatorGui"
+    "\\HealthCar3\\ConsoleApp1\\resources",
+    "\\HealthCar3\\ConsoleApp1\\resources\\NetworkEngine",
+    "\\HealthCar3\\ConsoleApp1\\resources\\NetworkEngine\\models",
+    "\\HealthCar3\\ConsoleApp1\\resources\\NetworkEngine\\models\\cars",
+    "\\HealthCar3\\ConsoleApp1\\resources\\NetworkEngine\\models\\cars\\cartoon",
+    "\\HealthCar3\\SimulatorGui",
+    "\\Server"
   ],
-  "SelectedNode": "\\HealthCar3\\SimulatorGui\\SimForm.Designer.cs",
+  "SelectedNode": "\\HealthCar3\\HealthCar3.sln",
   "PreviewInSolutionExplorer": false
 }
