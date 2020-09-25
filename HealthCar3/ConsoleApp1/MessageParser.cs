@@ -57,7 +57,7 @@ namespace ConsoleApp1
          */
         public void Parse(string id, dynamic jsonData)
         {
-            CommandCenter cc;
+            /*CommandCenter cc;*/
 
             switch (id)
             {
@@ -74,7 +74,7 @@ namespace ConsoleApp1
                     break;
                 case "tunnel/create":
                     GetTunnelId(jsonData);
-                    cc = new CommandCenter(this.destination );
+                    /*cc = new CommandCenter(this.destination );*/
                     break;
             }
         }

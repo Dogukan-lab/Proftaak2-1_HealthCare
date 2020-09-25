@@ -1,6 +1,6 @@
 ﻿using ConsoleApp1.command.scene;
-using ConsoleApp1.command.scene.node;
-using ConsoleApp1.command.scene.terrain;
+/*using ConsoleApp1.command.scene.node;
+using ConsoleApp1.command.scene.terrain;*/
 using ConsoleApp1.data;
 using ConsoleApp1.data.components;
 using Newtonsoft.Json;
@@ -22,10 +22,10 @@ namespace ConsoleApp1
             serializerSettings.NullValueHandling = NullValueHandling.Ignore;
             connector = vpn;
             
-            GenerateObject();
+            /*GenerateObject();*/
 
             VpnCommand tunnel = new DunnyTunnel(dest);
-            CreateTerrain(tunnel);
+            /*CreateTerrain(tunnel);*/
 
             connector.Send(tunnel);
 
@@ -35,7 +35,7 @@ namespace ConsoleApp1
         /**
          * Testfunction for testing tunnel command.
          */
-        private void TestTunnel()
+       /* private void TestTunnel()
         {
             VpnCommand dunny = new DunnyCommand();
             VpnCommand tunnel = new DunnyTunnel("dest");
@@ -43,12 +43,12 @@ namespace ConsoleApp1
             tunnel.data.SetData(dunny);
 
             Console.WriteLine(JsonConvert.SerializeObject(tunnel, serializerSettings));
-        }
+        }*/
 
         /**
          * TestFunction for generating an object.
          */
-        private void GenerateObject()
+       /* private void GenerateObject()
         {
             VpnCommand tunnel = new DunnyTunnel("dest");
 
@@ -67,15 +67,15 @@ namespace ConsoleApp1
 
             Console.WriteLine(JsonConvert.SerializeObject(tunnel, serializerSettings));
 
-        }
+        }*/
 
-        private void CreateTerrain(VpnCommand tunnel)
+       /* private void CreateTerrain(VpnCommand tunnel)
         {
             TerrainData data = new TerrainData();
 
             data.SetSize(256, 256);
             data.SetHeight(0);
-            VpnCommand terraiAdd = new TerrainAdd(data);
+            VpnCommand terrainAdd = new TerrainAdd(data);
 
             tunnel.data.SetData(terraiAdd);
             
@@ -84,7 +84,7 @@ namespace ConsoleApp1
         public void createBoundries()
         {
 
-        }
+        }*/
 
 
     }

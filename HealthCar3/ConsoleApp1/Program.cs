@@ -5,6 +5,9 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 
+using System.IO;
+using System.Reflection;
+
 namespace ConsoleApp1
 {
     class Program
@@ -88,7 +91,14 @@ namespace ConsoleApp1
                         }
                     }*/
 
-            VpnConnector connector = new VpnConnector(new JsonSerializerSettings());
+            /*VpnConnector connector = new VpnConnector(new JsonSerializerSettings());*/
+
+
+            var v = Path.Combine(Directory.GetCurrentDirectory(), @"\resources\NetworkEngine\models\cars\cartoon\Body_dDo_d_orange.obj");
+            String u = new Uri(v).LocalPath;
+            Console.WriteLine();
+          
+            Console.Read();
         }
     }
 }
