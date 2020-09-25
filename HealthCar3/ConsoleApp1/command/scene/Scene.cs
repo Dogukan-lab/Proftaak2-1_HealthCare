@@ -7,47 +7,59 @@ namespace ConsoleApp1.command.scene
     static  class Scene
     {
 
-        static string prefix = "scene/road/";
+        static string prefix = "scene/";
 
         /**
-         * This method adds a scene to the vr system
+         * This method gets the data inside of the scene in json format
          */
-        public static dynamic GetScene()
+        public static dynamic Get()
         {
             dynamic packetData = new
             {
             };
-            return SceneUtils.Wrap(packetData, prefix + "get");
+            return CommandUtils.Wrap(packetData, prefix + "get");
         }
 
-        public static dynamic ResetScene()
+        /**
+         * This method resets the scene to it's default state
+         */
+        public static dynamic Reset()
         {
             dynamic packetData = new
             {
             };
-            return SceneUtils.Wrap(packetData, prefix + "reset");
+            return CommandUtils.Wrap(packetData, prefix + "reset");
         }
 
-        public static dynamic SaveScene(string filename)
+        /**
+         * This method saves the scene in a designated file.
+         */
+        public static dynamic Save(string filename)
         {
             dynamic packetData = new
             {
                 filename = filename,
                 overwrite = true
             };
-            return SceneUtils.Wrap(packetData, prefix + "save");
+            return CommandUtils.Wrap(packetData, prefix + "save");
         }
 
-        public static dynamic LoadScene(string filename)
+        /**
+         * This method loads the scene from the save file
+         */
+        public static dynamic Load(string filename)
         {
             dynamic packetData = new
             {
                 filename = filename,
             };
-            return SceneUtils.Wrap(packetData, prefix + "load");
+            return CommandUtils.Wrap(packetData, prefix + "load");
         }
 
-        public static dynamic RaycastScene(int[] start, int[] direction, bool physics)
+        /**
+         * This method casts a ray through the scene, and returns an array of collision points.
+         */
+        public static dynamic Raycast(int[] start, int[] direction, bool physics)
         {
             dynamic packetData = new
             {
@@ -55,7 +67,7 @@ namespace ConsoleApp1.command.scene
                 direction = direction,
                 physics = physics
             };
-            return SceneUtils.Wrap(packetData, prefix + "raycast");
+            return CommandUtils.Wrap(packetData, prefix + "raycast");
         }
 
     }
