@@ -89,8 +89,6 @@ namespace ConsoleApp1
                     Console.WriteLine("Reconnection failed, check connection settings.");
                 }
             }
-            
-            
         }
 
         /**
