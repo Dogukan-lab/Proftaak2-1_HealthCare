@@ -18,6 +18,8 @@ namespace ConsoleApp1
             this.connector = connector;
         }
 
+        public string GetDestination() { return this.destination; }
+
         /*
          * This method checks the current session for your computer name.
          * Then it gets the id en sets it inside of the for loop.
@@ -58,24 +60,36 @@ namespace ConsoleApp1
         public void Parse(string id, dynamic jsonData)
         {
             CommandCenter cc;
-
+            Console.WriteLine(id);
             switch (id)
             {
                 case "session/list":
                     GetSession(jsonData);
                     if (this.id != null)
                     {
-                        ConnectData tempData = new ConnectData();
-                        tempData.SetSession(this.id);
-                        tempData.SetKey("");
-                        VpnCommand command = new VpnCommand("tunnel/create", tempData); //sends a new command including a data object to the connector.
-                        connector.Send(command);
+                        // Create the tunnel
+                        connector.Send(new { id = "tunnel/create", data = new { session = this.id, key = "" } });
                     }
                     break;
                 case "tunnel/create":
                     GetTunnelId(jsonData);
-                    cc = new CommandCenter(this.destination );
+                    Console.WriteLine(destination);
+                    if (this.destination != null)
+                    {
+                        // Scene is now fully initialized and can now execute commands 
+                        // Reset the responseId in VpnConnector
+                        connector.Send(new { id = "tunnel/send", data = new { dest = this.destination, data = new { } } });
+                        cc = new CommandCenter();
+
+                        // test
+                        //connector.SendPacket("scene/node/add", new { name = "test1", components = new { transform = new { position = new[] { 1, 1, 1 }, scale = 1, rotation = new[] { 0, 0, 0 } }, model = new { file = @"D:\Avans\Jaar2\Periode1\Proftaak2-1_HealthCare\HealthCar3\ConsoleApp1\resources\NetworkEngine\models\cars\cartoon\Pony_cartoon2.obj", cullbackfaces = true, animated = false } } }, data => {
+                        //    Console.WriteLine("Added a new node to the scene.");
+                        //});
+                    }
                     break;
+                /*case "tunnel/send":
+                    
+                    break;*/
             }
         }
     }

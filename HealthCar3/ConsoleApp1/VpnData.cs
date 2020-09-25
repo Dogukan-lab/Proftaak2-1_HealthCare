@@ -12,7 +12,7 @@ namespace ConsoleApp1
      */
     class VpnData : IPayload
     {
-        public readonly string id;
+        public string id;
         public IPayload data;
 
         public VpnData() { }

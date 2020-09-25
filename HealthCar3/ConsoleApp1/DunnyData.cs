@@ -8,9 +8,8 @@ namespace ConsoleApp1
     {
         public string test;
 
-        public DunnyData(string test)
+        public DunnyData()
         {
-            this.test = test;
         }
     }
 }
