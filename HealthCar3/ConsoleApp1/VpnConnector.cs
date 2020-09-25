@@ -128,7 +128,7 @@ namespace ConsoleApp1
             try
             {
                 jsonData = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(bytes), serializerSettings); //converts the response bytes to string data.
-                /*Console.WriteLine(jsonData);*/
+                //Console.WriteLine(jsonData);
             }
             catch (Exception ex)
             {
@@ -138,9 +138,13 @@ namespace ConsoleApp1
             {
                 // if init command, no callback
                 if (responseId == "session/list" || responseId == "tunnel/create")
+                {
                     parser.Parse(responseId, jsonData); //sends the response to the parser.
+                }
                 else
                     HandleCallBack(jsonData);
+
+                Console.WriteLine(responseId);
             }
             Listen();
         }
@@ -197,12 +201,22 @@ namespace ConsoleApp1
             JObject packetData = data as JObject;
 
             if (packetData["data"].ToObject<JObject>()["data"].ToObject<JObject>()["id"].ToObject<string>() == "callback")
+            {
+                HandleButton(packetData);
                 return;
+            }
 
             // Find the matching serial number 
             int receivedSerial = packetData["data"].ToObject<JObject>()["data"].ToObject<JObject>()["serial"].ToObject<int>();
             // Execute the corresponding callback
             callbacks[receivedSerial].Invoke(packetData["data"] as JObject);
+        }
+
+        private void HandleButton(JObject data)
+        {
+            string button = data["data"].ToObject<JObject>()["data"].ToObject<JObject>()["data"].ToObject<JObject>()["button"].ToObject<string>();
+            bool on = data["data"].ToObject<JObject>()["data"].ToObject<JObject>()["data"].ToObject<JObject>()["state"].ToObject<string>() == "on" ? true : false;
+            //Console.WriteLine($"Button: {button} State: {on}");
         }
     }
 }
