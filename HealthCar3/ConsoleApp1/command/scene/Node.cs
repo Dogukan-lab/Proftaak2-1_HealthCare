@@ -27,7 +27,7 @@ namespace ConsoleApp1.command.scene
                     model = model
                 }
             };
-            return SceneUtils.Wrap(packetData, prefix + "add");
+            return CommandUtils.Wrap(packetData, prefix + "add");
         }
 
         /**
@@ -48,7 +48,7 @@ namespace ConsoleApp1.command.scene
                     }
                 }
             };
-            return SceneUtils.Wrap(packetData, prefix + "add");
+            return CommandUtils.Wrap(packetData, prefix + "add");
         }
 
         /**
@@ -65,7 +65,7 @@ namespace ConsoleApp1.command.scene
                     panel = panel
                 }
             };
-            return SceneUtils.Wrap(packetData, prefix + "add");
+            return CommandUtils.Wrap(packetData, prefix + "add");
         }
 
         /**
@@ -82,7 +82,7 @@ namespace ConsoleApp1.command.scene
                 maxHeight = maxHeight,
                 fadeDist = fadeDist
             };
-            return SceneUtils.Wrap(packetData, prefix + "add");
+            return CommandUtils.Wrap(packetData, prefix + "add");
         }
 
         /**
@@ -94,7 +94,7 @@ namespace ConsoleApp1.command.scene
             {
 
             };
-            return SceneUtils.Wrap(packetData, prefix + "dellayer");
+            return CommandUtils.Wrap(packetData, prefix + "dellayer");
         }
 
         /**
@@ -106,7 +106,7 @@ namespace ConsoleApp1.command.scene
             {
                 name = objectName
             };
-            return SceneUtils.Wrap(packetData, prefix + "find");
+            return CommandUtils.Wrap(packetData, prefix + "find");
         }
 
         /**
@@ -125,7 +125,7 @@ namespace ConsoleApp1.command.scene
                 followheight = followheight,
                 speed = speed
             };
-            return SceneUtils.Wrap(packetData, prefix + "moveto");
+            return CommandUtils.Wrap(packetData, prefix + "moveto");
         }
 
         /**
@@ -144,7 +144,7 @@ namespace ConsoleApp1.command.scene
                     speed = speed
                 }
             };
-            return SceneUtils.Wrap(packetData, prefix + "update");
+            return CommandUtils.Wrap(packetData, prefix + "update");
         }
 
         /**
@@ -156,7 +156,7 @@ namespace ConsoleApp1.command.scene
             {
                 id = guid
             };
-            return SceneUtils.Wrap(packetData, prefix + "delete");
+            return CommandUtils.Wrap(packetData, prefix + "delete");
 
         }
     }

@@ -21,7 +21,7 @@ namespace ConsoleApp1.command.scene
             {
                 id = id
             };
-            return SceneUtils.Wrap(packetData, prefix + "clear");                          
+            return CommandUtils.Wrap(packetData, prefix + "clear");                          
         }
 
         /**
@@ -33,7 +33,7 @@ namespace ConsoleApp1.command.scene
             {
                 id = id
             };
-            return SceneUtils.Wrap(packetData, prefix + "swap");
+            return CommandUtils.Wrap(packetData, prefix + "swap");
         }
 
         /**
@@ -47,7 +47,7 @@ namespace ConsoleApp1.command.scene
                 widht = width,
                 lines = lines
             };
-            return SceneUtils.Wrap(packetData, prefix + "drawlines");
+            return CommandUtils.Wrap(packetData, prefix + "drawlines");
         }
 
         /**
@@ -60,7 +60,7 @@ namespace ConsoleApp1.command.scene
                 id = id,
                 color = color
             };
-            return SceneUtils.Wrap(packetData, prefix + "setclearcolor");
+            return CommandUtils.Wrap(packetData, prefix + "setclearcolor");
         }
 
         /**
@@ -77,7 +77,7 @@ namespace ConsoleApp1.command.scene
                 color = color,
                 font = font
             };
-            return SceneUtils.Wrap(packetData, prefix + "drawtext");
+            return CommandUtils.Wrap(packetData, prefix + "drawtext");
         }
 
         /**
@@ -93,7 +93,7 @@ namespace ConsoleApp1.command.scene
                 size = size
 
             };
-            return SceneUtils.Wrap(packetData, prefix + "image");
+            return CommandUtils.Wrap(packetData, prefix + "image");
         }
 
         

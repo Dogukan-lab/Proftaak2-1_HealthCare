@@ -17,7 +17,7 @@ namespace ConsoleApp1.command.scene
             {
                 time = time
             };
-            return SceneUtils.Wrap(packetData, prefix + "settime");
+            return CommandUtils.Wrap(packetData, prefix + "settime");
         }
 
         /**
@@ -38,7 +38,7 @@ namespace ConsoleApp1.command.scene
                     zneg = zNeg
                 }
             };
-            return SceneUtils.Wrap(packetData, prefix + "update");
+            return CommandUtils.Wrap(packetData, prefix + "update");
         }
 
     }

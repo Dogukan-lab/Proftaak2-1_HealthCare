@@ -8,20 +8,23 @@ namespace ConsoleApp1.command.route
     static class Route
     {
 
-        static string prefix = "scene/road/";
+        static string prefix = "scene/route/";
 
         /**
          * This method adds a route to the vr system
          */
-        public static dynamic AddRoute( object[] nodes)
+        public static dynamic Add( object[] nodes)
         {
             dynamic packetData = new
             {
                 nodes = nodes
             };
-            return SceneUtils.Wrap(packetData, prefix + "add");
+            return CommandUtils.Wrap(packetData, prefix + "add");
         }
 
+        /**
+         * This method updates the current route
+         */
         public static dynamic UpdateRoute(string uuid, object[] nodes)
         {
             dynamic packetData = new
@@ -29,19 +32,25 @@ namespace ConsoleApp1.command.route
                 uuid = uuid,
                 nodes = nodes
             };
-            return SceneUtils.Wrap(packetData, prefix + "update");
+            return CommandUtils.Wrap(packetData, prefix + "update");
         }
 
-        public static dynamic DeleteRoute(string uuid)
+        /**
+         * This method deletes a specified route
+         */
+        public static dynamic Delete(string uuid)
         {
             dynamic packetData = new
             {
                 uuid = uuid
             };
-            return SceneUtils.Wrap(packetData, prefix + "delete");
+            return CommandUtils.Wrap(packetData, prefix + "delete");
         }
 
-        public static dynamic FollowRoute(string routeId, string nodeId, double speed, double offset, string rotate, double smoothing, bool followHeight, int[] rotateOffset, int[] positionOffset)
+        /**
+         * This method makes a node follow the route
+         */
+        public static dynamic Follow(string routeId, string nodeId, double speed, double offset, string rotate, double smoothing, bool followHeight, int[] rotateOffset, int[] positionOffset)
         {
             dynamic packetData = new
             {
@@ -56,26 +65,32 @@ namespace ConsoleApp1.command.route
                 positionOffset = positionOffset
 
             };
-            return SceneUtils.Wrap(packetData, prefix + "follow");
+            return CommandUtils.Wrap(packetData, prefix + "follow");
         }
 
-        public static dynamic SpeedRoute(string nodeId, double speed)
+        /**
+         * This method changes the speed of a nod on a route
+         */
+        public static dynamic Speed(string nodeId, double speed)
         {
             dynamic packetData = new
             {
                 node = nodeId,
                 speed = speed
             };
-            return SceneUtils.Wrap(packetData, prefix + "speed");
+            return CommandUtils.Wrap(packetData, prefix + "follow/speed");
         }
 
+        /**
+         * This method shows the route with red lining.
+         */
         public static dynamic ShowRoute(bool show)
         {
             dynamic packetData = new
             {
                 show = show
             };
-            return SceneUtils.Wrap(packetData, prefix + "show");
+            return CommandUtils.Wrap(packetData, prefix + "show");
         }
     }
 }

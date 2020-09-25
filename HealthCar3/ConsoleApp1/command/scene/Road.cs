@@ -22,7 +22,7 @@ namespace ConsoleApp1.command.scene
                 specular = specular,
                 heightoffset = heightoffset
             };
-            return SceneUtils.Wrap(packetData, prefix + "add");
+            return CommandUtils.Wrap(packetData, prefix + "add");
         }
 
         /**
@@ -39,7 +39,7 @@ namespace ConsoleApp1.command.scene
                 specular = specular,
                 heightoffset = heightoffset
             };
-            return SceneUtils.Wrap(packetData, prefix + "update");
+            return CommandUtils.Wrap(packetData, prefix + "update");
         }
     }
 }
