@@ -8,6 +8,7 @@ using ConsoleApp1.data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Threading;
+using ConsoleApp1.command.scene;
 
 namespace ConsoleApp1
 {
@@ -165,31 +166,27 @@ namespace ConsoleApp1
         /**
          * Wrap the data in the tunnel and set the destination and serial.
          * Syntax for SendPacket
-         * SendPacket("scene/node/add", new { transform = new[] { } }, (data) => {
+         * SendPacket("scene/node/add", dynamic, (data) => {
          *     Console.WriteLine("Model got added");
          * });
          */
-        public void SendPacket(string id, dynamic data, Action<JObject> callback)
+        public void SendPacket(dynamic data, Action<JObject> callback)
         {
+            CommandUtils.SetSerial(currentSerial);
             dynamic packet = new
             {
                 id = "tunnel/send",
                 data = new
                 {
                     dest = this.parser.GetDestination(),
-                    data = new
-                    {
-                        id = id,
-                        serial = currentSerial,
-                        data = data
-                    }
+                    data = data
                 }
             };
 
             // Send the whole packet
             Send(packet);
             // Add serial to callbacks
-            callbacks[currentSerial] = callback;
+            callbacks[CommandUtils.GetSerial()] = callback;
             currentSerial++;
         }
 
