@@ -1,4 +1,5 @@
-﻿using ConsoleApp1.command.scene.node;
+﻿using ConsoleApp1.command.scene;
+using ConsoleApp1.command.scene.node;
 using ConsoleApp1.command.scene.terrain;
 using ConsoleApp1.data;
 using ConsoleApp1.data.components;
@@ -77,6 +78,12 @@ namespace ConsoleApp1
             VpnCommand terraiAdd = new TerrainAdd(data);
 
             tunnel.data.SetData(terraiAdd);
+            
+        }
+
+        public void createBoundries()
+        {
+
         }
 
 
