@@ -16,6 +16,7 @@ namespace ConsoleApp1
 
         /**
          * Controller for managing construction and management of commands.
+         * Om bomen aan het landschap toe te voegen maak het terrein naam de parent.
          */
         public CommandCenter(String dest, VpnConnector vpn)
         {
@@ -28,6 +29,11 @@ namespace ConsoleApp1
             //serializerSettings.NullValueHandling = NullValueHandling.Ignore;
             connector = vpn;
 
+            Action<JObject> addObject = new Action<JObject>(data =>
+           {
+               Console.WriteLine("Added node: {0}", data);
+           });
+
             Action<JObject> cb2 = new Action<JObject>(data => {
                 Console.WriteLine("Added Layer");
             });
@@ -35,32 +41,26 @@ namespace ConsoleApp1
             Action<JObject> cb1 = new Action<JObject>(data => {
                 Console.WriteLine("Added Node");
                 Console.WriteLine(data);
-                connector.SendPacket(Node.AddLayer(uuid, GetResourcePath(@"resources\NetworkEngine\textures\terrain\grass_diffuse.png"), GetResourcePath(@"resources\NetworkEngine\textures\terrain\grass_normal.png"), 0, 10, 1), cb2);
+                connector.SendPacket(Node.AddLayer(uuid, @"data/NetwerkEngine/textures/grass_diffuse.png", @"data/NetwerkEngine/textures/grass_normal.png", 0, 10, 1), cb2);
+                //connector.SendPacket(Node.AddLayer(uuid, GetResourcePath(@"resources\NetworkEngine\textures\terrain\grass_diffuse.png"), GetResourcePath(@"resources\NetworkEngine\textures\terrain\grass_normal.png"), 0, 10, 1), cb2);
             });
 
             int count = 0;
             Action<JObject> cb = new Action<JObject>(data => {
                 Console.WriteLine("Added Terrain");
-                Console.WriteLine(data);
-                if (count == 1)
-                {
-                    uuid = data["data"].ToObject<JObject>()["data"].ToObject<JObject>()["uuid"].ToObject<string>();
-                    Console.WriteLine(uuid);
-                }
-                else
-                    count++;
                 connector.SendPacket(Node.AddTerrain("ground", null, null, true), cb1);
             });
 
             Random random = new Random();
             int[] heightMap = new int[65536];
 
-            for(int i = 0; i < heightMap.Length; i++)
+            for (int i = 0; i < heightMap.Length; i++)
             {
                 heightMap[i] = random.Next(0, 10000);
             }
 
             connector.SendPacket(Terrain.Add(new int[] { 256, 256 }, heightMap), cb);
+            //connector.SendPacket(Node.AddModel("car", new TransformComponent(2, 2, 2, 0.01, 0, 0, 0), new ModelComponent(@"data/NetworkEngine/models/cars/cartoon/Pony_cartoon.obj", true, false, "")), addObject);
         }
 
         /**
