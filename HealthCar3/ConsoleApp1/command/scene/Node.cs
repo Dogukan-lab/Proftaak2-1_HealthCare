@@ -16,7 +16,7 @@ namespace ConsoleApp1.command.scene
         /**
          * This method adds a model such a tree, bike or house.
          */
-        public static dynamic AddModel(string objectName, string objectFile, TransformComponent transform, ModelComponent model)
+        public static dynamic AddModel(string objectName, TransformComponent transform, ModelComponent model)
         {
             dynamic packetData = new
             {
@@ -71,7 +71,7 @@ namespace ConsoleApp1.command.scene
         /**
          * This method can add a layer to the vr system
          */
-        public static dynamic AddLayer(string id, object diffuse, object normal, int minHeight, int maxHeight, int fadeDist)
+        public static dynamic AddLayer(string id, string diffuse, string normal, int minHeight, int maxHeight, int fadeDist)
         {
             dynamic packetData = new
             {

@@ -4,16 +4,11 @@ using System.Text;
 
 namespace ConsoleApp1
 {
-    class DunnyCommand : VpnCommand
+    class DunnyCommand : VpnCommand<DunnyData>
     {
         public DunnyCommand() : base(id: "node/create")
         {
-            this.data = generateData();
-        }
-
-        private DunnyData generateData()
-        {
-            return new DunnyData("test");
+            GetData().test = "test";
         }
     }
 }

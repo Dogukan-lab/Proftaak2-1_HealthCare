@@ -1,10 +1,10 @@
 ﻿using ConsoleApp1.command.scene;
-using ConsoleApp1.command.scene.node;
-using ConsoleApp1.command.scene.terrain;
-using ConsoleApp1.data;
 using ConsoleApp1.data.components;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.IO;
+using System.Reflection;
 
 namespace ConsoleApp1
 {
@@ -12,80 +12,73 @@ namespace ConsoleApp1
     {
         private VpnConnector connector;
         private JsonSerializerSettings serializerSettings;
+        private string runningPath;
 
         /**
          * Controller for managing construction and management of commands.
+         * Om bomen aan het landschap toe te voegen maak het terrein naam de parent.
          */
         public CommandCenter(String dest, VpnConnector vpn)
         {
-            serializerSettings = new JsonSerializerSettings();
-            serializerSettings.NullValueHandling = NullValueHandling.Ignore;
+            string uuid = "";
+
+            // Get the "root" path of our resources 
+            runningPath = AppDomain.CurrentDomain.BaseDirectory;
+
+            //serializerSettings = new JsonSerializerSettings();
+            //serializerSettings.NullValueHandling = NullValueHandling.Ignore;
             connector = vpn;
-            
-            GenerateObject();
 
-            VpnCommand tunnel = new DunnyTunnel(dest);
-            CreateTerrain(tunnel);
+            Action<JObject> addObject = new Action<JObject>(data =>
+           {
+               Console.WriteLine("Added node: {0}", data);
+           });
 
-            connector.Send(tunnel);
+            Action<JObject> cb2 = new Action<JObject>(data => {
+                Console.WriteLine("Added Layer");
+            });
 
-            
+            Action<JObject> cb1 = new Action<JObject>(data => {
+                Console.WriteLine("Added Node");
+                Console.WriteLine(data);
+                connector.SendPacket(Node.AddLayer(uuid, @"data/NetwerkEngine/textures/grass_diffuse.png", @"data/NetwerkEngine/textures/grass_normal.png", 0, 10, 1), cb2);
+                //connector.SendPacket(Node.AddLayer(uuid, GetResourcePath(@"resources\NetworkEngine\textures\terrain\grass_diffuse.png"), GetResourcePath(@"resources\NetworkEngine\textures\terrain\grass_normal.png"), 0, 10, 1), cb2);
+            });
+
+            int count = 0;
+            Action<JObject> cb = new Action<JObject>(data => {
+                Console.WriteLine("Added Terrain");
+                connector.SendPacket(Node.AddTerrain("ground", null, null, true), cb1);
+            });
+
+            Random random = new Random();
+            int[] heightMap = new int[65536];
+
+            for (int i = 0; i < heightMap.Length; i++)
+            {
+                heightMap[i] = random.Next(0, 10000);
+            }
+
+            connector.SendPacket(Terrain.Add(new int[] { 256, 256 }, heightMap), cb);
+            //connector.SendPacket(Node.AddModel("car", new TransformComponent(2, 2, 2, 0.01, 0, 0, 0), new ModelComponent(@"data/NetworkEngine/models/cars/cartoon/Pony_cartoon.obj", true, false, "")), addObject);
         }
 
         /**
-         * Testfunction for testing tunnel command.
+         * Returns the root path with the given file name
          */
-        private void TestTunnel()
+        private string GetResourcePath(string fileName)
         {
-            VpnCommand dunny = new DunnyCommand();
-            VpnCommand tunnel = new DunnyTunnel("dest");
-
-            tunnel.data.SetData(dunny);
-
-            Console.WriteLine(JsonConvert.SerializeObject(tunnel, serializerSettings));
+            return Path.Join(runningPath, fileName);
         }
 
-        /**
-         * TestFunction for generating an object.
-         */
-        private void GenerateObject()
+        private string GetModelObjects(string objectname)
         {
-            VpnCommand tunnel = new DunnyTunnel("dest");
-
-            NodeData data = new NodeData();
-            data.SetName("B2-Object-Add-Test");
-            
-            data.SetComponents(new ComponentMashup(
-                new TransformComponent(0, 0, 0, 1, 0, 0, 0),
-                new ModelComponent("filelocation", true, false, "AnimationLocation"),
-                new TerrainComponent(true), 
-                new PanelComponent(1, 1, 512, 512, 1, 1, 1, 1, true), 
-                new WaterComponent(20, 20, 0.1)));
-
-            VpnCommand addObject = new NodeAdd(data);
-            tunnel.data.SetData(addObject);
-
-            Console.WriteLine(JsonConvert.SerializeObject(tunnel, serializerSettings));
-
+            return $"data/NetworkEngine/model/{objectname}";
         }
 
-        private void CreateTerrain(VpnCommand tunnel)
+        private string GetTextures(string textureName)
         {
-            TerrainData data = new TerrainData();
-
-            data.SetSize(256, 256);
-            data.SetHeight(0);
-            VpnCommand terraiAdd = new TerrainAdd(data);
-
-            tunnel.data.SetData(terraiAdd);
-            
+            return $"data/NetworkEngine/texture/{textureName}";
         }
-
-        public void createBoundries()
-        {
-
-        }
-
-
     }
 }
