@@ -70,5 +70,15 @@ namespace ConsoleApp1
         {
             return Path.Join(runningPath, fileName);
         }
+
+        private string GetModelObjects(string objectname)
+        {
+            return $"data/NetworkEngine/model/{objectname}";
+        }
+
+        private string GetTextures(string textureName)
+        {
+            return $"data/NetworkEngine/texture/{textureName}";
+        }
     }
 }
