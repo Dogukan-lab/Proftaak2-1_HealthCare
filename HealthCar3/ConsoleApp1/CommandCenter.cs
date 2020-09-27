@@ -23,9 +23,25 @@ namespace ConsoleApp1
         public CommandCenter(VpnConnector vpn)
         {
             string uuid = "";
-            Random random = new Random();
-            int[] heightMap = new int[65536];
             connector = vpn;
+        }
+
+        public void ResetScene()
+        {
+            Console.WriteLine("Command: RESET SCENE");
+            this.connector.SendPacket(Scene.Reset(), new Action<JObject>(data =>
+            {
+                Console.WriteLine("Scene has been reset! Data: {0}", data.ToString());
+
+            }));
+            //CreateTerrain();
+
+        }
+
+        private void CreateTerrain()
+        {
+            int[] heightMap = new int[65536];
+            Random random = new Random();
 
             //Initializes the heightmap for the scene
             for (int i = 0; i < heightMap.Length; i++)
@@ -33,23 +49,36 @@ namespace ConsoleApp1
                 heightMap[i] = random.Next(0, 5);
             }
 
+            connector.SendPacket(Terrain.Add(new int[] { 256, 256 }, heightMap), new Action<JObject>(data =>
+            {
+                Console.WriteLine("Terrain skeleton added!");
+            }));
+            CreateTerrainTexture();
+
         }
 
-        public void ResetScene()
+        private void CreateTerrainTexture()
         {
-            Action<JObject> reset = new Action<JObject>(data =>
+            string uuid = "";
+            this.connector.SendPacket(Node.AddTerrain("groundPlane", null, null, true), new Action<JObject>(data =>
             {
-                Console.WriteLine("Scene has been reset!");
-                CreateObject("cars/cartoon/Pony_cartoon.obj");
-                //connector.SendPacket(Terrain.Add(new int[] { 256, 256 }, heightMap), cb);
-            });
+                Console.WriteLine("Data: {0}", data.ToString());
+                uuid = data["data"]["data"]["uuid"].ToString();
 
-            this.connector.SendPacket(Scene.Reset(), reset);
+            }));
+
+            this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("grass_diffuse.png"), GetTextures("grass_normal.png"), 0, 10, 1), new Action<JObject>(data =>
+            {
+                Console.WriteLine("Texture has been added!");
+            }));
+
         }
 
         public void CreateObject(string desiredModel)
         {
-            this.connector.SendPacket(Node.AddModel("car", new TransformComponent(2, 2, 2, 0.01, 0, 0, 0), new ModelComponent(GetModelObjects(desiredModel), true, false, "")), new Action<JObject>(data=>
+            Console.WriteLine("Command: ADD CAR OBJECT");
+
+            this.connector.SendPacket(Node.AddModel("car", new TransformComponent(2, 2, 2, 1, 0, 0, 0), new ModelComponent(GetModelObjects(desiredModel), true, false, "")), new Action<JObject>(data =>
             {
                 Console.WriteLine("Node added {0}", data);
             }));

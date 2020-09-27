@@ -71,13 +71,13 @@ namespace ConsoleApp1.command.scene
         /**
          * This method can add a layer to the vr system
          */
-        public static dynamic AddLayer(string id, string diffuse, string normal, int minHeight, int maxHeight, int fadeDist)
+        public static dynamic AddLayer(string uuid, string diffusePng, string normalPng, int minHeight, int maxHeight, int fadeDist)
         {
             dynamic packetData = new
             {
-                id = id,
-                diffuse = diffuse,
-                normal = normal,
+                id = uuid,
+                diffuse = diffusePng,
+                normal = normalPng,
                 minHeight = minHeight,
                 maxHeight = maxHeight,
                 fadeDist = fadeDist
@@ -112,7 +112,7 @@ namespace ConsoleApp1.command.scene
         /**
          * This method can move a node.
          */
-        public static dynamic MoveTo(string id, string stop, int[] position, string rotate, string interpolate, Boolean followheight, double speed)
+        public static dynamic MoveTo(string id, string stop, int[] position, string rotate, string interpolate, bool followheight, double speed)
         {
             dynamic packetData = new
             {

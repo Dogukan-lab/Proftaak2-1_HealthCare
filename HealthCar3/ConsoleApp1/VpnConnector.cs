@@ -174,6 +174,9 @@ namespace ConsoleApp1
         public void SendPacket(dynamic data, Action<JObject> callback)
         {
             CommandUtils.SetSerial(currentSerial);
+
+            Console.WriteLine("CommandUtils.SetSerial(currentSerial): {0}", currentSerial);
+
             dynamic packet = new
             {
                 id = "tunnel/send",
@@ -187,8 +190,8 @@ namespace ConsoleApp1
             // Send the whole packet
             Send(packet);
             // Add serial to callbacks
-            //callbacks[CommandUtils.GetSerial()] = callback;
-            callbacks.Add(CommandUtils.GetSerial(), callback);
+            callbacks[CommandUtils.GetSerial()] = callback;
+            //callbacks.Add(currentSerial, callback);
             currentSerial++;
         }
 
@@ -198,17 +201,17 @@ namespace ConsoleApp1
         private void HandleCallBack(dynamic data)
         {
             JObject packetData = data as JObject;
-            Console.WriteLine("Handle callback packetData {0}", packetData.ToString());
 
             if (packetData["data"].ToObject<JObject>()["data"].ToObject<JObject>()["id"].ToObject<string>() == "callback")
             {
+                Console.WriteLine("Reached here!!");
                 HandleButton(packetData);
                 return;
             }
 
             // Find the matching serial number 
             int receivedSerial = packetData["data"].ToObject<JObject>()["data"].ToObject<JObject>()["serial"].ToObject<int>();
-            Console.WriteLine("Received serial:  {0}", receivedSerial);
+            Console.WriteLine("Received serial: {0}", receivedSerial);
             // Execute the corresponding callback
             callbacks[receivedSerial].Invoke(packetData["data"] as JObject);
         }

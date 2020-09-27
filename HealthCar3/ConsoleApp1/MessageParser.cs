@@ -38,6 +38,7 @@ namespace ConsoleApp1
             if (this.id == null) 
             {
                 Console.WriteLine("Error: Session not found. Please make sure you are connected to the network application!");
+                Environment.Exit(0);
             }
         }
 
@@ -79,6 +80,7 @@ namespace ConsoleApp1
                     if (this.destination != null)
                     {
                         this.command.ResetScene();
+                        this.command.CreateObject("cars/generic/blue.obj");
                         // Scene is now fully initialized and can now execute commands 
 
                         //test
