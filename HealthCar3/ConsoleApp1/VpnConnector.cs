@@ -141,12 +141,12 @@ namespace ConsoleApp1
                 // if init command, no callback
                 if (responseId == "session/list" || responseId == "tunnel/create")
                 {
-                    parser.Parse(responseId, jsonData); //sends the response to the parser.
+                    parser.Parse(responseId, jsonData);//sends the response to the parser.
                 }
                 else
                     HandleCallBack(jsonData);
 
-                Console.WriteLine(responseId);
+                //Console.WriteLine(responseId);
             }
             Listen();
         }
@@ -163,7 +163,7 @@ namespace ConsoleApp1
 
         // Dictionary to keep track of the callbacks
         Dictionary<int, Action<JObject>> callbacks = new Dictionary<int, Action<JObject>>();
-        int currentSerial = 1;
+        int currentSerial = 0;
         /**
          * Wrap the data in the tunnel and set the destination and serial.
          * Syntax for SendPacket
@@ -173,9 +173,7 @@ namespace ConsoleApp1
          */
         public void SendPacket(dynamic data, Action<JObject> callback)
         {
-            CommandUtils.SetSerial(currentSerial);
-
-            Console.WriteLine("CommandUtils.SetSerial(currentSerial): {0}", currentSerial);
+           // Console.WriteLine("CommandUtils.SetSerial(currentSerial): {0}", currentSerial);
 
             dynamic packet = new
             {
@@ -193,6 +191,7 @@ namespace ConsoleApp1
             callbacks[CommandUtils.GetSerial()] = callback;
             //callbacks.Add(currentSerial, callback);
             currentSerial++;
+            CommandUtils.SetSerial(currentSerial);
         }
 
         /**
@@ -204,14 +203,14 @@ namespace ConsoleApp1
 
             if (packetData["data"].ToObject<JObject>()["data"].ToObject<JObject>()["id"].ToObject<string>() == "callback")
             {
-                Console.WriteLine("Reached here!!");
+                //Console.WriteLine("Reached here!!");
                 HandleButton(packetData);
                 return;
             }
 
             // Find the matching serial number 
             int receivedSerial = packetData["data"].ToObject<JObject>()["data"].ToObject<JObject>()["serial"].ToObject<int>();
-            Console.WriteLine("Received serial: {0}", receivedSerial);
+            //Console.WriteLine("Received serial: {0}", receivedSerial);
             // Execute the corresponding callback
             callbacks[receivedSerial].Invoke(packetData["data"] as JObject);
         }

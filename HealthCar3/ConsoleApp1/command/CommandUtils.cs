@@ -6,7 +6,7 @@ namespace ConsoleApp1.command.scene
 {
     static class CommandUtils
     {
-        private static int serial;
+        private static int serial = 0;
         public static int GetSerial() { return serial; }
         public static void SetSerial(int newSerial) { serial = newSerial; }
         /**

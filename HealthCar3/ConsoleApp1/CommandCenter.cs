@@ -38,7 +38,7 @@ namespace ConsoleApp1
 
         }
 
-        private void CreateTerrain()
+        public void CreateTerrain()
         {
             int[] heightMap = new int[65536];
             Random random = new Random();
@@ -51,9 +51,10 @@ namespace ConsoleApp1
 
             connector.SendPacket(Terrain.Add(new int[] { 256, 256 }, heightMap), new Action<JObject>(data =>
             {
+                Console.WriteLine("Data: {0}", data.ToString());
                 Console.WriteLine("Terrain skeleton added!");
+                CreateTerrainTexture();
             }));
-            CreateTerrainTexture();
 
         }
 
@@ -64,13 +65,13 @@ namespace ConsoleApp1
             {
                 Console.WriteLine("Data: {0}", data.ToString());
                 uuid = data["data"]["data"]["uuid"].ToString();
-
+                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("grass_diffuse.png"), GetTextures("grass_normal.png"), 0, 10, 1), new Action<JObject>(data =>
+                {
+                    Console.WriteLine("Data: {0}", data.ToString());
+                    Console.WriteLine("Texture has been added!");
+                }));
             }));
 
-            this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("grass_diffuse.png"), GetTextures("grass_normal.png"), 0, 10, 1), new Action<JObject>(data =>
-            {
-                Console.WriteLine("Texture has been added!");
-            }));
 
         }
 

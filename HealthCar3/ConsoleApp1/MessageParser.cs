@@ -80,7 +80,8 @@ namespace ConsoleApp1
                     if (this.destination != null)
                     {
                         this.command.ResetScene();
-                        this.command.CreateObject("cars/generic/blue.obj");
+                        //this.command.CreateObject("cars/generic/blue.obj");
+                        this.command.CreateTerrain();
                         // Scene is now fully initialized and can now execute commands 
 
                         //test
