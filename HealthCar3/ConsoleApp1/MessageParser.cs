@@ -10,21 +10,23 @@ namespace ConsoleApp1
     class MessageParser
     {
         private VpnConnector connector;
+        private CommandCenter command;
         private string id;
         private string destination;
 
         public MessageParser(VpnConnector connector)
         {
             this.connector = connector;
+            this.command = new CommandCenter(this.connector);
         }
 
         public string GetDestination() { return this.destination; }
 
         /*
          * This method checks the current session for your computer name.
-         * Then it gets the id en sets it inside of the for loop.
+         * Then it gets the id and sets it inside of the for loop.
          */
-        public void GetSession(dynamic jsonData)
+        public void GetSessionId(dynamic jsonData)
         {
             for (int i = 0; i < jsonData.data.Count; i++)
             {
@@ -49,38 +51,39 @@ namespace ConsoleApp1
             if (jsonData.data.status == "ok")
             {
                 this.destination = (string)jsonData.data.id;
+                Console.WriteLine("Destination has been set! {0}", this.destination);
+
             }
         }
 
         /**
          * Parses the data received based on the given response id.
          * TODO first switch-case needs to be refactored. 
-         * This will be based off of the 
          */
         public void Parse(string id, dynamic jsonData)
         {
-            CommandCenter cc;
-            Console.WriteLine(id);
             switch (id)
             {
                 case "session/list":
-                    GetSession(jsonData);
+                    GetSessionId(jsonData);
                     if (this.id != null)
                     {
+                        Console.WriteLine("Creating the tunnel...");
                         // Create the tunnel
                         connector.Send(new { id = "tunnel/create", data = new { session = this.id, key = "" } });
                     }
                     break;
                 case "tunnel/create":
+                    Console.WriteLine("Tunnel has been created!");
                     GetTunnelId(jsonData);
-                    Console.WriteLine(destination);
                     if (this.destination != null)
                     {
+                        this.command.ResetScene();
                         // Scene is now fully initialized and can now execute commands 
-                        cc = new CommandCenter(destination, connector);
 
-                        // test
-                        //connector.SendPacket(new { name = "test1", components = new { transform = new { position = new[] { 1, 1, 1 }, scale = 1, rotation = new[] { 0, 0, 0 } }, model = new { file = @"D:\Avans\Jaar2\Periode1\Proftaak2-1_HealthCare\HealthCar3\ConsoleApp1\resources\NetworkEngine\models\cars\cartoon\Pony_cartoon2.obj", cullbackfaces = true, animated = false } } }, data => {
+                        //test
+                        //connector.SendPacket(new { name = "test1", components = new { transform = new { position = new[] { 1, 1, 1 }, scale = 1, rotation = new[] { 0, 0, 0 } }, model = new { file = "data/NetworkEngine/models/cars/cartoon/Pony_cartoon2.obj", cullbackfaces = true, animated = false } } }, data =>
+                        //{
                         //    Console.WriteLine("Added a new node to the scene.");
                         //});
                     }
