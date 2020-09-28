@@ -173,7 +173,6 @@ namespace ConsoleApp1
          */
         public void SendPacket(dynamic data, Action<JObject> callback)
         {
-           // Console.WriteLine("CommandUtils.SetSerial(currentSerial): {0}", currentSerial);
 
             dynamic packet = new
             {
@@ -189,8 +188,8 @@ namespace ConsoleApp1
             Send(packet);
             // Add serial to callbacks
             callbacks[CommandUtils.GetSerial()] = callback;
-            //callbacks.Add(currentSerial, callback);
             currentSerial++;
+            //Sets the serial for the wrapper method inside of CommandUtils
             CommandUtils.SetSerial(currentSerial);
         }
 

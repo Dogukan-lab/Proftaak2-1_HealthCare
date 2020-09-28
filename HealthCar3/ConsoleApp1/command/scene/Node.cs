@@ -82,7 +82,7 @@ namespace ConsoleApp1.command.scene
                 maxHeight = maxHeight,
                 fadeDist = fadeDist
             };
-            return CommandUtils.Wrap(packetData, prefix + "add");
+            return CommandUtils.Wrap(packetData, prefix + "addlayer");
         }
 
         /**

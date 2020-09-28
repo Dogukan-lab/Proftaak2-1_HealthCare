@@ -22,7 +22,6 @@ namespace ConsoleApp1
          */
         public CommandCenter(VpnConnector vpn)
         {
-            string uuid = "";
             connector = vpn;
         }
 
@@ -34,8 +33,6 @@ namespace ConsoleApp1
                 Console.WriteLine("Scene has been reset! Data: {0}", data.ToString());
 
             }));
-            //CreateTerrain();
-
         }
 
         public void CreateTerrain()
@@ -51,24 +48,22 @@ namespace ConsoleApp1
 
             connector.SendPacket(Terrain.Add(new int[] { 256, 256 }, heightMap), new Action<JObject>(data =>
             {
-                Console.WriteLine("Data: {0}", data.ToString());
-                Console.WriteLine("Terrain skeleton added!");
-                CreateTerrainTexture();
+
             }));
+            CreateTerrainTexture();
 
         }
 
         private void CreateTerrainTexture()
         {
-            string uuid = "";
-            this.connector.SendPacket(Node.AddTerrain("groundPlane", null, null, true), new Action<JObject>(data =>
+            var uuid = "";
+            this.connector.SendPacket(Node.AddTerrain("groundPlane", null, new ModelComponent(GetTextures("terrain/desert_sand_bigx_d.jpg"), true, false, ""), true), new Action<JObject>(data =>
             {
-                Console.WriteLine("Data: {0}", data.ToString());
+                if (data["data"]["data"]["uuid"] != null)
                 uuid = data["data"]["data"]["uuid"].ToString();
-                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("grass_diffuse.png"), GetTextures("grass_normal.png"), 0, 10, 1), new Action<JObject>(data =>
+                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("grass_diffuse.png"), GetTextures("grid.png"), 0, 10, 1), new Action<JObject>(data =>
                 {
-                    Console.WriteLine("Data: {0}", data.ToString());
-                    Console.WriteLine("Texture has been added!");
+
                 }));
             }));
 
@@ -77,11 +72,9 @@ namespace ConsoleApp1
 
         public void CreateObject(string desiredModel)
         {
-            Console.WriteLine("Command: ADD CAR OBJECT");
 
             this.connector.SendPacket(Node.AddModel("car", new TransformComponent(2, 2, 2, 1, 0, 0, 0), new ModelComponent(GetModelObjects(desiredModel), true, false, "")), new Action<JObject>(data =>
             {
-                Console.WriteLine("Node added {0}", data);
             }));
         }
 
