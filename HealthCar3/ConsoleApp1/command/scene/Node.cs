@@ -72,7 +72,7 @@ namespace ConsoleApp1.command.scene
         /**
          * This method can add a layer to the vr system
          */
-        public static dynamic AddLayer(string uuid, string diffusePng, string normalPng, int minHeight, int maxHeight, int fadeDist)
+        public static dynamic AddLayer(string uuid, string diffusePng, string normalPng, int minHeight, int maxHeight, double fadeDist)
         {
             dynamic packetData = new
             {

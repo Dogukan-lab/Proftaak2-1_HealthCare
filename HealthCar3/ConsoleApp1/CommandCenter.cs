@@ -52,7 +52,7 @@ namespace ConsoleApp1
 
         public void CreateTerrain()
         {
-            int[] heightMap = new int[65536];
+            double[] heightMap = new double[65536];
             Random random = new Random();
 
             //Initializes the heightmap for the scene
@@ -60,17 +60,13 @@ namespace ConsoleApp1
             {
                 for (int j = 0; j < 256; j++)
                 {
-                    if (i == 0 || i == 255)
-                    {
-                        heightMap[(i * 255) + j] = 0;
-                    }
-                    else if (j == 0 || j == 255)
+                    if ((i == 0 || i == 255) || (j == 0 || j == 255))
                     {
                         heightMap[(i * 255) + j] = 0;
                     }
                     else
                     {
-                        heightMap[(i * 255) + j] = random.Next(0, 1);
+                        heightMap[(i * 255) + j] = random.NextDouble()/2;
                     }
                 }
             }
@@ -87,7 +83,7 @@ namespace ConsoleApp1
             this.connector.SendPacket(Node.AddTerrain("groundPlane", null, new TransformComponent(-128, -2, -128, 1, 0, 0, 0), true), new Action<JObject>(data =>
             {
                 uuid = data["data"]["data"]["uuid"].ToString();
-                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("terrain/lava_mars_d.jpg"), GetTextures("terrain/jungle_stone_s.jpg"), 0, 10, 1), new Action<JObject>(data =>
+                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("terrain/lava_mars_d.jpg"), GetTextures("terrain/jungle_stone_s.jpg"), 0, 10, 0.2), new Action<JObject>(data =>
                {
                    Console.WriteLine("Texture Data: {0}", data);
                }));
