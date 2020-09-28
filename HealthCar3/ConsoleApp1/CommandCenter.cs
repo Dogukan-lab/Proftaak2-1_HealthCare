@@ -73,6 +73,7 @@ namespace ConsoleApp1
         public void CreateRoute()
         {
             RouteData[] routeData = new RouteData[4];
+            // Defining route
             routeData[0] = new RouteData(new int[] { 1, 0, 1}, new int[] { 1, 0, 0 });
             routeData[1] = new RouteData(new int[] { 11, 0, 1 }, new int[] { 0, 0, 1 });
             routeData[2] = new RouteData(new int[] { 11, 0, 11 }, new int[] { -1, 0, 0 });
@@ -85,6 +86,15 @@ namespace ConsoleApp1
                 {
                     Console.WriteLine($"Response show: {data}");
                 }));
+                AddRoad(data["data"]["data"]["uuid"].ToString());
+            }));
+        }
+
+        private void AddRoad(string uuid)
+        {
+            this.connector.SendPacket(Road.AddRoad(uuid, GetTextures("tarmac_diffuse.png"), GetTextures("tarmac_normal.png"), GetTextures("tarmax_specular.png"), 0), new Action<JObject>(data =>
+            {
+                Console.WriteLine($"Response show: {data}");
             }));
         }
 
