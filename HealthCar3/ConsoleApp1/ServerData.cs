@@ -6,6 +6,9 @@ using Newtonsoft.Json;
 
 namespace ConsoleApp1
 {
+    /*
+     * Class used to save simulation data as an object to be sent to the server.
+     */
     class ServerData
     {
         public int heartRate;

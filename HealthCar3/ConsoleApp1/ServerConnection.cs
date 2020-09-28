@@ -13,8 +13,6 @@ namespace ConsoleApp1
         private int port;
         private int totalTries;
         private readonly int MAXRECONTRIES = 3;
-   
-
         public ServerConnection(String IPAddress, int port)
         {
             clientConnection = new TcpClient();
@@ -22,6 +20,9 @@ namespace ConsoleApp1
             OnConnection(IPAddress, port);
         }
 
+        /*
+         * Method used to make a connection with the server.
+         */
         public void OnConnection(string IPAddress, int port)
         {
             try
@@ -43,12 +44,18 @@ namespace ConsoleApp1
             }
         }
 
+        /*
+         * Method used to disconnect from the server.
+         */
         public void OnDisconnect()
         {
             stream.Dispose();
             clientConnection.Close();
         }
 
+        /*
+         * Method used to send messages to the server.
+         */
         public void Message(string jsonData)
         {
 
