@@ -56,10 +56,23 @@ namespace ConsoleApp1
             Random random = new Random();
 
             //Initializes the heightmap for the scene
-            for (int i = 0; i < heightMap.Length; i++)
+            for (int i = 0; i < 256; i++)
             {
-                //Make the heightmap morer fancy TODO
-                heightMap[i] = 1;
+                for (int j = 0; j < 256; j++)
+                {
+                    if (i == 0 || i == 255)
+                    {
+                        heightMap[(i * 255) + j] = 0;
+                    }
+                    else if (j == 0 || j == 255)
+                    {
+                        heightMap[(i * 255) + j] = 0;
+                    }
+                    else
+                    {
+                        heightMap[(i * 255) + j] = random.Next(0, 1);
+                    }
+                }
             }
 
             connector.SendPacket(Terrain.Add(new int[] { 256, 256 }, heightMap), new Action<JObject>(data =>
