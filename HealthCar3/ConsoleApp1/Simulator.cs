@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using Newtonsoft.Json;
 
 namespace ConsoleApp1
 {
@@ -19,6 +20,13 @@ namespace ConsoleApp1
         private Random random;
         private float resistance;
         private SimForm simForm;
+
+        //send data to server
+        private readonly String IPAddress = "127.0.0.1";
+        private readonly int portNum = 1330;
+        private ServerConnection serverCon;
+        private JsonSerializerSettings settings;
+
         public Thread updateThread { get; }
         public Simulator(IValueChangeListener listener, SimForm simForm) : base(listener)
         {
@@ -35,6 +43,12 @@ namespace ConsoleApp1
             random = new Random();
 
             this.simForm = simForm;
+
+            //has to make server connection
+            serverCon = new ServerConnection(IPAddress, portNum);
+            settings = new JsonSerializerSettings();
+            settings.NullValueHandling = NullValueHandling.Ignore;
+
 
             // Create a new thread that updates our values 
             updateThread = new Thread(new ThreadStart(UpdateValues));
@@ -69,6 +83,10 @@ namespace ConsoleApp1
             {
                 SetNewHeartRate(simForm.GetHeartRate());
             }
+
+            serverCon.Message(JsonConvert.SerializeObject(new ServerData(selectedHeartRate, selectedSpeed)));
+
+            /*serverCon.Message(JsonConvert.SerializeObject("test message"));*/
 
             // Wait an amount of time to update our values again
             Thread.Sleep(updateInterval);
