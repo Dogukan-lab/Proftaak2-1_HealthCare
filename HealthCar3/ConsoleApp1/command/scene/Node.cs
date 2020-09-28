@@ -113,12 +113,12 @@ namespace ConsoleApp1.command.scene
         /**
          * This method can move a node.
          */
-        public static dynamic MoveTo(string id, string stop, int[] position, string rotate, string interpolate, bool followheight, double speed)
+        public static dynamic MoveTo(string guid, string stop, int[] position, string rotate, string interpolate, bool followheight, double speed)
         {
             dynamic packetData = new
             {
 
-                id = id,
+                id = guid,
                 stop = stop,
                 position = position,
                 rotate = rotate,
@@ -132,11 +132,11 @@ namespace ConsoleApp1.command.scene
         /**
          * This method updates the position of a node.
          */
-        public static dynamic Update(string id, object parent, TransformComponent transform, string name, double speed)
+        public static dynamic Update(string guid, string parent, TransformComponent transform, string name, double speed)
         {
             dynamic packetData = new
             {
-                id = id,
+                id = guid,
                 parent = parent,
                 transform = transform,
                 animation = new

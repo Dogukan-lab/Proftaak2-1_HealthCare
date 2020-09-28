@@ -25,13 +25,28 @@ namespace ConsoleApp1
             connector = vpn;
         }
 
+        public void GetScene()
+        {
+            this.connector.SendPacket(Scene.Get(), new Action<JObject>(data =>
+            {
+                Console.WriteLine("Scene data: {0}", data);
+            }));
+        }
+
         public void ResetScene()
         {
             Console.WriteLine("Command: RESET SCENE");
             this.connector.SendPacket(Scene.Reset(), new Action<JObject>(data =>
             {
-                Console.WriteLine("Scene has been reset! Data: {0}", data.ToString());
+                Console.WriteLine("Scene has been reset!");
+                connector.SendPacket(Node.Find("GroundPlane"), new Action<JObject>(data =>
+                {
+                    this.connector.SendPacket(Node.Delete(data["data"]["data"][0]["uuid"].ToString()), new Action<JObject>(data =>
+                    {
+                        Console.WriteLine("Ground layer Deleted!");
+                    }));
 
+                }));
             }));
         }
 
@@ -45,31 +60,24 @@ namespace ConsoleApp1
             {
                 //Make the heightmap morer fancy TODO
                 heightMap[i] = 1;
-               
             }
-
-            connector.SendPacket(Node.DelLayer(), new Action<JObject>(data =>
-            {
-                Console.WriteLine("Base terrain has been deleted! {0}", data);
-            }));
 
             connector.SendPacket(Terrain.Add(new int[] { 256, 256 }, heightMap), new Action<JObject>(data =>
             {
                 CreateTerrainTexture();
             }));
-
         }
 
         private void CreateTerrainTexture()
         {
-            var uuid = "";
-            this.connector.SendPacket(Node.AddTerrain("groundPlane", null, null, true), new Action<JObject>(data =>
+            string uuid = "";
+            this.connector.SendPacket(Node.AddTerrain("groundPlane", null, new TransformComponent(-128, -2, -128, 1, 0, 0, 0), true), new Action<JObject>(data =>
             {
                 uuid = data["data"]["data"]["uuid"].ToString();
-                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("terrain/lava_mars_d.jpg") , GetTextures("terrain/jungle_stone_s.jpg"), 0, 10, 1), new Action<JObject>(data =>
-                {
-                    Console.WriteLine("Texture Data: {0}", data);
-                }));
+                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("terrain/lava_mars_d.jpg"), GetTextures("terrain/jungle_stone_s.jpg"), 0, 10, 1), new Action<JObject>(data =>
+               {
+                   Console.WriteLine("Texture Data: {0}", data);
+               }));
             }));
 
 
