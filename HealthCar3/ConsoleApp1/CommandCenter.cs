@@ -25,28 +25,13 @@ namespace ConsoleApp1
             connector = vpn;
         }
 
-        public void GetScene()
-        {
-            this.connector.SendPacket(Scene.Get(), new Action<JObject>(data =>
-            {
-                Console.WriteLine("Scene data: {0}", data);
-            }));
-        }
-
         public void ResetScene()
         {
             Console.WriteLine("Command: RESET SCENE");
             this.connector.SendPacket(Scene.Reset(), new Action<JObject>(data =>
             {
-                Console.WriteLine("Scene has been reset!");
-                connector.SendPacket(Node.Find("GroundPlane"), new Action<JObject>(data =>
-                {
-                    this.connector.SendPacket(Node.Delete(data["data"]["data"][0]["uuid"].ToString()), new Action<JObject>(data =>
-                    {
-                        Console.WriteLine("Ground layer Deleted!");
-                    }));
+                Console.WriteLine("Scene has been reset! Data: {0}", data.ToString());
 
-                }));
             }));
         }
 
@@ -56,28 +41,46 @@ namespace ConsoleApp1
             Random random = new Random();
 
             //Initializes the heightmap for the scene
-            for (int i = 0; i < heightMap.Length; i++)
+            /*for (int i = 0; i < heightMap.Length; i++)
             {
-                //Make the heightmap morer fancy TODO
-                heightMap[i] = 1;
+                heightMap[i] = random.Next(0, 2);
+            }*/
+
+            for (int i = 0; i < 256; i++)
+            {
+                for (int j = 0; j < 256; j++)
+                {
+                    if (i == 0 || i == 255)
+                    {
+                        heightMap[(i * 255) + j] = 0;
+                    } else if (j == 0 || j == 255) {
+                        heightMap[(i * 255) + j] = 0;
+                    } else
+                    {
+                        heightMap[(i * 255) + j] = random.Next(0, 1);
+                    }
+                }
             }
 
             connector.SendPacket(Terrain.Add(new int[] { 256, 256 }, heightMap), new Action<JObject>(data =>
             {
-                CreateTerrainTexture();
+
             }));
+            CreateTerrainTexture();
+
         }
 
         private void CreateTerrainTexture()
         {
-            string uuid = "";
-            this.connector.SendPacket(Node.AddTerrain("groundPlane", null, new TransformComponent(-128, -2, -128, 1, 0, 0, 0), true), new Action<JObject>(data =>
+            var uuid = "";
+            this.connector.SendPacket(Node.AddTerrain("groundPlane", null, new ModelComponent(GetTextures("terrain/desert_sand_bigx_d.jpg"), true, false, ""), true), new Action<JObject>(data =>
             {
+                if (data["data"]["data"]["uuid"] != null)
                 uuid = data["data"]["data"]["uuid"].ToString();
-                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("terrain/lava_mars_d.jpg"), GetTextures("terrain/jungle_stone_s.jpg"), 0, 10, 1), new Action<JObject>(data =>
-               {
-                   Console.WriteLine("Texture Data: {0}", data);
-               }));
+                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("grass_diffuse.png"), GetTextures("grid.png"), 0, 10, 1), new Action<JObject>(data =>
+                {
+
+                }));
             }));
 
 
@@ -85,6 +88,7 @@ namespace ConsoleApp1
 
         public void CreateObject(string desiredModel)
         {
+
             this.connector.SendPacket(Node.AddModel("car", new TransformComponent(2, 2, 2, 1, 0, 0, 0), new ModelComponent(GetModelObjects(desiredModel), true, false, "")), new Action<JObject>(data =>
             {
             }));
@@ -105,7 +109,7 @@ namespace ConsoleApp1
 
         private string GetTextures(string textureName)
         {
-            return $"data/NetworkEngine/textures/{textureName}";
+            return $"data/NetworkEngine/texture/{textureName}";
         }
     }
 }
