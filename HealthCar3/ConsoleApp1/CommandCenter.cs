@@ -1,4 +1,6 @@
-﻿using ConsoleApp1.command.scene;
+﻿using ConsoleApp1.command.route;
+using ConsoleApp1.command.scene;
+using ConsoleApp1.data;
 using ConsoleApp1.data.components;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -30,7 +32,7 @@ namespace ConsoleApp1
             Console.WriteLine("Command: RESET SCENE");
             this.connector.SendPacket(Scene.Reset(), new Action<JObject>(data =>
             {
-                Console.WriteLine("Scene has been reset! Data: {0}", data.ToString());
+                //Console.WriteLine("Scene has been reset! Data: {0}", data.ToString());
 
             }));
         }
@@ -44,14 +46,9 @@ namespace ConsoleApp1
             for (int i = 0; i < heightMap.Length; i++)
             {
                 //Make the heightmap morer fancy TODO
-                heightMap[i] = 1;
+                heightMap[i] = 0;
                
             }
-
-            connector.SendPacket(Node.DelLayer(), new Action<JObject>(data =>
-            {
-                Console.WriteLine("Base terrain has been deleted! {0}", data);
-            }));
 
             connector.SendPacket(Terrain.Add(new int[] { 256, 256 }, heightMap), new Action<JObject>(data =>
             {
@@ -66,13 +63,29 @@ namespace ConsoleApp1
             this.connector.SendPacket(Node.AddTerrain("groundPlane", null, null, true), new Action<JObject>(data =>
             {
                 uuid = data["data"]["data"]["uuid"].ToString();
-                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("terrain/lava_mars_d.jpg") , GetTextures("terrain/jungle_stone_s.jpg"), 0, 10, 1), new Action<JObject>(data =>
+                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("terrain/grass_green_d.jpg"), GetTextures("terrain/grass_normal.jpg"), 0, 10, 1), new Action<JObject>(data =>
                 {
                     Console.WriteLine("Texture Data: {0}", data);
                 }));
             }));
+        }
 
+        public void CreateRoute()
+        {
+            RouteData[] routeData = new RouteData[4];
+            routeData[0] = new RouteData(new int[] { 1, 0, 1}, new int[] { 1, 0, 0 });
+            routeData[1] = new RouteData(new int[] { 11, 0, 1 }, new int[] { 0, 0, 1 });
+            routeData[2] = new RouteData(new int[] { 11, 0, 11 }, new int[] { -1, 0, 0 });
+            routeData[3] = new RouteData(new int[] { 1, 0, 11 }, new int[] { 0, 0, -1 });
 
+            this.connector.SendPacket(Route.Add(routeData), new Action<JObject>(data =>
+            {
+                Console.WriteLine($"Response add: {data}");
+                this.connector.SendPacket(Route.ShowRoute(true), new Action<JObject>(data =>
+                {
+                    Console.WriteLine($"Response show: {data}");
+                }));
+            }));
         }
 
         public void CreateObject(string desiredModel)

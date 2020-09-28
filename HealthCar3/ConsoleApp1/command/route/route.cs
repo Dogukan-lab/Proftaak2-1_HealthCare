@@ -8,7 +8,7 @@ namespace ConsoleApp1.command.route
     static class Route
     {
 
-        static string prefix = "scene/route/";
+        static string prefix = "route/";
 
         /**
          * This method adds a route to the vr system
