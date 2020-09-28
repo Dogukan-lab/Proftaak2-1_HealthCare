@@ -33,7 +33,7 @@ namespace ConsoleApp1.command.scene
         /**
          * This method adds a terrain node to be used for texturing.
          */
-        public static dynamic AddTerrain(string name, string parent, ModelComponent model, Boolean smoothnormals )
+        public static dynamic AddTerrain(string name, string parent, TransformComponent transform, Boolean smoothnormals )
         {
             dynamic packetData = new
             {
@@ -41,7 +41,7 @@ namespace ConsoleApp1.command.scene
                 parent = parent,
                 components = new
                 {
-                    model = model,
+                    transform = transform,
                     terrain = new
                     {
                         smoothnormals = smoothnormals

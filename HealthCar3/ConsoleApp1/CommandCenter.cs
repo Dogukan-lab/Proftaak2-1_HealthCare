@@ -57,11 +57,11 @@ namespace ConsoleApp1
         private void CreateTerrainTexture()
         {
             var uuid = "";
-            this.connector.SendPacket(Node.AddTerrain("groundPlane", null, new ModelComponent(GetTextures("terrain/desert_sand_bigx_d.jpg"), true, false, ""), true), new Action<JObject>(data =>
+            this.connector.SendPacket(Node.AddTerrain("groundPlane", null, new TransformComponent(0, 0, 0, 1, 0, 0, 0), true), new Action<JObject>(data =>
             {
                 if (data["data"]["data"]["uuid"] != null)
                 uuid = data["data"]["data"]["uuid"].ToString();
-                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("grass_diffuse.png"), GetTextures("grid.png"), 0, 10, 1), new Action<JObject>(data =>
+                this.connector.SendPacket(Node.AddLayer(uuid, @"D:\Avans\Jaar2\Periode1\Proftaak\NetworkEngine.18.10.10.1\NetworkEngine\data\NetworkEngine\textures\terrain\grass_diffuse.png", @"D:\Avans\Jaar2\Periode1\Proftaak\NetworkEngine.18.10.10.1\NetworkEngine\data\NetworkEngine\textures\terrain\grass_normal.png", 0, 10, 1), new Action<JObject>(data =>
                 {
 
                 }));
