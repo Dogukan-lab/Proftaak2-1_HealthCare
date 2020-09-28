@@ -209,7 +209,6 @@ namespace ConsoleApp1
 
             // Find the matching serial number 
             int receivedSerial = packetData["data"].ToObject<JObject>()["data"].ToObject<JObject>()["serial"].ToObject<int>();
-            //Console.WriteLine("Received serial: {0}", receivedSerial);
             // Execute the corresponding callback
             callbacks[receivedSerial].Invoke(packetData["data"] as JObject);
         }
@@ -218,7 +217,6 @@ namespace ConsoleApp1
         {
             string button = data["data"].ToObject<JObject>()["data"].ToObject<JObject>()["data"].ToObject<JObject>()["button"].ToObject<string>();
             bool on = data["data"].ToObject<JObject>()["data"].ToObject<JObject>()["data"].ToObject<JObject>()["state"].ToObject<string>() == "on" ? true : false;
-            //Console.WriteLine($"Button: {button} State: {on}");
         }
     }
 }

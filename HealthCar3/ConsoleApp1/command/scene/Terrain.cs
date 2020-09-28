@@ -16,7 +16,7 @@ namespace ConsoleApp1.command.scene
             dynamic packetData = new
             {
                 size = size,
-                height = height
+                heights = height
             };
             return CommandUtils.Wrap(packetData, prefix + "add");
         }

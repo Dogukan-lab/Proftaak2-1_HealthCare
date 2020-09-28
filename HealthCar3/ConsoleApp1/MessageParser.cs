@@ -35,7 +35,7 @@ namespace ConsoleApp1
                     this.id = (string)jsonData.data[i].id;
                 }
             }
-            if (this.id == null) 
+            if (this.id == null)
             {
                 Console.WriteLine("Error: Session not found. Please make sure you are connected to the network application!");
                 Environment.Exit(0);
@@ -79,22 +79,11 @@ namespace ConsoleApp1
                     GetTunnelId(jsonData);
                     if (this.destination != null)
                     {
-                        this.command.ResetScene();
-                        //this.command.CreateObject("cars/generic/blue.obj");
-                        this.command.CreateTerrain();
-                        this.command.CreateObject("cars/generic/blue.obj");
                         // Scene is now fully initialized and can now execute commands 
-
-                        //test
-                        //connector.SendPacket(new { name = "test1", components = new { transform = new { position = new[] { 1, 1, 1 }, scale = 1, rotation = new[] { 0, 0, 0 } }, model = new { file = "data/NetworkEngine/models/cars/cartoon/Pony_cartoon2.obj", cullbackfaces = true, animated = false } } }, data =>
-                        //{
-                        //    Console.WriteLine("Added a new node to the scene.");
-                        //});
+                        this.command.ResetScene();
+                        this.command.CreateTerrain();
                     }
                     break;
-                /*case "tunnel/send":
-                    
-                    break;*/
             }
         }
     }

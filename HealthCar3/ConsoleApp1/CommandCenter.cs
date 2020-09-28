@@ -43,27 +43,32 @@ namespace ConsoleApp1
             //Initializes the heightmap for the scene
             for (int i = 0; i < heightMap.Length; i++)
             {
-                heightMap[i] = random.Next(0, 5);
+                //Make the heightmap morer fancy TODO
+                heightMap[i] = 1;
+               
             }
+
+            connector.SendPacket(Node.DelLayer(), new Action<JObject>(data =>
+            {
+                Console.WriteLine("Base terrain has been deleted! {0}", data);
+            }));
 
             connector.SendPacket(Terrain.Add(new int[] { 256, 256 }, heightMap), new Action<JObject>(data =>
             {
-
+                CreateTerrainTexture();
             }));
-            CreateTerrainTexture();
 
         }
 
         private void CreateTerrainTexture()
         {
             var uuid = "";
-            this.connector.SendPacket(Node.AddTerrain("groundPlane", null, new ModelComponent(GetTextures("terrain/desert_sand_bigx_d.jpg"), true, false, ""), true), new Action<JObject>(data =>
+            this.connector.SendPacket(Node.AddTerrain("groundPlane", null, null, true), new Action<JObject>(data =>
             {
-                if (data["data"]["data"]["uuid"] != null)
                 uuid = data["data"]["data"]["uuid"].ToString();
-                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("grass_diffuse.png"), GetTextures("grid.png"), 0, 10, 1), new Action<JObject>(data =>
+                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("terrain/lava_mars_d.jpg") , GetTextures("terrain/jungle_stone_s.jpg"), 0, 10, 1), new Action<JObject>(data =>
                 {
-
+                    Console.WriteLine("Texture Data: {0}", data);
                 }));
             }));
 
@@ -72,7 +77,6 @@ namespace ConsoleApp1
 
         public void CreateObject(string desiredModel)
         {
-
             this.connector.SendPacket(Node.AddModel("car", new TransformComponent(2, 2, 2, 1, 0, 0, 0), new ModelComponent(GetModelObjects(desiredModel), true, false, "")), new Action<JObject>(data =>
             {
             }));
@@ -93,7 +97,7 @@ namespace ConsoleApp1
 
         private string GetTextures(string textureName)
         {
-            return $"data/NetworkEngine/texture/{textureName}";
+            return $"data/NetworkEngine/textures/{textureName}";
         }
     }
 }
