@@ -86,7 +86,15 @@ namespace ConsoleApp1
                 {
                     Console.WriteLine($"Response show: {data}");
                 }));
+                string roadID = data["data"]["data"]["uuid"].ToString();
                 AddRoad(data["data"]["data"]["uuid"].ToString());
+                this.connector.SendPacket(Node.AddModel("Fiets", new TransformComponent(1, 0, 1, 1, 0, 0, 0), new ModelComponent(GetModelObjects("bike/bike.fbx"), true, false, "")), new Action<JObject>(data =>
+                {
+                    this.connector.SendPacket(Route.Follow(roadID, data["data"]["data"]["uuid"].ToString(),1, 0, "XZ", 1,false , new int[] { 0,0,0}, new int[] {0,0,0 } ), new Action<JObject>(data =>
+                    { 
+                    }));
+                }));
+               
             }));
         }
 
