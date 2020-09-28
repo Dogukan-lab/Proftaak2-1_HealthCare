@@ -61,7 +61,7 @@ namespace ConsoleApp1
             {
                 if (data["data"]["data"]["uuid"] != null)
                 uuid = data["data"]["data"]["uuid"].ToString();
-                this.connector.SendPacket(Node.AddLayer(uuid, @"D:\Avans\Jaar2\Periode1\Proftaak\NetworkEngine.18.10.10.1\NetworkEngine\data\NetworkEngine\textures\terrain\grass_diffuse.png", @"D:\Avans\Jaar2\Periode1\Proftaak\NetworkEngine.18.10.10.1\NetworkEngine\data\NetworkEngine\textures\terrain\grass_normal.png", 0, 10, 1), new Action<JObject>(data =>
+                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("terrain/grass_diffuse.png"), GetTextures("terrain/grass_normal.png"), 0, 10, 1), new Action<JObject>(data =>
                 {
 
                 }));
@@ -93,7 +93,7 @@ namespace ConsoleApp1
 
         private string GetTextures(string textureName)
         {
-            return $"data/NetworkEngine/texture/{textureName}";
+            return $"data/NetworkEngine/textures/{textureName}";
         }
     }
 }
