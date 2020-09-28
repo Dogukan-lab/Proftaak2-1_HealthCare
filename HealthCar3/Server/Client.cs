@@ -27,7 +27,9 @@ namespace Server
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
 
         }
-
+        /*
+         * Method that deserilises the JsonData
+         */
         private void OnRead(IAsyncResult ar)
         {
             try

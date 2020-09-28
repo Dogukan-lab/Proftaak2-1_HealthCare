@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Server
 {
+    /*
+     * Dataclass that holds the data of the clients
+     */
     class ClientData
     {
         private int heartRate { get; set; }

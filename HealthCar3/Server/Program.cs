@@ -6,6 +6,9 @@ using System.Net.Sockets;
 
 namespace Server
 {
+    /*
+     * Class that allows the client to connect to the server
+     */
     class Program
     {
         private TcpListener listener;
@@ -17,7 +20,9 @@ namespace Server
             new Program().Listen();
             
         }
-
+        /*
+        * Method that accepts the connection to the server
+        */
         public void Listen()
         {
             clients = new Dictionary<Client, int>();
@@ -28,7 +33,9 @@ namespace Server
 
             Console.ReadLine();
         }
-
+        /*
+        * Method that shows the connection to the server
+        */
         private void Connect(IAsyncResult ar)
         {
             TcpClient tcpClient = listener.EndAcceptTcpClient(ar);
@@ -37,7 +44,9 @@ namespace Server
             clients.Add(new Client(tcpClient),clients.Count+1);
             listener.BeginAcceptTcpClient(new AsyncCallback(Connect), null);
         }
-
+       /*
+       * Method that removes the client when it disconnects
+       */
         internal static void Disconnect(Client client)
         {
             clients.Remove(client);
