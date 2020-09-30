@@ -19,8 +19,6 @@ namespace ConsoleApp1
         /**
          * Controller for managing construction and management of commands.
          * Om bomen aan het landschap toe te voegen maak het terrein naam de parent.
-         * TODO callbacks are being returned twice
-         * so the callbacks need to be fixed
          */
         public CommandCenter(VpnConnector vpn)
         {
@@ -37,7 +35,6 @@ namespace ConsoleApp1
 
         public void ResetScene()
         {
-            Console.WriteLine("Command: RESET SCENE");
             this.connector.SendPacket(Scene.Reset(), new Action<JObject>(data =>
             {
                 Console.WriteLine("Scene has been reset!");
