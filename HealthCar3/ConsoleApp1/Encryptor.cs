@@ -11,11 +11,11 @@ namespace ConsoleApp1.encryption
     static class Encryptor
     {
         // key and IV statically hardcoded for conviencence.
-        public static Byte[] key = { 144, 39, 92, 101, 2, 110, 84, 28, 184, 39, 121, 251, 50, 171, 59, 117, 214, 161, 108, 111, 231, 202, 203, 99, 51, 40, 17, 158, 175, 175, 191, 85 };
-        public static Byte[] iv = { 218, 146, 160, 230, 45, 68, 214, 92, 176, 159, 170, 162, 174, 58, 161, 186 };
+        public static byte[] key = { 144, 39, 92, 101, 2, 110, 84, 28, 184, 39, 121, 251, 50, 171, 59, 117, 214, 161, 108, 111, 231, 202, 203, 99, 51, 40, 17, 158, 175, 175, 191, 85 };
+        public static byte[] iv = { 218, 146, 160, 230, 45, 68, 214, 92, 176, 159, 170, 162, 174, 58, 161, 186 };
 
 
-        public static byte[] Encrypt(String original)
+        public static byte[] Encrypt(string original)
         {
             // Check arguments.
             if (original == null || original.Length <= 0)
@@ -23,7 +23,7 @@ namespace ConsoleApp1.encryption
                 throw new ArgumentException("String does not contain a message!");
             }
 
-            Byte[] encrypted;
+            byte[] encrypted;
 
             // Create an Rijndael object
             // with the specified key and IV.
@@ -54,7 +54,7 @@ namespace ConsoleApp1.encryption
             return encrypted;
         }
 
-        public static String Decrypt(Byte[] encrypted)
+        public static string Decrypt(byte[] encrypted)
         {
             // Check arguments.
             if (encrypted == null || encrypted.Length <= 0)
