@@ -21,12 +21,12 @@ namespace ConsoleApp1
                 return;
 
             speed = newSpeed;
-            valueChangeListener.OnSpeedChange(speed);
+            //valueChangeListener.OnSpeedChange(speed);
         }
         protected void SetNewHeartRate(int newHeartRate)
         {
             heartRate = newHeartRate;
-            valueChangeListener.OnHeartRateChange(heartRate);
+            //valueChangeListener.OnHeartRateChange(heartRate);
         }
 
         public virtual void WriteResistance(float resistance)
