@@ -66,7 +66,7 @@ namespace ConsoleApp1
                     }
                     else
                     {
-                        heightMap[(i * 255) + j] = random.NextDouble()/2;
+                        heightMap[(i * 255) + j] = random.NextDouble()/4;
                     }
                 }
             }
@@ -80,7 +80,7 @@ namespace ConsoleApp1
         private void CreateTerrainTexture()
         {
             string uuid = "";
-            this.connector.SendPacket(Node.AddTerrain("groundPlane", null, new TransformComponent(-128, -2, -128, 1, 0, 0, 0), true), new Action<JObject>(data =>
+            this.connector.SendPacket(Node.AddTerrain("groundPlane", null, new TransformComponent(-128, -1, -128, 1, 0, 0, 0), true), new Action<JObject>(data =>
             {
                 uuid = data["data"]["data"]["uuid"].ToString();
                 this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("terrain/lava_mars_d.jpg"), GetTextures("terrain/jungle_stone_s.jpg"), 0, 10, 0.2), new Action<JObject>(data =>
