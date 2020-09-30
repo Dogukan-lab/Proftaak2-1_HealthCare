@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using PackageUtils;
 
 namespace Server
 {
@@ -55,7 +56,9 @@ namespace Server
 
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
-
+        /*
+         * Handles all the incoming data by looking at the tag in the received package
+         */
         private void HandleData(dynamic data)
         {
             JObject jData = data as JObject;
@@ -67,7 +70,7 @@ namespace Server
                 case "login/register":
                     string name = jData["Data"].ToObject<JObject>()["Name"].ToObject<string>();
                     id = Program.GenerateId(name);
-                    byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(Program.WrapWithTag("client/id", new { Id = id })));
+                    byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(PackageWrapper.WrapWithTag("client/id", new { Id = id })));
                     stream.Write(bytes, 0, bytes.Length);
                     break;
                 case "login/client":

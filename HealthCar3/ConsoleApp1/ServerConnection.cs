@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using Newtonsoft.Json;
 using System.Threading;
 using Newtonsoft.Json.Linq;
+using PackageUtils;
 
 namespace ConsoleApp1
 {
@@ -19,6 +20,7 @@ namespace ConsoleApp1
         private readonly int MAXRECONTRIES = 3;
         private string uniqueId = "";
         private byte[] buffer = new byte[1024];
+        private bool connected = false;
         
         public ServerConnection()
         {
@@ -89,6 +91,7 @@ namespace ConsoleApp1
 
         private void OnConnected()
         {
+            connected = true;
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
             RegisterToServer("kees banaan");
         }
@@ -102,9 +105,12 @@ namespace ConsoleApp1
             clientConnection.Close();
         }
 
+        /*
+         * Method used to register to the server
+         */
         private void RegisterToServer(string name)
         {
-            byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(WrapWithTag("login/register", new { Name = name })));
+            byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(PackageWrapper.WrapWithTag("login/register", new { Name = name })));
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -114,25 +120,17 @@ namespace ConsoleApp1
          */
         public void UpdateHeartRate(int heartRate)
         {
-            byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(WrapWithTag("update/heartrate", new { Id = uniqueId, HeartRate = heartRate})));
+            byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(PackageWrapper.WrapWithTag("update/heartrate", new { Id = uniqueId, HeartRate = heartRate})));
 
-            stream.Write(bytes, 0, bytes.Length);
+            if(connected)
+                stream.Write(bytes, 0, bytes.Length);
         }
         public void UpdateSpeed(float speed)
         {
-            byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(WrapWithTag("update/speed", new { Id = uniqueId, Speed = speed})));
+            byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(PackageWrapper.WrapWithTag("update/speed", new { Id = uniqueId, Speed = speed})));
 
-            stream.Write(bytes, 0, bytes.Length);
-        }
-
-        private dynamic WrapWithTag(string tag, dynamic data)
-        {
-            dynamic command = new
-            {
-                Tag = tag,
-                Data = data
-            };
-            return command;
+            if(connected)
+                stream.Write(bytes, 0, bytes.Length);
         }
     }
 }

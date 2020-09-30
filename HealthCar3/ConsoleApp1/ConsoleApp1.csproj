@@ -38,4 +38,6 @@
     <Folder Include="Properties\" />
   </ItemGroup>
 
+  <Import Project="..\PackageUtils\PackageUtils.projitems" Label="Shared" />
+
 </Project>

@@ -54,6 +54,9 @@ namespace Server
             Console.WriteLine("Client disconnected");
         }
 
+        /*
+         * Generates an id for the new registered client
+         */
         public static string GenerateId(string name)
         {
             Random random = new Random();
@@ -64,16 +67,6 @@ namespace Server
             }
             registeredClients.Add(id, name);
             return id;
-        }
-
-        public static dynamic WrapWithTag(string tag, dynamic data)
-        {
-            dynamic command = new
-            {
-                Tag = tag,
-                Data = data
-            };
-            return command;
         }
     }
 }

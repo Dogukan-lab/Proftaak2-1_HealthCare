@@ -7,9 +7,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "ConsoleApp1\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimulatorGui", "SimulatorGui\SimulatorGui.csproj", "{140D1AD6-1935-43B1-89D9-FFE66900B988}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{3936FB85-2E89-4655-A11F-5D359DABD6E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{3936FB85-2E89-4655-A11F-5D359DABD6E8}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "PackageUtils", "PackageUtils\PackageUtils.shproj", "{126445E1-C754-417F-9757-944E031C13BD}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		PackageUtils\PackageUtils.projitems*{126445e1-c754-417f-9757-944e031c13bd}*SharedItemsImports = 13
+		PackageUtils\PackageUtils.projitems*{33b33a79-1fa3-4228-8b14-0b76c677e3d7}*SharedItemsImports = 5
+		PackageUtils\PackageUtils.projitems*{3936fb85-2e89-4655-a11f-5d359dabd6e8}*SharedItemsImports = 5
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
