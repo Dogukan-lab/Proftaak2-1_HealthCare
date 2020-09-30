@@ -13,7 +13,7 @@ namespace ConsoleApp1
         private Decoder decoder;
         public BLE bleBike { get; }
         public BLE bleHeart { get; }
-        public Bluetooth(string bikeID, string heartMonitorID, IValueChangeListener listener) : base(listener)
+        public Bluetooth(string bikeID, string heartMonitorID, IValueChangeListener listener, ServerConnection sc) : base(listener, sc)
         {
             decoder = new Decoder();
 

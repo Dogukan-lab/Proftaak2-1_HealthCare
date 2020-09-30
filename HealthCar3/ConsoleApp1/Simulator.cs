@@ -24,10 +24,9 @@ namespace ConsoleApp1
         //Attributes used to send data.
         private readonly String IPAddress = "127.0.0.1";
         private readonly int portNum = 1330;
-        private ServerConnection serverCon;
 
         public Thread updateThread { get; }
-        public Simulator(IValueChangeListener listener, SimForm simForm) : base(listener)
+        public Simulator(IValueChangeListener listener, ServerConnection sc, SimForm simForm) : base(listener, sc)
         {
             // Set the base values for the speed and the heart rate
             selectedSpeed = 0;
@@ -42,9 +41,6 @@ namespace ConsoleApp1
             random = new Random();
 
             this.simForm = simForm;
-
-            //Used to make a server connection.
-            serverCon = new ServerConnection(IPAddress, portNum);
 
             // Create a new thread that updates our values 
             updateThread = new Thread(new ThreadStart(UpdateValues));
@@ -79,9 +75,6 @@ namespace ConsoleApp1
             {
                 SetNewHeartRate(simForm.GetHeartRate());
             }
-
-            // Sends sim data to the server.
-            serverCon.Message(JsonConvert.SerializeObject(new ServerData(selectedHeartRate, selectedSpeed)));
 
             // Wait an amount of time to update our values again
             Thread.Sleep(updateInterval);

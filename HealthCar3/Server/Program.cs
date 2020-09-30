@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -13,12 +14,12 @@ namespace Server
     {
         private TcpListener listener;
         public static Dictionary<Client,int> clients;
+        public static Dictionary<string, string> registeredClients;
 
         static void Main(string[] args)
         {
             Console.WriteLine("Hello Server!");
-            new Program().Listen();
-            
+            new Program().Listen();     
         }
         /*
         * Method that accepts the connection to the server
@@ -26,11 +27,11 @@ namespace Server
         public void Listen()
         {
             clients = new Dictionary<Client, int>();
+            registeredClients = new Dictionary<string, string>();
             //TODO don't know which ip address and port
             listener = new TcpListener(IPAddress.Any, 1330);
             listener.Start();
             listener.BeginAcceptTcpClient(new AsyncCallback(Connect), null);
-
             Console.ReadLine();
         }
         /*
@@ -53,6 +54,26 @@ namespace Server
             Console.WriteLine("Client disconnected");
         }
 
+        public static string GenerateId(string name)
+        {
+            Random random = new Random();
+            string id = "";
+            for(int i = 0; i < 10; i++)
+            {
+                id += random.Next(0, 9);
+            }
+            registeredClients.Add(id, name);
+            return id;
+        }
 
+        public static dynamic WrapWithTag(string tag, dynamic data)
+        {
+            dynamic command = new
+            {
+                Tag = tag,
+                Data = data
+            };
+            return command;
+        }
     }
 }

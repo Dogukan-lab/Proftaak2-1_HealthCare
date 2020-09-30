@@ -14,8 +14,8 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-
             TempListenerClass listener = new TempListenerClass();
+            ServerConnection serverCon = new ServerConnection();
             SimForm simForm = null;
 
             // Select connector option
@@ -26,7 +26,7 @@ namespace ConsoleApp1
                 Console.WriteLine("Select bluetooth or simulator: |B|S|");
                 cInput = Console.ReadLine();
                 if (cInput.ToUpper() == "B")
-                    connector = new Bluetooth("Avans Bike AC74", "Avans Bike AC74", listener);
+                    connector = new Bluetooth("Avans Bike AC74", "Avans Bike AC74", listener, serverCon);
                 else if (cInput.ToUpper() == "S")
                 {
                     // Do the gui setup
@@ -34,7 +34,7 @@ namespace ConsoleApp1
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
                     simForm = new SimForm();
-                    connector = new Simulator(listener, simForm);
+                    connector = new Simulator(listener, serverCon, simForm);
                 }
                 else
                     cInput = "";
