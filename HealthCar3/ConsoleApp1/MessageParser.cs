@@ -82,6 +82,7 @@ namespace ConsoleApp1
                         // Scene is now fully initialized and can now execute commands 
                         this.command.ResetScene();
                         this.command.CreateTerrain();
+                        this.command.CreateRoute();
                     }
                     break;
             }

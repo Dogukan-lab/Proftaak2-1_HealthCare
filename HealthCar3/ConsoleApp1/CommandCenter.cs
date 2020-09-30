@@ -1,4 +1,6 @@
-﻿using ConsoleApp1.command.scene;
+﻿using ConsoleApp1.command.route;
+using ConsoleApp1.command.scene;
+using ConsoleApp1.data;
 using ConsoleApp1.data.components;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -88,8 +90,42 @@ namespace ConsoleApp1
                    Console.WriteLine("Texture Data: {0}", data);
                }));
             }));
+        }
 
+        public void CreateRoute()
+        {
+            RouteData[] routeData = new RouteData[4];
+            // Defining route
+            routeData[0] = new RouteData(new int[] { 1, 0, 1}, new int[] { 1, 0, 0 });
+            routeData[1] = new RouteData(new int[] { 11, 0, 1 }, new int[] { 0, 0, 1 });
+            routeData[2] = new RouteData(new int[] { 11, 0, 11 }, new int[] { -1, 0, 0 });
+            routeData[3] = new RouteData(new int[] { 1, 0, 11 }, new int[] { 0, 0, -1 });
 
+            this.connector.SendPacket(Route.Add(routeData), new Action<JObject>(data =>
+            {
+                Console.WriteLine($"Response add: {data}");
+                this.connector.SendPacket(Route.ShowRoute(true), new Action<JObject>(data =>
+                {
+                    Console.WriteLine($"Response show: {data}");
+                }));
+                string roadID = data["data"]["data"]["uuid"].ToString();
+                AddRoad(data["data"]["data"]["uuid"].ToString());
+                this.connector.SendPacket(Node.AddModel("Fiets", new TransformComponent(1, 0, 1, 1, 0, 0, 0), new ModelComponent(GetModelObjects("bike/bike.fbx"), true, false, "")), new Action<JObject>(data =>
+                {
+                    this.connector.SendPacket(Route.Follow(roadID, data["data"]["data"]["uuid"].ToString(),1, 0, "XZ", 1,false , new int[] { 0,0,0}, new int[] {0,0,0 } ), new Action<JObject>(data =>
+                    { 
+                    }));
+                }));
+               
+            }));
+        }
+
+        private void AddRoad(string uuid)
+        {
+            this.connector.SendPacket(Road.AddRoad(uuid, GetTextures("tarmac_diffuse.png"), GetTextures("tarmac_normal.png"), GetTextures("tarmax_specular.png"), 0), new Action<JObject>(data =>
+            {
+                Console.WriteLine($"Response show: {data}");
+            }));
         }
 
         public void CreateObject(string desiredModel)

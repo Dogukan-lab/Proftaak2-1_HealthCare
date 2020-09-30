@@ -12,7 +12,7 @@ namespace ConsoleApp1.command.scene
         /**
          * This method adds a route to the vr system
          */
-        public static dynamic AddRoute(string routeId, string diffuse, string normal, string specular, double heightoffset)
+        public static dynamic AddRoad(string routeId, string diffuse, string normal, string specular, double heightoffset)
         {
             dynamic packetData = new
             {
