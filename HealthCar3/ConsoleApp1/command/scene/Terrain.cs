@@ -11,12 +11,12 @@ namespace ConsoleApp1.command.scene
         /**
          * This method adds a skeleton terrain for the terrain textures.
          */
-        public static dynamic Add(int[] size, int[] height)
+        public static dynamic Add(int[] size, double[] height)
         {
             dynamic packetData = new
             {
                 size = size,
-                height = height
+                heights = height
             };
             return CommandUtils.Wrap(packetData, prefix + "add");
         }

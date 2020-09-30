@@ -7,10 +7,10 @@ namespace ConsoleApp1.data.components
     class TransformComponent
     {
         public int[] position;
-        public int scale;
+        public double scale;
         public int[] rotation;
 
-        public TransformComponent(int posx, int posy, int posz, int scale, int rotx, int roty, int rotz)
+        public TransformComponent(int posx, int posy, int posz, double scale, int rotx, int roty, int rotz)
         {
             this.position = new int[] { posx, posy, posz };
             this.scale = scale;

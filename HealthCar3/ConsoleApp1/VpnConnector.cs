@@ -8,6 +8,8 @@ using ConsoleApp1.data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Threading;
+using ConsoleApp1.command.scene;
+using System.Linq;
 
 namespace ConsoleApp1
 {
@@ -139,12 +141,12 @@ namespace ConsoleApp1
                 // if init command, no callback
                 if (responseId == "session/list" || responseId == "tunnel/create")
                 {
-                    parser.Parse(responseId, jsonData); //sends the response to the parser.
+                    parser.Parse(responseId, jsonData);//sends the response to the parser.
                 }
                 else
                     HandleCallBack(jsonData);
 
-                Console.WriteLine(responseId);
+                //Console.WriteLine(responseId);
             }
             Listen();
         }
@@ -161,36 +163,34 @@ namespace ConsoleApp1
 
         // Dictionary to keep track of the callbacks
         Dictionary<int, Action<JObject>> callbacks = new Dictionary<int, Action<JObject>>();
-        int currentSerial = 1;
+        int currentSerial = 0;
         /**
          * Wrap the data in the tunnel and set the destination and serial.
          * Syntax for SendPacket
-         * SendPacket("scene/node/add", new { transform = new[] { } }, (data) => {
+         * SendPacket("scene/node/add", dynamic, (data) => {
          *     Console.WriteLine("Model got added");
          * });
          */
-        public void SendPacket(string id, dynamic data, Action<JObject> callback)
+        public void SendPacket(dynamic data, Action<JObject> callback)
         {
+
             dynamic packet = new
             {
                 id = "tunnel/send",
                 data = new
                 {
                     dest = this.parser.GetDestination(),
-                    data = new
-                    {
-                        id = id,
-                        serial = currentSerial,
-                        data = data
-                    }
+                    data = data
                 }
             };
 
             // Send the whole packet
             Send(packet);
             // Add serial to callbacks
-            callbacks[currentSerial] = callback;
+            callbacks[CommandUtils.GetSerial()] = callback;
             currentSerial++;
+            //Sets the serial for the wrapper method inside of CommandUtils
+            CommandUtils.SetSerial(currentSerial);
         }
 
         /**
@@ -202,6 +202,7 @@ namespace ConsoleApp1
 
             if (packetData["data"].ToObject<JObject>()["data"].ToObject<JObject>()["id"].ToObject<string>() == "callback")
             {
+                //Console.WriteLine("Reached here!!");
                 HandleButton(packetData);
                 return;
             }
@@ -216,7 +217,6 @@ namespace ConsoleApp1
         {
             string button = data["data"].ToObject<JObject>()["data"].ToObject<JObject>()["data"].ToObject<JObject>()["button"].ToObject<string>();
             bool on = data["data"].ToObject<JObject>()["data"].ToObject<JObject>()["data"].ToObject<JObject>()["state"].ToObject<string>() == "on" ? true : false;
-            //Console.WriteLine($"Button: {button} State: {on}");
         }
     }
 }

@@ -6,6 +6,9 @@ namespace ConsoleApp1.command.scene
 {
     static class CommandUtils
     {
+        private static int serial = 0;
+        public static int GetSerial() { return serial; }
+        public static void SetSerial(int newSerial) { serial = newSerial; }
         /**
          * This method wraps the data into the send message.
          */
@@ -14,6 +17,7 @@ namespace ConsoleApp1.command.scene
             dynamic packet = new
             {
                 id = id,
+                serial = serial,
                 data = data
             };
             return packet;
