@@ -6,13 +6,13 @@ namespace ConsoleApp1.data.components
 {
     class TransformComponent
     {
-        public int[] position;
+        public double[] position;
         public double scale;
         public int[] rotation;
 
-        public TransformComponent(int posx, int posy, int posz, double scale, int rotx, int roty, int rotz)
+        public TransformComponent(double posx, double posy, double posz, double scale, int rotx, int roty, int rotz)
         {
-            this.position = new int[] { posx, posy, posz };
+            this.position = new double[] { posx, posy, posz };
             this.scale = scale;
             this.rotation = new int[] { rotx, roty, rotz };
         }

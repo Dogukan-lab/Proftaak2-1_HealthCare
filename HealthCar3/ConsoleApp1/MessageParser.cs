@@ -80,9 +80,10 @@ namespace ConsoleApp1
                     if (this.destination != null)
                     {
                         // Scene is now fully initialized and can now execute commands 
-                        this.command.ResetScene();
-                        this.command.CreateTerrain();
-                        this.command.CreateRoute();
+                        //this.command.ResetScene();
+                        //this.command.CreateTerrain();
+                        //this.command.CreateRoute();
+                        this.command.PresetOne(18);
                     }
                     break;
             }

@@ -22,7 +22,59 @@ namespace ConsoleApp1
          */
         public CommandCenter(VpnConnector vpn)
         {
-            connector = vpn;
+            this.connector = vpn;
+        }
+
+        public void PresetOne(int time)
+        {
+            ResetScene();
+            CreateTerrain();
+            CreateRoute();
+            SetTime(time);
+        }
+
+        public void SetTime(double time)
+        {
+            this.connector.SendPacket(Skybox.SetTime(time), new Action<JObject>(data =>
+           {
+               Console.WriteLine("Time set");
+               if (time < 12 && time >= 5)
+               {
+                   this.connector.SendPacket(Skybox.Update("static",
+                       GetSkyBox("bluecloud_rt.jpg"), GetSkyBox("bluecloud_lf.jpg"), GetSkyBox("bluecloud_up.jpg"),
+                       GetSkyBox("bluecloud_dn.jpg"), GetSkyBox("bluecloud_bk.jpg"), GetSkyBox("bluecloud_ft.jpg")), new Action<JObject>(data =>
+                       {
+                           Console.WriteLine("It's daytime!");
+                       }));
+               }
+               else if (time < 18)
+               {
+                   this.connector.SendPacket(Skybox.Update("static",
+                       GetSkyBox("graycloud_rt.jpg"), GetSkyBox("graycloud_lf.jpg"), GetSkyBox("graycloud_up.jpg"),
+                       GetSkyBox("graycloud_dn.jpg"), GetSkyBox("graycloud_bk.jpg"), GetSkyBox("graycloud_ft.jpg")), new Action<JObject>(data =>
+                       {
+                           Console.WriteLine("It's the afternoon!");
+                       }));
+               }
+               else if (time < 21)
+               {
+                   this.connector.SendPacket(Skybox.Update("static",
+                       GetSkyBox("yellowcloud_rt.jpg"), GetSkyBox("yellowcloud_lf.jpg"), GetSkyBox("yellowcloud_up.jpg"),
+                       GetSkyBox("yellowcloud_dn.jpg"), GetSkyBox("yellowcloud_bk.jpg"), GetSkyBox("yellowcloud_ft.jpg")), new Action<JObject>(data =>
+                       {
+                           Console.WriteLine("It's in the evening!");
+                       }));
+               }
+               else
+               {
+                   this.connector.SendPacket(Skybox.Update("static",
+                        GetSkyBox("graycloud_rt.jpg"), GetSkyBox("graycloud_lf.jpg"), GetSkyBox("graycloud_up.jpg"),
+                        GetSkyBox("graycloud_dn.jpg"), GetSkyBox("graycloud_bk.jpg"), GetSkyBox("graycloud_ft.jpg")), new Action<JObject>(data =>
+                        {
+                            Console.WriteLine("It's nightTime!");
+                        }));
+               }
+           }));
         }
 
         public void GetScene()
@@ -38,7 +90,7 @@ namespace ConsoleApp1
             this.connector.SendPacket(Scene.Reset(), new Action<JObject>(data =>
             {
                 Console.WriteLine("Scene has been reset!");
-                connector.SendPacket(Node.Find("GroundPlane"), new Action<JObject>(data =>
+                this.connector.SendPacket(Node.Find("GroundPlane"), new Action<JObject>(data =>
                 {
                     this.connector.SendPacket(Node.Delete(data["data"]["data"][0]["uuid"].ToString()), new Action<JObject>(data =>
                     {
@@ -65,12 +117,12 @@ namespace ConsoleApp1
                     }
                     else
                     {
-                        heightMap[(i * 255) + j] = random.NextDouble()/4;
+                        heightMap[(i * 255) + j] = random.NextDouble() / 4;
                     }
                 }
             }
 
-            connector.SendPacket(Terrain.Add(new int[] { 256, 256 }, heightMap), new Action<JObject>(data =>
+            this.connector.SendPacket(Terrain.Add(new int[] { 256, 256 }, heightMap), new Action<JObject>(data =>
             {
                 CreateTerrainTexture();
             }));
@@ -78,14 +130,13 @@ namespace ConsoleApp1
 
         private void CreateTerrainTexture()
         {
-            string uuid = "";
             this.connector.SendPacket(Node.AddTerrain("groundPlane", null, new TransformComponent(-128, -1, -128, 1, 0, 0, 0), true), new Action<JObject>(data =>
             {
-                uuid = data["data"]["data"]["uuid"].ToString();
-                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("terrain/lava_mars_d.jpg"), GetTextures("terrain/jungle_stone_s.jpg"), 0, 10, 0.2), new Action<JObject>(data =>
-               {
+                string uuid = data["data"]["data"]["uuid"].ToString();
+                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("terrain/desert_cracksv_d.jpg"), GetTextures("terrain/desert_cracksv_s.jpg"), 0, 10, 0.2), new Action<JObject>(data =>
+                {
                    Console.WriteLine("Texture Data: {0}", data);
-               }));
+                }));
             }));
         }
 
@@ -93,10 +144,10 @@ namespace ConsoleApp1
         {
             RouteData[] routeData = new RouteData[4];
             // Defining route
-            routeData[0] = new RouteData(new int[] { 1, 0, 1}, new int[] { 1, 0, 0 });
-            routeData[1] = new RouteData(new int[] { 11, 0, 1 }, new int[] { 0, 0, 1 });
-            routeData[2] = new RouteData(new int[] { 11, 0, 11 }, new int[] { -1, 0, 0 });
-            routeData[3] = new RouteData(new int[] { 1, 0, 11 }, new int[] { 0, 0, -1 });
+            routeData[0] = new RouteData(new int[] { 1, -1, 1 }, new int[] { 1, -1, 0 });
+            routeData[1] = new RouteData(new int[] { 11, -1, 1 }, new int[] { 0, -1, 1 });
+            routeData[2] = new RouteData(new int[] { 11, -1, 11 }, new int[] { -1, -1, 0 });
+            routeData[3] = new RouteData(new int[] { 1, -1, 11 }, new int[] { 0, -1, -1 });
 
             this.connector.SendPacket(Route.Add(routeData), new Action<JObject>(data =>
             {
@@ -107,13 +158,14 @@ namespace ConsoleApp1
                 }));
                 string roadID = data["data"]["data"]["uuid"].ToString();
                 AddRoad(data["data"]["data"]["uuid"].ToString());
-                this.connector.SendPacket(Node.AddModel("Fiets", new TransformComponent(1, 0, 1, 1, 0, 0, 0), new ModelComponent(GetModelObjects("bike/bike.fbx"), true, false, "")), new Action<JObject>(data =>
+                this.connector.SendPacket(Node.AddModel("Fiets", new TransformComponent(1, 0.2, 1, 1, 0, 0, 0), new ModelComponent(GetModelObjects("bike/bike.fbx"), true, false, "")), new Action<JObject>(data =>
                 {
-                    this.connector.SendPacket(Route.Follow(roadID, data["data"]["data"]["uuid"].ToString(),1, 0, "XZ", 1,false , new int[] { 0,0,0}, new int[] {0,0,0 } ), new Action<JObject>(data =>
-                    { 
-                    }));
+                    this.connector.SendPacket(Route.Follow(roadID, data["data"]["data"]["uuid"].ToString(), 1, 0, "XZ", 1, false, new int[] { 0, 0, 0 }, new int[] { 0, -1, 0 }), new Action<JObject>(data =>
+                          {
+                              Console.WriteLine("Following the route!");
+                          }));
                 }));
-               
+
             }));
         }
 
@@ -132,14 +184,6 @@ namespace ConsoleApp1
             }));
         }
 
-        /**
-         * Returns the root path with the given file name
-         */
-        private string GetResourcePath(string fileName)
-        {
-            return Path.Join(runningPath, fileName);
-        }
-
         private string GetModelObjects(string objectname)
         {
             return $"data/NetworkEngine/models/{objectname}";
@@ -148,6 +192,11 @@ namespace ConsoleApp1
         private string GetTextures(string textureName)
         {
             return $"data/NetworkEngine/textures/{textureName}";
+        }
+
+        private string GetSkyBox(string skyboxTexture)
+        {
+            return $"data/NetworkEngine/textures/SkyBoxes/clouds/{skyboxTexture}";
         }
     }
 }

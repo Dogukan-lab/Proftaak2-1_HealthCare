@@ -11,7 +11,7 @@ namespace ConsoleApp1.command.scene
         /**
          * This method sets the time inside of the vr environment
          */
-        public static dynamic SetTime(int time)
+        public static dynamic SetTime(double time)
         {
             dynamic packetData = new
             {
