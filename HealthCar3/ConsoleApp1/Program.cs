@@ -1,5 +1,7 @@
-﻿using SimulatorGui;
+﻿using Newtonsoft.Json;
+using SimulatorGui;
 using System;
+using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -86,10 +88,14 @@ namespace ConsoleApp1
                         }
                     }*/
 
+            VpnConnector connector = new VpnConnector(new JsonSerializerSettings());
 
-            VpnConnector connector = new VpnConnector();
-            connector.Send(new Id("session/list"));
+            /*Thread listenThread = new Thread(new ThreadStart(connector.Listen));
+            listenThread.Start();*/
 
+            //CommandCenter cc = new CommandCenter();
+
+            Console.Read();
         }
     }
 }
