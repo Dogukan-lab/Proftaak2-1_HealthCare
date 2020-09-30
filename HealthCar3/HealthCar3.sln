@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "ConsoleApp1\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimulatorGui", "SimulatorGui\SimulatorGui.csproj", "{140D1AD6-1935-43B1-89D9-FFE66900B988}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoctorGui", "DoctorGui\DoctorGui.csproj", "{DCB6B473-13C0-45CB-AB7B-CB60DB5BB5D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{140D1AD6-1935-43B1-89D9-FFE66900B988}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{140D1AD6-1935-43B1-89D9-FFE66900B988}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{140D1AD6-1935-43B1-89D9-FFE66900B988}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCB6B473-13C0-45CB-AB7B-CB60DB5BB5D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCB6B473-13C0-45CB-AB7B-CB60DB5BB5D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCB6B473-13C0-45CB-AB7B-CB60DB5BB5D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCB6B473-13C0-45CB-AB7B-CB60DB5BB5D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
