@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,10 +11,15 @@ namespace PackageUtils
         {
             dynamic command = new
             {
-                Tag = tag,
-                Data = data
+                tag = tag,
+                data = data
             };
             return command;
+        }
+
+        public static byte[] SerializeData(string tag, dynamic data)
+        {
+            return Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(WrapWithTag(tag, data)));
         }
     }
 }

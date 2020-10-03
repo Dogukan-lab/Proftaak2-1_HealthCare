@@ -16,6 +16,8 @@ namespace Server
         private NetworkStream stream;
         private byte[] buffer = new byte[1024];
         private string id;
+        public NetworkStream GetClientStream() { return this.stream; }
+        public string GetId() { return this.id; }
 
 
         public Client(TcpClient tcpClient)
@@ -38,11 +40,6 @@ namespace Server
                 dynamic receivedData = JsonConvert.DeserializeObject(receivedText);
                 HandleData(receivedData);
                 Console.WriteLine(receivedText);
-                /*totalBuffer += receivedText;*/
-                //string a = JsonConvert.SerializeObject(totalBuffer);
-                //testData.Add(a);
-                //
-                //Console.WriteLine(testData);
             }
             catch (IOException)
             {
@@ -51,7 +48,6 @@ namespace Server
             }
 
             //TODO 
-            //Read and print out the data from the message.
             //Have to save data from client on server.
 
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
@@ -62,18 +58,51 @@ namespace Server
         private void HandleData(dynamic data)
         {
             JObject jData = data as JObject;
-            string tag = jData["Tag"].ToObject<string>();
+            string tag = jData["tag"].ToObject<string>();
+            byte[] bytes = new byte[0];
+            string message = "";
             switch (tag)
             {
-                case "chat":
-                    break;
-                case "login/register":
-                    string name = jData["Data"].ToObject<JObject>()["Name"].ToObject<string>();
-                    id = Program.GenerateId(name);
-                    byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(PackageWrapper.WrapWithTag("client/id", new { Id = id })));
+                case "chat/message":
+                    message = jData["data"].ToObject<JObject>()["message"].ToObject<string>();
+                    if (message == "")
+                        bytes = PackageWrapper.SerializeData("chat/message/error", new { message = "message is empty!" });                    
+                    else
+                    {
+                        bytes = PackageWrapper.SerializeData("chat/message", new { message = message });
+                        // Check if sending the message was successful. 
+                        if (!Program.Chat(jData["data"].ToObject<JObject>()["destination"].ToObject<string>(), bytes))
+                            bytes = PackageWrapper.SerializeData("chat/message/error", new { message = "destinationId is not valid!" });
+                        else
+                            bytes = PackageWrapper.SerializeData("chat/message/success", new { message = "message had been received!" });
+                    }
                     stream.Write(bytes, 0, bytes.Length);
                     break;
-                case "login/client":
+                case "chat/broadcast":
+                    message = jData["data"].ToObject<JObject>()["message"].ToObject<string>();
+                    if (message == "") // if the message is empty, send an error response.
+                        bytes = PackageWrapper.SerializeData("chat/broadcast/error", new { message = "message is empty!" });
+                    else // otherwise just send the message.
+                    {
+                        bytes = PackageWrapper.SerializeData("chat/broadcast", new { message = jData["data"].ToObject<JObject>()["message"].ToObject<string>() });
+                        Program.Broadcast(bytes);
+                        
+                        bytes = PackageWrapper.SerializeData("chat/broadcast/success", new { message = "message has been received!" });
+                    }
+                    stream.Write(bytes, 0, bytes.Length);
+                    break;
+                case "client/register":
+                    string name = jData["data"].ToObject<JObject>()["name"].ToObject<string>();                   
+                    if (CredentialVarificator.VerifyUserName(name))
+                    {
+                        id = Program.GenerateId(name);
+                        bytes = PackageWrapper.SerializeData("client/register/success", new { clientId = id, clientName = name });
+                    }
+                    else
+                        bytes = PackageWrapper.SerializeData("client/register/error", new { message = "The username could not be set on the server." });
+                    stream.Write(bytes, 0, bytes.Length);
+                    break;
+                case "client/login":
                     break;
                 case "update/heartrate":
                     break;

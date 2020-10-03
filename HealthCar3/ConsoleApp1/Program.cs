@@ -18,9 +18,25 @@ namespace ConsoleApp1
             ServerConnection serverCon = new ServerConnection();
             SimForm simForm = null;
 
+            string cInput = "";
+            Console.WriteLine("Select: \n" +
+                "- login\n" +
+                "- register\n");
+            cInput = Console.ReadLine();
+            if (cInput == "login")
+            {
+                cInput = Console.ReadLine();
+                serverCon.LoginToServer(cInput, "0854753686");
+            }
+            else if (cInput == "register")
+            {
+                cInput = Console.ReadLine();
+                serverCon.RegisterToServer(cInput);
+            }
+
+            cInput = "";
             // Select connector option
             ConnectorOption connector = null;
-            string cInput = "";
             while (cInput == string.Empty)
             {
                 Console.WriteLine("Select bluetooth or simulator: |B|S|");
@@ -49,7 +65,7 @@ namespace ConsoleApp1
 
                 // Start the command thread
                 Thread consoleThread = new Thread(new ParameterizedThreadStart(ReadInput));
-                consoleThread.Start(connector);
+                consoleThread.Start(serverCon);
 
                 // Start the gui
                 Application.Run(simForm);
@@ -58,32 +74,48 @@ namespace ConsoleApp1
             {
                 Thread.Sleep(4000);
                 // No need to run this on this different thread
-                ReadInput(connector);
+                ReadInput(serverCon);
             }
         }
 
-        public static void ReadInput(Object connectorOption)
+        public static void ReadInput(Object serverConnection)
         {
-            var connector = connectorOption as ConnectorOption;
+            //var connector = connectorOption as ConnectorOption;
+            var sc = serverConnection as ServerConnection;
 
             string input = "";
             while (!input.Equals("quit"))
             {
                 Console.WriteLine("Commands: \n" +
                 "- quit (Quit application)\n" +
-                "- res (Send resistance)");
+                "- chat\n" +
+                "- broadcast\n"
+                //"- res (Send resistance)"
+                );
 
                 input = Console.ReadLine();
                 switch (input)
                 {
                     case "quit": // Quit the application
                         return;
-                    case "res": // Send resistance to the bike
-                        Console.WriteLine("Amount of resistance: ");
+                    case "broadcast":
+                        Console.WriteLine("Message: ");
                         input = Console.ReadLine();
-                        connector.WriteResistance(float.Parse(input));
-                        Console.WriteLine("");
+                        sc.BroadcastTest(input);
                         break;
+                    case "chat":
+                        Console.WriteLine("Id: ");
+                        string idInput = Console.ReadLine();
+                        Console.WriteLine("Message: ");
+                        input = Console.ReadLine();
+                        sc.ChatTest(idInput, input);
+                        break;
+                    //case "res": // Send resistance to the bike
+                    //    Console.WriteLine("Amount of resistance: ");
+                    //    input = Console.ReadLine();
+                    //    connector.WriteResistance(float.Parse(input));
+                    //    Console.WriteLine("");
+                    //    break;
                     default: // Unknown command
                         Console.WriteLine("Not a valid command.");
                         break;

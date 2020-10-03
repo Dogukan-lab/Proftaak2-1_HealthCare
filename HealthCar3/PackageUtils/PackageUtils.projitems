@@ -9,6 +9,7 @@
     <Import_RootNamespace>PackageUtils</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)CredentialVarificator.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PackageWrapper.cs" />
   </ItemGroup>
 </Project>

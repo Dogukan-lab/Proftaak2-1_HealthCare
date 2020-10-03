@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 
 namespace Server
 {
@@ -13,7 +14,7 @@ namespace Server
     class Program
     {
         private TcpListener listener;
-        public static Dictionary<Client,int> clients;
+        public static List<Client> clients;
         public static Dictionary<string, string> registeredClients;
 
         static void Main(string[] args)
@@ -26,7 +27,7 @@ namespace Server
         */
         public void Listen()
         {
-            clients = new Dictionary<Client, int>();
+            clients = new List<Client>();
             registeredClients = new Dictionary<string, string>();
             //TODO don't know which ip address and port
             listener = new TcpListener(IPAddress.Any, 1330);
@@ -42,7 +43,7 @@ namespace Server
             TcpClient tcpClient = listener.EndAcceptTcpClient(ar);
             ClientData cd = new ClientData();
             Console.WriteLine($"Client connected from {tcpClient.Client.RemoteEndPoint}");
-            clients.Add(new Client(tcpClient),clients.Count+1);
+            clients.Add(new Client(tcpClient));
             listener.BeginAcceptTcpClient(new AsyncCallback(Connect), null);
         }
        /*
@@ -67,6 +68,34 @@ namespace Server
             }
             registeredClients.Add(id, name);
             return id;
+        }
+
+        /*
+         * Sends the message to all the clients connected to the server.
+         */
+        public static void Broadcast(byte[] bytes)
+        {
+            foreach(Client client in clients)
+            {
+                client.GetClientStream().Write(bytes, 0, bytes.Length);
+            }
+        }
+
+        /*
+         * Sends the message to the given id.
+         * Returns true if id is found in the list and false if no match is found.
+         */
+        public static bool Chat(string id, byte[] bytes)
+        {
+            foreach(Client client in clients)
+            {
+                if(client.GetId() == id)
+                {
+                    client.GetClientStream().Write(bytes, 0, bytes.Length);
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
