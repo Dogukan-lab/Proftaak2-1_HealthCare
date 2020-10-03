@@ -86,11 +86,11 @@ namespace Server
          * Sends the message to the given id.
          * Returns true if id is found in the list and false if no match is found.
          */
-        public static bool Chat(string id, byte[] bytes)
+        public static bool SendMessageToSpecificClient(string id, byte[] bytes)
         {
-            foreach(Client client in clients)
+            foreach (Client client in clients)
             {
-                if(client.GetId() == id)
+                if (client.GetId() == id)
                 {
                     client.GetClientStream().Write(bytes, 0, bytes.Length);
                     return true;

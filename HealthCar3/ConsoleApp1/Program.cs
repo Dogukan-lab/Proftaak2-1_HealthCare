@@ -60,6 +60,7 @@ namespace ConsoleApp1
                     cInput = "";
             }
 
+            serverCon.SetConnectorOption(connector);
 
             var simulator = connector as Simulator;
             if (simulator != null)
@@ -88,6 +89,8 @@ namespace ConsoleApp1
             var sc = serverConnection as ServerConnection;
 
             string input = "";
+            string idInput = "";
+
             while (!input.Equals("quit"))
             {
                 Console.WriteLine("Commands: \n" +
@@ -109,17 +112,19 @@ namespace ConsoleApp1
                         break;
                     case "chat":
                         Console.WriteLine("Id: ");
-                        string idInput = Console.ReadLine();
+                        idInput = Console.ReadLine();
                         Console.WriteLine("Message: ");
                         input = Console.ReadLine();
                         sc.ChatTest(idInput, input);
                         break;
-                    //case "res": // Send resistance to the bike
-                    //    Console.WriteLine("Amount of resistance: ");
-                    //    input = Console.ReadLine();
-                    //    connector.WriteResistance(float.Parse(input));
-                    //    Console.WriteLine("");
-                    //    break;
+                    case "res": // Send resistance to the bike
+                        Console.WriteLine("Id: ");
+                        idInput = Console.ReadLine();
+                        Console.WriteLine("Amount of resistance: ");
+                        input = Console.ReadLine();
+                        sc.SetNewResistance(idInput, input);
+                        Console.WriteLine("");
+                        break;
                     default: // Unknown command
                         Console.WriteLine("Not a valid command.");
                         break;

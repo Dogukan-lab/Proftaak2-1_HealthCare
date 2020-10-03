@@ -70,7 +70,7 @@ namespace Server
                     {
                         bytes = PackageWrapper.SerializeData("chat/message", new { message = message });
                         // Check if sending the message was successful. 
-                        if (!Program.Chat(jData["data"].ToObject<JObject>()["destination"].ToObject<string>(), bytes))
+                        if (!Program.SendMessageToSpecificClient(jData["data"].ToObject<JObject>()["clientId"].ToObject<string>(), bytes))
                             bytes = PackageWrapper.SerializeData("chat/message/error", new { message = "destinationId is not valid!" });
                         else
                             bytes = PackageWrapper.SerializeData("chat/message/success", new { message = "message had been received!" });
@@ -106,6 +106,21 @@ namespace Server
                 case "update/heartrate":
                     break;
                 case "update/speed":
+                    break;
+                case "session/resistance":
+                    string resistance = jData["data"].ToObject<JObject>()["resistance"].ToObject<string>();
+                    if (resistance == "")
+                        bytes = PackageWrapper.SerializeData("session/resistance/error", new { message = "Resistance value is invalid!" });
+                    else
+                    {
+                        bytes = PackageWrapper.SerializeData("session/resistance", new { resistance = resistance });
+                        // Check if sending the message was successful. 
+                        if (!Program.SendMessageToSpecificClient(jData["data"].ToObject<JObject>()["clientId"].ToObject<string>(), bytes))
+                            bytes = PackageWrapper.SerializeData("session/resistance/error", new { message = "The Client Id could not be found." });
+                        else
+                            bytes = PackageWrapper.SerializeData("session/resistance/success", new { message = "Resistance has been updated." });
+                    }
+                    stream.Write(bytes, 0, bytes.Length);
                     break;
             }
         }

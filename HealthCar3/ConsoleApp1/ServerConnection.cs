@@ -22,7 +22,8 @@ namespace ConsoleApp1
         private string uniqueId = "";
         private byte[] buffer = new byte[1024];
         private bool connected = false;
-        
+        private ConnectorOption co = null;
+        public void SetConnectorOption(ConnectorOption co) { this.co = co; }
         public ServerConnection()
         {
             clientConnection = new TcpClient();
@@ -87,11 +88,6 @@ namespace ConsoleApp1
             string tag = jData["tag"].ToObject<string>();
             switch (tag)
             {
-                case "chat/message":
-                case "chat/broadcast":
-                    string message = jData["data"].ToObject<JObject>()["message"].ToObject<string>();
-                    Console.WriteLine($"Received Message: {message}");
-                    break;
                 case "client/register/success":
                     Console.WriteLine($"Received Id: {jData["data"].ToObject<JObject>()["clientId"].ToObject<string>()}");
                     uniqueId = jData["data"].ToObject<JObject>()["clientId"].ToObject<string>();
@@ -99,16 +95,23 @@ namespace ConsoleApp1
                 case "client/register/error":
                     Console.WriteLine($"ERROR: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
                     break;
+                case "session/resistance":
+                    float resistance = float.Parse(jData["data"].ToObject<JObject>()["resistance"].ToObject<string>());
+                    co.WriteResistance(resistance);
+                    break;
+                case "chat/message":
+                case "chat/broadcast":
+                    string message = jData["data"].ToObject<JObject>()["message"].ToObject<string>();
+                    Console.WriteLine($"Received Message: {message}");
+                    break;
                 case "chat/message/success":
+                case "chat/broadcast/success":
+                case "session/resistance/success":
                     Console.WriteLine($"Succes: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
                     break;
                 case "chat/message/error":
-                    Console.WriteLine($"ERROR: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
-                    break;
-                case "chat/broadcast/success":
-                    Console.WriteLine($"Succes: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
-                    break;
                 case "chat/broadcast/error":
+                case "session/resistance/error":
                     Console.WriteLine($"ERROR: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
                     break;
             }
@@ -120,9 +123,10 @@ namespace ConsoleApp1
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
 
+        // Test functions (move these to doctor ServerConnection)
         public void ChatTest(string id, string message)
         {
-            byte[] bytes = PackageWrapper.SerializeData("chat/message", new { destination = id, message = message});
+            byte[] bytes = PackageWrapper.SerializeData("chat/message", new { clientId = id, message = message});
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -132,6 +136,13 @@ namespace ConsoleApp1
 
             stream.Write(bytes, 0, bytes.Length);
         }
+        public void SetNewResistance(string id, string resistance)
+        {
+            byte[] bytes = PackageWrapper.SerializeData("session/resistance", new { clientId = id, resistance = resistance });
+
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        // End of test functions
 
         /*
          * Method used to disconnect from the server.
