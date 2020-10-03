@@ -24,9 +24,8 @@ namespace Server
         {
             this.tcpClient = tcpClient;
             this.stream = this.tcpClient.GetStream();
-      
+            
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
-
         }
         /*
          * Method that deserilises the JsonData
@@ -43,8 +42,8 @@ namespace Server
             }
             catch (IOException)
             {
-                /*Program.Disconnect(this);
-                return;*/
+                Program.Disconnect(this);
+                return;
             }
 
             //TODO 

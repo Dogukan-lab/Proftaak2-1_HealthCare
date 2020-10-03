@@ -25,11 +25,15 @@ namespace ConsoleApp1
             cInput = Console.ReadLine();
             if (cInput == "login")
             {
+                Console.WriteLine("Name: ");
                 cInput = Console.ReadLine();
-                serverCon.LoginToServer(cInput, "0854753686");
+                Console.WriteLine("Id: ");
+                string idInput = Console.ReadLine();
+                serverCon.LoginToServer(cInput, idInput);
             }
             else if (cInput == "register")
             {
+                Console.WriteLine("Name: ");
                 cInput = Console.ReadLine();
                 serverCon.RegisterToServer(cInput);
             }
@@ -122,9 +126,8 @@ namespace ConsoleApp1
                 }
             }
         }
-
         /*VpnConnector connector = new VpnConnector(new JsonSerializerSettings());*/
     }
-    }
+}
 
 

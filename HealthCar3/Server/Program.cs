@@ -52,7 +52,8 @@ namespace Server
         internal static void Disconnect(Client client)
         {
             clients.Remove(client);
-            Console.WriteLine("Client disconnected");
+            client.GetClientStream().Close();           
+            Console.WriteLine($"Client {client.GetId()} disconnected");
         }
 
         /*

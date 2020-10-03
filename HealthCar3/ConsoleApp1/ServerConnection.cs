@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Threading;
 using Newtonsoft.Json.Linq;
 using PackageUtils;
+using System.IO;
 
 namespace ConsoleApp1
 {
@@ -66,12 +67,19 @@ namespace ConsoleApp1
 
         private void OnRead(IAsyncResult ar)
         {
-            int receivedBytes = stream.EndRead(ar);
-            string receivedText = System.Text.Encoding.ASCII.GetString(buffer, 0, receivedBytes);
-            dynamic receivedData = JsonConvert.DeserializeObject(receivedText);
-            HandleData(receivedData);
-            stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
-        }
+            try {
+                int receivedBytes = stream.EndRead(ar);
+                string receivedText = System.Text.Encoding.ASCII.GetString(buffer, 0, receivedBytes);
+                dynamic receivedData = JsonConvert.DeserializeObject(receivedText);
+                HandleData(receivedData);
+                stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
+            }
+            catch (IOException)
+            {
+                OnDisconnect();
+                return;
+            }
+    }
 
         private void HandleData(dynamic data)
         {
@@ -144,6 +152,9 @@ namespace ConsoleApp1
             stream.Write(bytes, 0, bytes.Length);
         }
 
+        /*
+         * Method used to login to the server
+         */
         public void LoginToServer(string name, string id)
         {
             byte[] bytes = PackageWrapper.SerializeData("client/login", new { name = name, clientId = id});
@@ -152,7 +163,7 @@ namespace ConsoleApp1
         }
 
         /*
-         * Method used to send messages to the server.
+         * Method used to send update messages to the server.
          */
         public void UpdateHeartRate(int heartRate)
         {
