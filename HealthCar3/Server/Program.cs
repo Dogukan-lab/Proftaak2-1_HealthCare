@@ -98,5 +98,17 @@ namespace Server
             }
             return false;
         }
+
+        internal static bool ActiveSession(string id)
+        {
+            foreach(Client client in clients)
+            {
+                if(client.GetId() == id)
+                {
+                    return client.IsSessionActive();
+                }
+            }
+            return false;
+        }
     }
 }

@@ -96,7 +96,10 @@ namespace ConsoleApp1
                 Console.WriteLine("Commands: \n" +
                 "- quit (Quit application)\n" +
                 "- chat\n" +
-                "- broadcast\n"
+                "- broadcast\n" +
+                "- res" +
+                "- start" +
+                "- stop"
                 //"- res (Send resistance)"
                 );
 
@@ -124,6 +127,16 @@ namespace ConsoleApp1
                         input = Console.ReadLine();
                         sc.SetNewResistance(idInput, input);
                         Console.WriteLine("");
+                        break;
+                    case "start":
+                        Console.WriteLine("Id: ");
+                        idInput = Console.ReadLine();
+                        sc.StartSession(idInput);
+                        break;
+                    case "stop":
+                        Console.WriteLine("Id: ");
+                        idInput = Console.ReadLine();
+                        sc.StopSession(idInput);
                         break;
                     default: // Unknown command
                         Console.WriteLine("Not a valid command.");

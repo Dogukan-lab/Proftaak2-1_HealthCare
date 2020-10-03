@@ -99,6 +99,12 @@ namespace ConsoleApp1
                     float resistance = float.Parse(jData["data"].ToObject<JObject>()["resistance"].ToObject<string>());
                     co.WriteResistance(resistance);
                     break;
+                case "session/start":
+                    Console.WriteLine("Start session");
+                    break;
+                case "session/stop":
+                    Console.WriteLine("Stop session");
+                    break;
                 case "chat/message":
                 case "chat/broadcast":
                     string message = jData["data"].ToObject<JObject>()["message"].ToObject<string>();
@@ -107,11 +113,15 @@ namespace ConsoleApp1
                 case "chat/message/success":
                 case "chat/broadcast/success":
                 case "session/resistance/success":
+                case "session/start/success":
+                case "session/stop/success":
                     Console.WriteLine($"Succes: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
                     break;
                 case "chat/message/error":
                 case "chat/broadcast/error":
                 case "session/resistance/error":
+                case "session/start/error":
+                case "session/stop/error":
                     Console.WriteLine($"ERROR: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
                     break;
             }
@@ -139,6 +149,18 @@ namespace ConsoleApp1
         public void SetNewResistance(string id, string resistance)
         {
             byte[] bytes = PackageWrapper.SerializeData("session/resistance", new { clientId = id, resistance = resistance });
+
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        public void StartSession(string id)
+        {
+            byte[] bytes = PackageWrapper.SerializeData("session/start", new { clientId = id});
+
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        public void StopSession(string id)
+        {
+            byte[] bytes = PackageWrapper.SerializeData("session/stop", new { clientId = id});
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -178,14 +200,14 @@ namespace ConsoleApp1
          */
         public void UpdateHeartRate(int heartRate)
         {
-            byte[] bytes = PackageWrapper.SerializeData("update/heartrate", new { Id = uniqueId, HeartRate = heartRate});
+            byte[] bytes = PackageWrapper.SerializeData("client/update/heartRate", new { heartRate = heartRate});
 
             if(connected)
                 stream.Write(bytes, 0, bytes.Length);
         }
         public void UpdateSpeed(float speed)
         {
-            byte[] bytes = PackageWrapper.SerializeData("update/speed", new { Id = uniqueId, Speed = speed});
+            byte[] bytes = PackageWrapper.SerializeData("client/update/speed", new { speed = speed});
 
             if(connected)
                 stream.Write(bytes, 0, bytes.Length);
