@@ -99,12 +99,14 @@ namespace Server
             return false;
         }
 
-        internal static bool ActiveSession(string id)
+        internal static bool ActiveSession(string id, out Client targetClient)
         {
+            targetClient = null;
             foreach(Client client in clients)
             {
                 if(client.GetId() == id)
                 {
+                    targetClient = client;
                     return client.IsSessionActive();
                 }
             }

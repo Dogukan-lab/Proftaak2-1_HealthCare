@@ -20,6 +20,7 @@ namespace Server
         public NetworkStream GetClientStream() { return this.stream; }
         public string GetId() { return this.id; }
         public bool IsSessionActive() { return this.sessionActive; }
+        public void SetSession(bool active) { this.sessionActive = active; }
 
 
         public Client(TcpClient tcpClient)
@@ -62,6 +63,7 @@ namespace Server
             string tag = jData["tag"].ToObject<string>();
             byte[] bytes = new byte[0];
             string message = "";
+            Client targetClient = null;
             switch (tag)
             {
                 case "chat/message":
@@ -128,7 +130,7 @@ namespace Server
                     break;
                 case "session/start":
                     bytes = PackageWrapper.SerializeData("session/start", new { });
-                    if (Program.ActiveSession(jData["data"].ToObject<JObject>()["clientId"].ToObject<string>()))
+                    if (Program.ActiveSession(jData["data"].ToObject<JObject>()["clientId"].ToObject<string>(), out targetClient))
                         bytes = PackageWrapper.SerializeData("session/start/error", new { message = "Session is already active." });
                     else
                     {
@@ -136,15 +138,16 @@ namespace Server
                             bytes = PackageWrapper.SerializeData("session/start/error", new { message = "The Client Id could not be found." });
                         else
                         {
+                            targetClient.SetSession(true);
+                            targetClient = null;
                             bytes = PackageWrapper.SerializeData("session/start/success", new { message = "Session successfully started." });
-                            sessionActive = true;
                         }
                     }
                     stream.Write(bytes, 0, bytes.Length);
                     break;
                 case "session/stop":
                     bytes = PackageWrapper.SerializeData("session/stop", new { });
-                    if (!Program.ActiveSession(jData["data"].ToObject<JObject>()["clientId"].ToObject<string>()))
+                    if (!Program.ActiveSession(jData["data"].ToObject<JObject>()["clientId"].ToObject<string>(), out targetClient))
                         bytes = PackageWrapper.SerializeData("session/stop/error", new { message = "Client has no active session." });
                     else
                     {
@@ -152,8 +155,9 @@ namespace Server
                             bytes = PackageWrapper.SerializeData("session/stop/error", new { message = "The Client Id could not be found." });
                         else
                         {
-                            bytes = PackageWrapper.SerializeData("session/stop/success", new { message = "Session successfully started." });
-                            sessionActive = false;
+                            targetClient.SetSession(false);
+                            targetClient = null;
+                            bytes = PackageWrapper.SerializeData("session/stop/success", new { message = "Session successfully stopped." });
                         }
                     }
                     stream.Write(bytes, 0, bytes.Length);

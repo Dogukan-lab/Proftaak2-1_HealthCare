@@ -97,9 +97,9 @@ namespace ConsoleApp1
                 "- quit (Quit application)\n" +
                 "- chat\n" +
                 "- broadcast\n" +
-                "- res" +
-                "- start" +
-                "- stop"
+                "- resistance\n" +
+                "- start\n" +
+                "- stop\n"
                 //"- res (Send resistance)"
                 );
 
@@ -120,7 +120,7 @@ namespace ConsoleApp1
                         input = Console.ReadLine();
                         sc.ChatTest(idInput, input);
                         break;
-                    case "res": // Send resistance to the bike
+                    case "resistance": // Send resistance to the bike
                         Console.WriteLine("Id: ");
                         idInput = Console.ReadLine();
                         Console.WriteLine("Amount of resistance: ");
