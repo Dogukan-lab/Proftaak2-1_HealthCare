@@ -25,14 +25,14 @@ namespace ConsoleApp1
             speed = newSpeed;
             //valueChangeListener.OnSpeedChange(speed);
             // Updates the value
-            //sc.UpdateSpeed(newSpeed);
+            sc.UpdateSpeed(newSpeed);
         }
         protected void SetNewHeartRate(int newHeartRate)
         {
             heartRate = newHeartRate;
             //valueChangeListener.OnHeartRateChange(heartRate);
             // Updates the value
-            //sc.UpdateHeartRate(newHeartRate);
+            sc.UpdateHeartRate(newHeartRate);
         }
 
         public virtual void WriteResistance(float resistance)

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 
-namespace Testroom.Encryption.Shared
+namespace Encryption.Shared
 {
     public class Decryptor
     {
@@ -76,12 +76,18 @@ namespace Testroom.Encryption.Shared
         /**
          * Decrypts and AES encrypted packet.
          */
-        public string DecryptAES(byte[] data)
+        public string DecryptAES(byte[] data, int index, int count)
         {
             // Check arguments.
             if (data == null || data.Length <= 0)
             {
                 throw new ArgumentException("Data does not contain a message!");
+            }
+            
+            byte[] chunk = new byte[count];
+            for (int i = index; i < count; i++)
+            {
+                chunk[i] = data[i];
             }
 
             // Declare the string used to hold
@@ -99,7 +105,7 @@ namespace Testroom.Encryption.Shared
                 ICryptoTransform decryptor = rijAlg.CreateDecryptor(rijAlg.Key, rijAlg.IV);
 
                 // Create the streams used for decryption.
-                using (MemoryStream msDecrypt = new MemoryStream(data))
+                using (MemoryStream msDecrypt = new MemoryStream(chunk))
                 {
                     using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                     {

@@ -10,7 +10,6 @@ using Newtonsoft.Json.Linq;
 using System.Threading;
 using ConsoleApp1.command.scene;
 using System.Linq;
-using ConsoleApp1.encryption;
 
 namespace ConsoleApp1
 {

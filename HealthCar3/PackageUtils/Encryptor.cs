@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Security.Cryptography;
 
-namespace Testroom.Encryption.Shared
+namespace Encryption.Shared
 {
     public class Encryptor
     {
