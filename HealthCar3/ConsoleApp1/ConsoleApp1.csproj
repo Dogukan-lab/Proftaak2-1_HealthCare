@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DoctorGui\DoctorGui.csproj" />
     <ProjectReference Include="..\SimulatorGui\SimulatorGui.csproj" />
   </ItemGroup>
 
@@ -17,21 +18,6 @@
     <Reference Include="BLELibrary">
       <HintPath>BLELibrary.dll</HintPath>
     </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="resource.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>resource.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="resource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>resource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

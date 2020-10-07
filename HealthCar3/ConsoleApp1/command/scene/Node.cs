@@ -1,4 +1,5 @@
 ﻿using ConsoleApp1.data.components;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,7 +17,7 @@ namespace ConsoleApp1.command.scene
         /**
          * This method adds a model such a tree, bike or house.
          */
-        public static dynamic AddModel(string objectName, string objectFile, TransformComponent transform, ModelComponent model)
+        public static dynamic AddModel(string objectName, TransformComponent transform, ModelComponent model)
         {
             dynamic packetData = new
             {
@@ -27,13 +28,13 @@ namespace ConsoleApp1.command.scene
                     model = model
                 }
             };
-            return SceneUtils.Wrap(packetData, prefix + "add");
+            return CommandUtils.Wrap(packetData, prefix + "add");
         }
 
         /**
          * This method adds a terrain node to be used for texturing.
          */
-        public static dynamic AddTerrain(string name, string parent, ModelComponent model, Boolean smoothnormals )
+        public static dynamic AddTerrain(string name, string parent, TransformComponent transform, bool smoothnormals )
         {
             dynamic packetData = new
             {
@@ -41,14 +42,14 @@ namespace ConsoleApp1.command.scene
                 parent = parent,
                 components = new
                 {
-                    model = model,
+                    transform = transform,
                     terrain = new
                     {
                         smoothnormals = smoothnormals
                     }
                 }
             };
-            return SceneUtils.Wrap(packetData, prefix + "add");
+            return CommandUtils.Wrap(packetData, prefix + "add");
         }
 
         /**
@@ -65,24 +66,24 @@ namespace ConsoleApp1.command.scene
                     panel = panel
                 }
             };
-            return SceneUtils.Wrap(packetData, prefix + "add");
+            return CommandUtils.Wrap(packetData, prefix + "add");
         }
 
         /**
          * This method can add a layer to the vr system
          */
-        public static dynamic AddLayer(string id, object diffuse, object normal, int minHeight, int maxHeight, int fadeDist)
+        public static dynamic AddLayer(string uuid, string diffusePng, string normalPng, int minHeight, int maxHeight, double fadeDist)
         {
             dynamic packetData = new
             {
-                id = id,
-                diffuse = diffuse,
-                normal = normal,
+                id = uuid,
+                diffuse = diffusePng,
+                normal = normalPng,
                 minHeight = minHeight,
                 maxHeight = maxHeight,
                 fadeDist = fadeDist
             };
-            return SceneUtils.Wrap(packetData, prefix + "add");
+            return CommandUtils.Wrap(packetData, prefix + "addlayer");
         }
 
         /**
@@ -94,7 +95,7 @@ namespace ConsoleApp1.command.scene
             {
 
             };
-            return SceneUtils.Wrap(packetData, prefix + "dellayer");
+            return CommandUtils.Wrap(packetData, prefix + "dellayer");
         }
 
         /**
@@ -106,18 +107,18 @@ namespace ConsoleApp1.command.scene
             {
                 name = objectName
             };
-            return SceneUtils.Wrap(packetData, prefix + "find");
+            return CommandUtils.Wrap(packetData, prefix + "find");
         }
 
         /**
          * This method can move a node.
          */
-        public static dynamic MoveTo(string id, string stop, int[] position, string rotate, string interpolate, Boolean followheight, double speed)
+        public static dynamic MoveTo(string guid, string stop, int[] position, string rotate, string interpolate, bool followheight, double speed)
         {
             dynamic packetData = new
             {
 
-                id = id,
+                id = guid,
                 stop = stop,
                 position = position,
                 rotate = rotate,
@@ -125,17 +126,17 @@ namespace ConsoleApp1.command.scene
                 followheight = followheight,
                 speed = speed
             };
-            return SceneUtils.Wrap(packetData, prefix + "moveto");
+            return CommandUtils.Wrap(packetData, prefix + "moveto");
         }
 
         /**
          * This method updates the position of a node.
          */
-        public static dynamic Update(string id, object parent, TransformComponent transform, string name, double speed)
+        public static dynamic Update(string guid, string parent, TransformComponent transform, string name, double speed)
         {
             dynamic packetData = new
             {
-                id = id,
+                id = guid,
                 parent = parent,
                 transform = transform,
                 animation = new
@@ -144,7 +145,7 @@ namespace ConsoleApp1.command.scene
                     speed = speed
                 }
             };
-            return SceneUtils.Wrap(packetData, prefix + "update");
+            return CommandUtils.Wrap(packetData, prefix + "update");
         }
 
         /**
@@ -156,7 +157,7 @@ namespace ConsoleApp1.command.scene
             {
                 id = guid
             };
-            return SceneUtils.Wrap(packetData, prefix + "delete");
+            return CommandUtils.Wrap(packetData, prefix + "delete");
 
         }
     }

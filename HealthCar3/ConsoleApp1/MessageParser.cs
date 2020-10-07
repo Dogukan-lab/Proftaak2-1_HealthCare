@@ -10,19 +10,23 @@ namespace ConsoleApp1
     class MessageParser
     {
         private VpnConnector connector;
+        private CommandCenter command;
         private string id;
         private string destination;
 
         public MessageParser(VpnConnector connector)
         {
             this.connector = connector;
+            this.command = new CommandCenter(this.connector);
         }
+
+        public string GetDestination() { return this.destination; }
 
         /*
          * This method checks the current session for your computer name.
-         * Then it gets the id en sets it inside of the for loop.
+         * Then it gets the id and sets it inside of the for loop.
          */
-        public void GetSession(dynamic jsonData)
+        public void GetSessionId(dynamic jsonData)
         {
             for (int i = 0; i < jsonData.data.Count; i++)
             {
@@ -31,9 +35,10 @@ namespace ConsoleApp1
                     this.id = (string)jsonData.data[i].id;
                 }
             }
-            if (this.id == null) 
+            if (this.id == null)
             {
                 Console.WriteLine("Error: Session not found. Please make sure you are connected to the network application!");
+                Environment.Exit(0);
             }
         }
 
@@ -47,34 +52,38 @@ namespace ConsoleApp1
             if (jsonData.data.status == "ok")
             {
                 this.destination = (string)jsonData.data.id;
+                Console.WriteLine("Destination has been set! {0}", this.destination);
+
             }
         }
 
         /**
          * Parses the data received based on the given response id.
          * TODO first switch-case needs to be refactored. 
-         * This will be based off of the 
          */
         public void Parse(string id, dynamic jsonData)
         {
-            /*CommandCenter cc;*/
-
             switch (id)
             {
                 case "session/list":
-                    GetSession(jsonData);
+                    GetSessionId(jsonData);
                     if (this.id != null)
                     {
-                        ConnectData tempData = new ConnectData();
-                        tempData.SetSession(this.id);
-                        tempData.SetKey("");
-                        VpnCommand command = new VpnCommand("tunnel/create", tempData); //sends a new command including a data object to the connector.
-                        connector.Send(command);
+                        Console.WriteLine("Creating the tunnel...");
+                        // Create the tunnel
+                        connector.Send(new { id = "tunnel/create", data = new { session = this.id, key = "" } });
                     }
                     break;
                 case "tunnel/create":
+                    Console.WriteLine("Tunnel has been created!");
                     GetTunnelId(jsonData);
-                    /*cc = new CommandCenter(this.destination );*/
+                    if (this.destination != null)
+                    {
+                        // Scene is now fully initialized and can now execute commands 
+                        this.command.ResetScene();
+                        this.command.CreateTerrain();
+                        this.command.CreateRoute();
+                    }
                     break;
             }
         }

@@ -11,14 +11,14 @@ namespace ConsoleApp1.command.scene
         /**
          * This method adds a skeleton terrain for the terrain textures.
          */
-        public static dynamic AddTerrain(int[] size, int[] height)
+        public static dynamic Add(int[] size, double[] height)
         {
             dynamic packetData = new
             {
                 size = size,
-                height = height
+                heights = height
             };
-            return SceneUtils.Wrap(packetData, prefix + "add");
+            return CommandUtils.Wrap(packetData, prefix + "add");
         }
 
         /**
@@ -30,7 +30,7 @@ namespace ConsoleApp1.command.scene
             {
 
             };
-            return SceneUtils.Wrap(packetData, prefix + "update");
+            return CommandUtils.Wrap(packetData, prefix + "update");
         }
 
         /**
@@ -42,7 +42,7 @@ namespace ConsoleApp1.command.scene
             {
 
             };
-            return SceneUtils.Wrap(packetData, prefix + "delete");
+            return CommandUtils.Wrap(packetData, prefix + "delete");
         }
 
         /**
@@ -55,7 +55,7 @@ namespace ConsoleApp1.command.scene
                 position = position,
                 positions = positions
             };
-            return SceneUtils.Wrap(packetData, prefix + "update");
+            return CommandUtils.Wrap(packetData, prefix + "update");
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
 
+using DoctorGui;
 namespace ConsoleApp1
 {
     class Program
@@ -17,6 +18,7 @@ namespace ConsoleApp1
             TempListenerClass listener = new TempListenerClass();
             ServerConnection serverCon = new ServerConnection();
             SimForm simForm = null;
+            Application.Run(new SimDocLogin());
 
             string cInput = "";
             Console.WriteLine("Select: \n" +
