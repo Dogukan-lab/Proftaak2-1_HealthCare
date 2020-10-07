@@ -7,7 +7,7 @@ using Avans.TI.BLE;
 
 namespace ConsoleApp1
 {
-    class Bluetooth : ConnectorOption
+     class Bluetooth : ConnectorOption
     {
         private int errorCode = 0;
         private Decoder decoder;

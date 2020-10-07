@@ -1,10 +1,6 @@
-﻿using ConsoleApp1.command.scene;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ConsoleApp1.command.route
+﻿namespace ConsoleApp1.command.scene
 {
+
     static class Route
     {
 
@@ -13,7 +9,7 @@ namespace ConsoleApp1.command.route
         /**
          * This method adds a route to the vr system
          */
-        public static dynamic Add( object[] nodes)
+        public static dynamic Add(object[] nodes)
         {
             dynamic packetData = new
             {
@@ -50,7 +46,8 @@ namespace ConsoleApp1.command.route
         /**
          * This method makes a node follow the route
          */
-        public static dynamic Follow(string routeId, string nodeId, double speed, double offset, string rotate, double smoothing, bool followHeight, int[] rotateOffset, int[] positionOffset)
+        public static dynamic Follow(string routeId, string nodeId, double speed, double offset, string rotate,
+            double smoothing, bool followHeight, int[] rotateOffset, int[] positionOffset)
         {
             dynamic packetData = new
             {
@@ -93,4 +90,5 @@ namespace ConsoleApp1.command.route
             return CommandUtils.Wrap(packetData, prefix + "show");
         }
     }
+   
 }

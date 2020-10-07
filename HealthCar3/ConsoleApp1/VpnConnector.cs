@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Net.Sockets;
-using System.Runtime.CompilerServices;
 using System.Text;
-using ConsoleApp1.data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Threading;
 using ConsoleApp1.command.scene;
-using System.Linq;
 
 namespace ConsoleApp1
 {

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 namespace ConsoleApp1.command.scene
 {
-    static  class Scene
+    public static class Scene
     {
 
         static string prefix = "scene/";

@@ -1,5 +1,4 @@
 ﻿using ConsoleApp1.data;
-using Newtonsoft.Json;
 using System;
 
 namespace ConsoleApp1
@@ -83,7 +82,7 @@ namespace ConsoleApp1
                         //this.command.ResetScene();
                         //this.command.CreateTerrain();
                         //this.command.CreateRoute();
-                        this.command.PresetOne(18);
+                        this.command.PresetOne(SkyBoxTime.MORNING);
                     }
                     break;
             }

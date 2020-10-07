@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-
-namespace ConsoleApp1.command.scene
+﻿namespace ConsoleApp1.command.scene
 {
     static class Road
     {
