@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using Newtonsoft.Json;
 
 namespace ConsoleApp1
 {
@@ -19,8 +20,13 @@ namespace ConsoleApp1
         private Random random;
         private float resistance;
         private SimForm simForm;
+
+        //Attributes used to send data.
+        private readonly String IPAddress = "127.0.0.1";
+        private readonly int portNum = 1330;
+
         public Thread updateThread { get; }
-        public Simulator(IValueChangeListener listener, SimForm simForm) : base(listener)
+        public Simulator(IValueChangeListener listener, ServerConnection sc, SimForm simForm) : base(listener, sc)
         {
             // Set the base values for the speed and the heart rate
             selectedSpeed = 0;

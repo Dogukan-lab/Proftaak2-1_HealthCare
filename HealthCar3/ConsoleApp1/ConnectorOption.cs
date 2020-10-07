@@ -9,10 +9,12 @@ namespace ConsoleApp1
         private int heartRate;
         private float speed;
         private IValueChangeListener valueChangeListener;
+        private ServerConnection sc;
 
-        public ConnectorOption(IValueChangeListener listener)
+        public ConnectorOption(IValueChangeListener listener, ServerConnection sc)
         {
             valueChangeListener = listener;
+            this.sc = sc;
         }
 
         protected void SetNewSpeed(float newSpeed)
@@ -22,11 +24,15 @@ namespace ConsoleApp1
 
             speed = newSpeed;
             //valueChangeListener.OnSpeedChange(speed);
+            // Updates the value
+            //sc.UpdateSpeed(newSpeed);
         }
         protected void SetNewHeartRate(int newHeartRate)
         {
             heartRate = newHeartRate;
             //valueChangeListener.OnHeartRateChange(heartRate);
+            // Updates the value
+            //sc.UpdateHeartRate(newHeartRate);
         }
 
         public virtual void WriteResistance(float resistance)

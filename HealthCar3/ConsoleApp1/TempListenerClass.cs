@@ -8,12 +8,14 @@ namespace ConsoleApp1
     {
         public void OnHeartRateChange(int heartRate)
         {
-            Console.WriteLine($"{heartRate} BPM");
+            //Console.WriteLine($"{heartRate} BPM");
+            // Sends sim data to the server.
         }
 
         public void OnSpeedChange(float speed)
         {
-            Console.WriteLine($"{speed} m/s");
+            //Console.WriteLine($"{speed} m/s");
+            // Sends sim data to the server.
         }
     }
 }
