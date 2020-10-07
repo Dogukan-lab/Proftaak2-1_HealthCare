@@ -18,7 +18,7 @@ namespace ConsoleApp1
             TempListenerClass listener = new TempListenerClass();
             ServerConnection serverCon = new ServerConnection();
             SimForm simForm = null;
-            Application.Run(new SimDocLogin());
+            //Application.Run(new SimDocLogin());
 
             string cInput = "";
             Console.WriteLine("Select: \n" +
