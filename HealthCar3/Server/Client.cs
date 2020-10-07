@@ -103,9 +103,24 @@ namespace Server
                     }
                     else
                         bytes = PackageWrapper.SerializeData("client/register/error", new { message = "The username could not be set on the server." });
+
                     stream.Write(bytes, 0, bytes.Length);
                     break;
                 case "client/login":
+                    break;
+                case "doctor/login":
+                    string username = jData["data"].ToObject<JObject>()["username"].ToObject<string>();
+                    string password = jData["data"].ToObject<JObject>()["password"].ToObject<string>();
+
+                    if(username == "kees" && password == "banaan")
+                    {
+                        bytes = PackageWrapper.SerializeData("doctor/login/success", new { message = "Login successful" });
+                        id = "0000";
+                    }
+                    else
+                        bytes = PackageWrapper.SerializeData("doctor/login/error", new { message = "The username or password is incorrect." });
+
+                    stream.Write(bytes, 0, bytes.Length);
                     break;
                 case "client/update/heartRate":
                     Console.WriteLine($"{id}: {jData["data"].ToObject<JObject>()["heartRate"].ToObject<string>()} BPM");

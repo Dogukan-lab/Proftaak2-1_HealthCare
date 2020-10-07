@@ -18,7 +18,6 @@ namespace ConsoleApp1
             TempListenerClass listener = new TempListenerClass();
             ServerConnection serverCon = new ServerConnection();
             SimForm simForm = null;
-            //Application.Run(new SimDocLogin());
 
             string cInput = "";
             Console.WriteLine("Select: \n" +
@@ -70,80 +69,12 @@ namespace ConsoleApp1
                 // Start the update thread
                 simulator.updateThread.Start();
 
-                // Start the command thread
-                Thread consoleThread = new Thread(new ParameterizedThreadStart(ReadInput));
-                consoleThread.Start(serverCon);
-
                 // Start the gui
                 Application.Run(simForm);
             }
             else
             {
                 Thread.Sleep(4000);
-                // No need to run this on this different thread
-                ReadInput(serverCon);
-            }
-        }
-
-        public static void ReadInput(Object serverConnection)
-        {
-            //var connector = connectorOption as ConnectorOption;
-            var sc = serverConnection as ServerConnection;
-
-            string input = "";
-            string idInput = "";
-
-            while (!input.Equals("quit"))
-            {
-                Console.WriteLine("Commands: \n" +
-                "- quit (Quit application)\n" +
-                "- chat\n" +
-                "- broadcast\n" +
-                "- resistance\n" +
-                "- start\n" +
-                "- stop\n"
-                //"- res (Send resistance)"
-                );
-
-                input = Console.ReadLine();
-                switch (input)
-                {
-                    case "quit": // Quit the application
-                        return;
-                    case "broadcast":
-                        Console.WriteLine("Message: ");
-                        input = Console.ReadLine();
-                        sc.BroadcastTest(input);
-                        break;
-                    case "chat":
-                        Console.WriteLine("Id: ");
-                        idInput = Console.ReadLine();
-                        Console.WriteLine("Message: ");
-                        input = Console.ReadLine();
-                        sc.ChatTest(idInput, input);
-                        break;
-                    case "resistance": // Send resistance to the bike
-                        Console.WriteLine("Id: ");
-                        idInput = Console.ReadLine();
-                        Console.WriteLine("Amount of resistance: ");
-                        input = Console.ReadLine();
-                        sc.SetNewResistance(idInput, input);
-                        Console.WriteLine("");
-                        break;
-                    case "start":
-                        Console.WriteLine("Id: ");
-                        idInput = Console.ReadLine();
-                        sc.StartSession(idInput);
-                        break;
-                    case "stop":
-                        Console.WriteLine("Id: ");
-                        idInput = Console.ReadLine();
-                        sc.StopSession(idInput);
-                        break;
-                    default: // Unknown command
-                        Console.WriteLine("Not a valid command.");
-                        break;
-                }
             }
         }
         /*VpnConnector connector = new VpnConnector(new JsonSerializerSettings());*/

@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 using PackageUtils;
 using System.IO;
 
-namespace ConsoleApp1
+namespace DoctorGui
 {
     class ServerConnection
     {
@@ -22,8 +22,10 @@ namespace ConsoleApp1
         private string uniqueId = "";
         private byte[] buffer = new byte[1024];
         private bool connected = false;
-        private ConnectorOption co = null;
-        public void SetConnectorOption(ConnectorOption co) { this.co = co; }
+        private bool loggedIn = false;
+        public bool isConnected() { return this.connected; }
+        public bool isLoggedIn() { return this.loggedIn; }
+
         public ServerConnection()
         {
             clientConnection = new TcpClient();
@@ -68,7 +70,8 @@ namespace ConsoleApp1
 
         private void OnRead(IAsyncResult ar)
         {
-            try {
+            try
+            {
                 int receivedBytes = stream.EndRead(ar);
                 string receivedText = System.Text.Encoding.ASCII.GetString(buffer, 0, receivedBytes);
                 dynamic receivedData = JsonConvert.DeserializeObject(receivedText);
@@ -80,7 +83,7 @@ namespace ConsoleApp1
                 OnDisconnect();
                 return;
             }
-    }
+        }
 
         private void HandleData(dynamic data)
         {
@@ -88,27 +91,27 @@ namespace ConsoleApp1
             string tag = jData["tag"].ToObject<string>();
             switch (tag)
             {
-                case "client/register/success":
-                    Console.WriteLine($"Received Id: {jData["data"].ToObject<JObject>()["clientId"].ToObject<string>()}");
-                    uniqueId = jData["data"].ToObject<JObject>()["clientId"].ToObject<string>();
+                case "doctor/login/success":
+                    loggedIn = true;
+                    Console.WriteLine(jData["data"].ToObject<JObject>()["message"].ToObject<string>());
                     break;
-                case "client/register/error":
+                case "doctor/login/error":
+                    Console.WriteLine(jData["data"].ToObject<JObject>()["message"].ToObject<string>());
+                    break;
+
+                case "chat/message/success":
+                case "chat/broadcast/success":
+                case "session/resistance/success":
+                case "session/start/success":
+                case "session/stop/success":
+                    Console.WriteLine($"Succes: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
+                    break;
+                case "chat/message/error":
+                case "chat/broadcast/error":
+                case "session/resistance/error":
+                case "session/start/error":
+                case "session/stop/error":
                     Console.WriteLine($"ERROR: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
-                    break;
-                case "session/resistance":
-                    float resistance = float.Parse(jData["data"].ToObject<JObject>()["resistance"].ToObject<string>());
-                    co.WriteResistance(resistance);
-                    break;
-                case "session/start":
-                    Console.WriteLine("Start session");
-                    break;
-                case "session/stop":
-                    Console.WriteLine("Stop session");
-                    break;
-                case "chat/message":
-                case "chat/broadcast":
-                    string message = jData["data"].ToObject<JObject>()["message"].ToObject<string>();
-                    Console.WriteLine($"Received Message: {message}");
                     break;
             }
         }
@@ -117,6 +120,56 @@ namespace ConsoleApp1
         {
             connected = true;
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
+        }
+
+        /*
+         * Sends a message to a specific client.
+         */
+        public void Chat(string id, string message)
+        {
+            byte[] bytes = PackageWrapper.SerializeData("chat/message", new { clientId = id, message = message });
+
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        /*
+         * Sends a message to all the current connected clients.
+         */
+        public void Broadcast(string message)
+        {
+            byte[] bytes = PackageWrapper.SerializeData("chat/broadcast", new { message = message });
+
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        /*
+         * Sends a new resistance to the given client.
+         */
+        public void SetNewResistance(string id, string resistance)
+        {
+            byte[] bytes = PackageWrapper.SerializeData("session/resistance", new { clientId = id, resistance = resistance });
+
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        /*
+         * Starts the the session of the given client.
+         */
+        public void StartSession(string id)
+        {
+            byte[] bytes = PackageWrapper.SerializeData("session/start", new { clientId = id });
+
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        /*
+         * Stops the the session of the given client.
+         */
+        public void StopSession(string id)
+        {
+            byte[] bytes = PackageWrapper.SerializeData("session/stop", new { clientId = id });
+
+            stream.Write(bytes, 0, bytes.Length);
         }
 
         /*
@@ -129,41 +182,13 @@ namespace ConsoleApp1
         }
 
         /*
-         * Method used to register to the server
-         */
-        public void RegisterToServer(string name)
-        {
-            byte[] bytes = PackageWrapper.SerializeData("client/register", new { name = name });
-
-            stream.Write(bytes, 0, bytes.Length);
-        }
-
-        /*
          * Method used to login to the server
          */
-        public void LoginToServer(string name, string id)
+        public void LoginToServer(string username, string password)
         {
-            byte[] bytes = PackageWrapper.SerializeData("client/login", new { name = name, clientId = id});
-
+            byte[] bytes = PackageWrapper.SerializeData("doctor/login", new { username = username, password = password });
+        
             stream.Write(bytes, 0, bytes.Length);
-        }
-
-        /*
-         * Method used to send update messages to the server.
-         */
-        public void UpdateHeartRate(int heartRate)
-        {
-            byte[] bytes = PackageWrapper.SerializeData("client/update/heartRate", new { heartRate = heartRate});
-
-            if(connected)
-                stream.Write(bytes, 0, bytes.Length);
-        }
-        public void UpdateSpeed(float speed)
-        {
-            byte[] bytes = PackageWrapper.SerializeData("client/update/speed", new { speed = speed});
-
-            if(connected)
-                stream.Write(bytes, 0, bytes.Length);
         }
     }
 }
