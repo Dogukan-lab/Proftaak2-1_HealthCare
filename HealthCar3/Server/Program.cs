@@ -10,6 +10,7 @@ namespace Server
 {
     /*
      * Class that allows the client to connect to the server
+     * :)
      */
     class Program
     {
