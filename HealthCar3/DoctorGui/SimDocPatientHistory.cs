@@ -8,12 +8,12 @@ using System.Windows.Forms;
 
 namespace DoctorGui
 {
-    public partial class SimDocHome : Form
+    public partial class SimDocPatientHistory : Form
     {
-        public SimDocHome(string username)
+        public SimDocPatientHistory()
         {
             InitializeComponent();
-            DoctorWelcome.Text = "Welcome Docter " + username;
+            DoctorWelcome.Text = "Welcome Docter ";
         }
 
         private void Docter_Click(object sender, EventArgs e)
@@ -34,16 +34,17 @@ namespace DoctorGui
 
         private void BikePatientButton_Click(object sender, EventArgs e)
         {
-             this.Hide();
+            this.Hide();
             SimDocBikePatient simDocBikePatient = new SimDocBikePatient();
             simDocBikePatient.ShowDialog();
         }
 
-        private void PatientHistoryButton_Click(object sender, EventArgs e)
+        private void HomeButton_Click(object sender, EventArgs e)
         {
             this.Hide();
-            SimDocPatientHistory simDocPatientHistory = new SimDocPatientHistory();
-            simDocPatientHistory.ShowDialog();
+            SimDocHome simDocHome = new SimDocHome("Welcome");
+            simDocHome.ShowDialog();
+
         }
     }
 }
