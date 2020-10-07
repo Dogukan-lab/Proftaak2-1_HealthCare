@@ -10,6 +10,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)CredentialVarificator.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Decryptor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Encryptor.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)PackageWrapper.cs" />
   </ItemGroup>
 </Project>
