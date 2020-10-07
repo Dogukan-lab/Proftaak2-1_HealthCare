@@ -17,11 +17,12 @@ namespace Server
         private byte[] buffer = new byte[1024];
         private string id;
         private bool sessionActive = false;
+        private SessionData sessionData = null;
         public NetworkStream GetClientStream() { return this.stream; }
         public string GetId() { return this.id; }
         public bool IsSessionActive() { return this.sessionActive; }
         public void SetSession(bool active) { this.sessionActive = active; }
-
+        public SessionData GetSessionData() { return this.sessionData; }
 
         public Client(TcpClient tcpClient)
         {
@@ -115,7 +116,7 @@ namespace Server
                     if(username == "kees" && password == "banaan")
                     {
                         bytes = PackageWrapper.SerializeData("doctor/login/success", new { message = "Login successful" });
-                        id = "0000";
+                        id = "0000"; // standard doctor ID
                     }
                     else
                         bytes = PackageWrapper.SerializeData("doctor/login/error", new { message = "The username or password is incorrect." });
@@ -123,10 +124,21 @@ namespace Server
                     stream.Write(bytes, 0, bytes.Length);
                     break;
                 case "client/update/heartRate":
-                    Console.WriteLine($"{id}: {jData["data"].ToObject<JObject>()["heartRate"].ToObject<string>()} BPM");
+                    if(!sessionActive) { return; } // if we are not currently in a session do not save the data.
+                    //Console.WriteLine($"{id}: {jData["data"].ToObject<JObject>()["heartRate"].ToObject<string>()} BPM");
+                    // Update the session with the new received heart rate.
+                    sessionData.newHeartRate(jData["data"].ToObject<JObject>()["heartRate"].ToObject<int>());
+                    // Send data to doctor client
+                    Program.SendMessageToSpecificClient("0000", PackageWrapper.SerializeData("client/update/heartRate", new { clientId = id, heartRate = jData["data"].ToObject<JObject>()["heartRate"].ToObject<string>() }));
                     break;
                 case "client/update/speed":
-                    Console.WriteLine($"{id}: {jData["data"].ToObject<JObject>()["speed"].ToObject<string>()} m/s");
+                    if (!sessionActive) { return; } // if we are not currently in a session do not save the data.
+                    //Console.WriteLine($"{id}: {jData["data"].ToObject<JObject>()["speed"].ToObject<string>()} m/s");
+                    // Update the session with the new received speed.
+                    float newSpeed = jData["data"].ToObject<JObject>()["speed"].ToObject<float>();
+                    sessionData.newSpeed(newSpeed);
+                    // Send data to doctor client
+                    Program.SendMessageToSpecificClient("0000", PackageWrapper.SerializeData("client/update/speed", new { clientId = id, speed = jData["data"].ToObject<JObject>()["speed"].ToObject<string>() }));
                     break;
                 case "session/resistance":
                     string resistance = jData["data"].ToObject<JObject>()["resistance"].ToObject<string>();
@@ -154,8 +166,10 @@ namespace Server
                         else
                         {
                             targetClient.SetSession(true);
-                            targetClient = null;
                             bytes = PackageWrapper.SerializeData("session/start/success", new { message = "Session successfully started." });
+                            targetClient.sessionData = new SessionData();
+                            targetClient.sessionData.clientId = targetClient.GetId();
+                            targetClient = null;
                         }
                     }
                     stream.Write(bytes, 0, bytes.Length);
@@ -171,10 +185,19 @@ namespace Server
                         else
                         {
                             targetClient.SetSession(false);
-                            targetClient = null;
                             bytes = PackageWrapper.SerializeData("session/stop/success", new { message = "Session successfully stopped." });
+                            Program.SaveSession(targetClient);
+                            targetClient = null;
                         }
                     }
+                    stream.Write(bytes, 0, bytes.Length);
+                    break;
+                case "doctor/clientHistory":
+                    dynamic session = Program.GetSession(jData["data"].ToObject<JObject>()["clientId"].ToObject<string>());
+                    if (session != null)
+                        bytes = PackageWrapper.SerializeData("doctor/clientHistory/success", session);
+                    else
+                        bytes = PackageWrapper.SerializeData("doctor/clientHistory/error", new { message = "No session found with the given ID." });
                     stream.Write(bytes, 0, bytes.Length);
                     break;
             }

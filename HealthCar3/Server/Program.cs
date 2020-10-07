@@ -16,11 +16,14 @@ namespace Server
     {
         private TcpListener listener;
         public static List<Client> clients;
-        public static Dictionary<string, string> registeredClients;
+        public static Dictionary<string, string> registeredClients; //<id, name>
+        public static List<dynamic> savedSession;
+        public static Client doctorClient;
 
         static void Main(string[] args)
         {
             Console.WriteLine("Hello Server!");
+            savedSession = new List<dynamic>();
             new Program().Listen();     
         }
         /*
@@ -42,7 +45,7 @@ namespace Server
         private void Connect(IAsyncResult ar)
         {
             TcpClient tcpClient = listener.EndAcceptTcpClient(ar);
-            ClientData cd = new ClientData();
+            SessionData cd = new SessionData();
             Console.WriteLine($"Client connected from {tcpClient.Client.RemoteEndPoint}");
             clients.Add(new Client(tcpClient));
             listener.BeginAcceptTcpClient(new AsyncCallback(Connect), null);
@@ -75,7 +78,7 @@ namespace Server
         /*
          * Sends the message to all the clients connected to the server.
          */
-        public static void Broadcast(byte[] bytes)
+        internal static void Broadcast(byte[] bytes)
         {
             foreach(Client client in clients)
             {
@@ -87,7 +90,7 @@ namespace Server
          * Sends the message to the given id.
          * Returns true if id is found in the list and false if no match is found.
          */
-        public static bool SendMessageToSpecificClient(string id, byte[] bytes)
+        internal static bool SendMessageToSpecificClient(string id, byte[] bytes)
         {
             foreach (Client client in clients)
             {
@@ -97,7 +100,7 @@ namespace Server
                     return true;
                 }
             }
-            return false;
+            return false; // No client found with the given id.
         }
 
         internal static bool ActiveSession(string id, out Client targetClient)
@@ -111,7 +114,29 @@ namespace Server
                     return client.IsSessionActive();
                 }
             }
-            return false;
+            return false; // No client found with the given id.
+        }
+
+        /*
+         * Saves the session for later viewing.
+         */
+        internal static void SaveSession(Client client)
+        {
+            savedSession.Add(client.GetSessionData().GetData());
+        }
+
+        /*
+         * Retrieves the data of a previous session.
+         */
+        internal static dynamic GetSession(string id)
+        {
+            foreach(var sd in savedSession)
+            {
+                JObject jSd = sd as JObject;
+                if (jSd["clientId"].ToObject<string>() == id)
+                    return sd;
+            }
+            return null; // No session found with the given id.
         }
     }
 }

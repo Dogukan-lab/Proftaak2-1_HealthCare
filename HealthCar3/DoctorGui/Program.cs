@@ -29,7 +29,7 @@ namespace DoctorGui
                 string password = Console.ReadLine();
 
                 sc.LoginToServer(username, password);
-                Thread.Sleep(1000);
+                Thread.Sleep(2000);
             }
 
             // Start the command thread

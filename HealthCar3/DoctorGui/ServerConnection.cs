@@ -98,7 +98,12 @@ namespace DoctorGui
                 case "doctor/login/error":
                     Console.WriteLine(jData["data"].ToObject<JObject>()["message"].ToObject<string>());
                     break;
-
+                case "client/update/heartRate":
+                    //Console.WriteLine($"{jData["data"].ToObject<JObject>()["clientId"].ToObject<string>()}: {jData["data"].ToObject<JObject>()["heartRate"].ToObject<string>()} BPM");
+                    break;
+                case "client/update/speed":
+                    //Console.WriteLine($"{jData["data"].ToObject<JObject>()["clientId"].ToObject<string>()}: {jData["data"].ToObject<JObject>()["speed"].ToObject<string>()} m/s");
+                    break;
                 case "chat/message/success":
                 case "chat/broadcast/success":
                 case "session/resistance/success":
@@ -122,6 +127,7 @@ namespace DoctorGui
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
 
+        #region // Writer functions
         /*
          * Sends a message to a specific client.
          */
@@ -171,6 +177,17 @@ namespace DoctorGui
 
             stream.Write(bytes, 0, bytes.Length);
         }
+
+        /*
+         * Retrieves the data from a previous session
+         */
+        public void GetSession(string id)
+        {
+            byte[] bytes = PackageWrapper.SerializeData("doctor/clientHistory", new { clientId = id });
+
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        #endregion
 
         /*
          * Method used to disconnect from the server.
