@@ -57,7 +57,9 @@ namespace DoctorGui
                 "- broadcast\n" +
                 "- resistance\n" +
                 "- start\n" +
-                "- stop\n"
+                "- stop\n" +
+                "- record\n" +
+                "- emergencystop\n"
                 //"- res (Send resistance)"
                 );
 
@@ -95,6 +97,14 @@ namespace DoctorGui
                         Console.WriteLine("Id: ");
                         idInput = Console.ReadLine();
                         sc.StopSession(idInput);
+                        break;
+                    case "record":
+                        Console.WriteLine("Id: ");
+                        idInput = Console.ReadLine();
+                        sc.GetSession(idInput);
+                        break;
+                    case "emergencystop":
+                        sc.EmergencyStopSessions();
                         break;
                     default: // Unknown command
                         Console.WriteLine("Not a valid command.");

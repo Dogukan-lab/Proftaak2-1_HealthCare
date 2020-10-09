@@ -104,6 +104,9 @@ namespace DoctorGui
                 case "client/update/speed":
                     //Console.WriteLine($"{jData["data"].ToObject<JObject>()["clientId"].ToObject<string>()}: {jData["data"].ToObject<JObject>()["speed"].ToObject<string>()} m/s");
                     break;
+                case "doctor/clientHistory/success":
+                    Console.WriteLine($"{jData["data"]}");
+                    break;
                 case "chat/message/success":
                 case "chat/broadcast/success":
                 case "session/resistance/success":
@@ -111,6 +114,7 @@ namespace DoctorGui
                 case "session/stop/success":
                     Console.WriteLine($"Succes: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
                     break;
+                case "doctor/clientHistory/error":
                 case "chat/message/error":
                 case "chat/broadcast/error":
                 case "session/resistance/error":
@@ -184,6 +188,15 @@ namespace DoctorGui
         public void GetSession(string id)
         {
             byte[] bytes = PackageWrapper.SerializeData("doctor/clientHistory", new { clientId = id });
+
+            stream.Write(bytes, 0, bytes.Length);
+        }
+        /*
+         * Stops all the active clients
+         */
+        public void EmergencyStopSessions()
+        {
+            byte[] bytes = PackageWrapper.SerializeData("session/emergencyStop", new { });
 
             stream.Write(bytes, 0, bytes.Length);
         }

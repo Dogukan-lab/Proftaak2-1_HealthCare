@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -126,17 +127,39 @@ namespace Server
         }
 
         /*
-         * Retrieves the data of a previous session.
+         * Retrieves all the records of the given id.
          */
-        internal static dynamic GetSession(string id)
+        internal static dynamic[] GetSession(string id)
         {
-            foreach(var sd in savedSession)
+            List<dynamic> records = new List<dynamic>();
+            foreach(dynamic sd in savedSession)
             {
-                JObject jSd = sd as JObject;
-                if (jSd["clientId"].ToObject<string>() == id)
-                    return sd;
+                if (sd.clientId == id)
+                    records.Add(sd);
             }
-            return null; // No session found with the given id.
+            if (records.Count > 0)
+                return records.ToArray();
+            else
+                return null; // return null if no records were found with the given id.
+        }
+
+        /*
+         * Sends a stop message to all the clients with an active session and saves the data
+         */
+        internal static void EmergencyStop(byte[] bytes)
+        {
+            foreach(var client in clients)
+            {
+                if (client.IsSessionActive())
+                {
+                    // Send stop message to client
+                    SendMessageToSpecificClient(client.GetId(), bytes);
+                    // Save the data
+                    SaveSession(client);
+                    // End session server side
+                    client.SetSession(false);
+                }
+            }
         }
     }
 }
