@@ -17,7 +17,8 @@ namespace Server
     {
         private TcpListener listener;
         public static List<Client> clients;
-        public static Dictionary<string, string> registeredClients; //<id, name>
+        //public static Dictionary<string, string> registeredClients; //<id, name>
+        public static Dictionary<(string name, string password), string> registeredClients; //<(name, password), id>
         public static List<dynamic> savedSession;
 
         static void Main(string[] args)
@@ -32,7 +33,7 @@ namespace Server
         public void Listen()
         {
             clients = new List<Client>();
-            registeredClients = new Dictionary<string, string>();
+            registeredClients = new Dictionary<(string, string), string>();
             //TODO don't know which ip address and port
             listener = new TcpListener(IPAddress.Any, 1330);
             listener.Start();
@@ -71,7 +72,6 @@ namespace Server
             {
                 id += random.Next(0, 9);
             }
-            registeredClients.Add(id, name);
             return id;
         }
 
@@ -81,9 +81,8 @@ namespace Server
         internal static void Broadcast(byte[] bytes)
         {
             foreach(Client client in clients)
-            {
-                client.GetClientStream().Write(bytes, 0, bytes.Length);
-            }
+                if(client.IsLoggedIn())
+                    client.GetClientStream().Write(bytes, 0, bytes.Length);
         }
 
         /*
@@ -159,6 +158,11 @@ namespace Server
                     client.SetSession(false);
                 }
             }
+        }
+
+        internal static bool ClientLogin(string name, string password)
+        {
+            return registeredClients.ContainsKey((name, password));
         }
     }
 }

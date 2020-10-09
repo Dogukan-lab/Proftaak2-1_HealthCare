@@ -16,13 +16,16 @@ namespace Server
         private NetworkStream stream;
         private byte[] buffer = new byte[1024];
         private string id;
+        private string name;
         private bool sessionActive = false;
         private SessionData sessionData = null;
+        private bool loggedIn = false;
         public NetworkStream GetClientStream() { return this.stream; }
         public string GetId() { return this.id; }
         public bool IsSessionActive() { return this.sessionActive; }
         public void SetSession(bool active) { this.sessionActive = active; }
         public SessionData GetSessionData() { return this.sessionData; }
+        public bool IsLoggedIn() { return this.loggedIn; }
 
         public Client(TcpClient tcpClient)
         {
@@ -65,7 +68,7 @@ namespace Server
             sessionData = new SessionData();
             sessionData.clientId = id;
             sessionData.sessionStart = DateTime.Now;
-            sessionData.name = Program.registeredClients.GetValueOrDefault(id, "Error: No registered name found");
+            sessionData.name = name;
         }
         /*
          * Stops the session with this client
@@ -121,14 +124,30 @@ namespace Server
                     if (CredentialVarificator.VerifyUserName(name))
                     {
                         id = Program.GenerateId(name);
-                        bytes = PackageWrapper.SerializeData("client/register/success", new { clientId = id, clientName = name });
+                        this.name = name;
+                        Program.registeredClients.Add((name, (string)data.data.password), id);
+                        Console.WriteLine($"New Client registered with id: {id}");
+                        bytes = PackageWrapper.SerializeData("client/register/success", new { message = "Successfully registered!" });
+                        loggedIn = true;
                     }
                     else
-                        bytes = PackageWrapper.SerializeData("client/register/error", new { message = "The username could not be set on the server." });
+                        bytes = PackageWrapper.SerializeData("client/register/error", new { message = "Username cannot contain numbers or special characters." });
 
                     stream.Write(bytes, 0, bytes.Length);
                     break;
                 case "client/login":
+                    if (Program.ClientLogin((string)data.data.name, (string)data.data.password))
+                    {
+                        this.name = data.data.name;
+                        id = Program.registeredClients.GetValueOrDefault((this.name, (string)data.data.password), "Error: Logged in without known id!");
+                        Console.WriteLine($"New Client logged in with id: {id}");
+                        bytes = PackageWrapper.SerializeData("client/login/success", new { message = "Login successful." });
+                        loggedIn = true;
+                    }
+                    else
+                        bytes = PackageWrapper.SerializeData("client/login/error", new { message = "The username or password is not correct." });
+
+                    stream.Write(bytes, 0, bytes.Length);
                     break;
                 case "doctor/login":
                     string username = data.data.username;

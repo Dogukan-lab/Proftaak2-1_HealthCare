@@ -22,8 +22,10 @@ namespace ConsoleApp1
         private string uniqueId = "";
         private byte[] buffer = new byte[1024];
         private bool connected = false;
+        private bool loggedIn = false;
         private ConnectorOption co = null;
         public void SetConnectorOption(ConnectorOption co) { this.co = co; }
+        public bool IsLoggedIn() { return this.loggedIn; }
         public ServerConnection()
         {
             clientConnection = new TcpClient();
@@ -89,11 +91,13 @@ namespace ConsoleApp1
             switch (tag)
             {
                 case "client/register/success":
-                    Console.WriteLine($"Received Id: {jData["data"].ToObject<JObject>()["clientId"].ToObject<string>()}");
-                    uniqueId = jData["data"].ToObject<JObject>()["clientId"].ToObject<string>();
+                case "client/login/success":
+                    Console.WriteLine(data.data.message);
+                    loggedIn = true;
                     break;
                 case "client/register/error":
-                    Console.WriteLine($"ERROR: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
+                case "client/login/error":
+                    Console.WriteLine($"ERROR: {data.data.message}");
                     break;
                 case "session/resistance":
                     float resistance = float.Parse(jData["data"].ToObject<JObject>()["resistance"].ToObject<string>());
@@ -131,9 +135,9 @@ namespace ConsoleApp1
         /*
          * Method used to register to the server
          */
-        public void RegisterToServer(string name)
+        public void RegisterToServer(string name, string password)
         {
-            byte[] bytes = PackageWrapper.SerializeData("client/register", new { name = name });
+            byte[] bytes = PackageWrapper.SerializeData("client/register", new { name = name, password = password });
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -141,9 +145,9 @@ namespace ConsoleApp1
         /*
          * Method used to login to the server
          */
-        public void LoginToServer(string name, string id)
+        public void LoginToServer(string name, string password)
         {
-            byte[] bytes = PackageWrapper.SerializeData("client/login", new { name = name, clientId = id});
+            byte[] bytes = PackageWrapper.SerializeData("client/login", new { name = name, password = password });
 
             stream.Write(bytes, 0, bytes.Length);
         }

@@ -20,23 +20,30 @@ namespace ConsoleApp1
             SimForm simForm = null;
 
             string cInput = "";
-            Console.WriteLine("Select: \n" +
-                "- login\n" +
-                "- register\n");
-            cInput = Console.ReadLine();
-            if (cInput == "login")
+            string pInput = "";
+            while (!serverCon.IsLoggedIn())
             {
-                Console.WriteLine("Name: ");
+                Console.WriteLine("Select: \n" +
+                    "- login\n" +
+                    "- register\n");
                 cInput = Console.ReadLine();
-                Console.WriteLine("Id: ");
-                string idInput = Console.ReadLine();
-                serverCon.LoginToServer(cInput, idInput);
-            }
-            else if (cInput == "register")
-            {
-                Console.WriteLine("Name: ");
-                cInput = Console.ReadLine();
-                serverCon.RegisterToServer(cInput);
+                if (cInput == "login")
+                {
+                    Console.WriteLine("Name: ");
+                    cInput = Console.ReadLine();
+                    Console.WriteLine("Password: ");
+                    pInput = Console.ReadLine();
+                    serverCon.LoginToServer(cInput, pInput);
+                }
+                else if (cInput == "register")
+                {
+                    Console.WriteLine("Name: ");
+                    cInput = Console.ReadLine();
+                    Console.WriteLine("Password: ");
+                    pInput = Console.ReadLine();
+                    serverCon.RegisterToServer(cInput, pInput);
+                }
+                Thread.Sleep(2000);
             }
 
             cInput = "";
