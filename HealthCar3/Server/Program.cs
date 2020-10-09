@@ -19,7 +19,6 @@ namespace Server
         public static List<Client> clients;
         public static Dictionary<string, string> registeredClients; //<id, name>
         public static List<dynamic> savedSession;
-        public static Client doctorClient;
 
         static void Main(string[] args)
         {

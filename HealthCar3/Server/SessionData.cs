@@ -8,6 +8,7 @@ namespace Server
     class SessionData
     {
         public string clientId { get; set; }
+        public string name { get; set; }
         public DateTime sessionStart { get; set; }
         public DateTime sessionEnd { get; set; }
         private int maxHeartRate { get; set; }
@@ -70,6 +71,7 @@ namespace Server
             return new
             {
                 clientId = clientId,
+                name = name,
                 sessionStart = sessionStart,
                 sessionEnd = sessionEnd,
                 maxHeartRate = maxHeartRate,

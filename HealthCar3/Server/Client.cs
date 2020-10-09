@@ -65,6 +65,7 @@ namespace Server
             sessionData = new SessionData();
             sessionData.clientId = id;
             sessionData.sessionStart = DateTime.Now;
+            sessionData.name = Program.registeredClients.GetValueOrDefault(id, "Error: No registered name found");
         }
         /*
          * Stops the session with this client
