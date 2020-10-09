@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DoctorGui\DoctorGui.csproj" />
     <ProjectReference Include="..\SimulatorGui\SimulatorGui.csproj" />
   </ItemGroup>
 
@@ -22,5 +23,7 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+
+  <Import Project="..\PackageUtils\PackageUtils.projitems" Label="Shared" />
 
 </Project>
