@@ -121,7 +121,7 @@ namespace Server
                     break;
                 case "client/register":
                     string name = data.data.name;                   
-                    if (CredentialVarificator.VerifyUserName(name))
+                    if (CredentialVarificator.VerifyUsername(name))
                     {
                         id = Program.GenerateId(name);
                         this.name = name;
