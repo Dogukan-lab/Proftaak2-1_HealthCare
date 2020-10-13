@@ -78,11 +78,7 @@ namespace ConsoleApp1
                     GetTunnelId(jsonData);
                     if (this.destination != null)
                     {
-                        // Scene is now fully initialized and can now execute commands 
-                        //this.command.ResetScene();
-                        //this.command.CreateTerrain();
-                        //this.command.CreateRoute();
-                        this.command.PresetOne(SkyBoxTime.MORNING);
+                        this.command.PresetOne();
                     }
                     break;
             }

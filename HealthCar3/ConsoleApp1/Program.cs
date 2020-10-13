@@ -83,8 +83,8 @@ namespace ConsoleApp1
             //     // No need to run this on this different thread
             //     ReadInput(serverCon);
             // }
+            
             VpnConnector connector = new VpnConnector(new JsonSerializerSettings());
-
         }
 
         public static void ReadInput(Object serverConnection)
