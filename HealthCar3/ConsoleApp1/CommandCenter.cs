@@ -5,6 +5,7 @@ using ConsoleApp1.data.components;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Data;
 using System.IO;
 using System.Reflection;
 
@@ -13,8 +14,9 @@ namespace ConsoleApp1
     class CommandCenter
     {
         private VpnConnector connector;
-        private JsonSerializerSettings serializerSettings;
-        private string runningPath;
+        private string roadTexture, roadNormal, roadSpecular,
+            terrainTexture, terrainNormal;
+        private int routeSize;
 
         /**
          * Controller for managing construction and management of commands.
@@ -25,8 +27,38 @@ namespace ConsoleApp1
         public CommandCenter(VpnConnector vpn)
         {
             connector = vpn;
+            this.roadTexture = "";
+            this.roadNormal = "";
+            this.roadSpecular = "";
+            this.terrainTexture= "";
+            this.terrainNormal = "";
+            this.routeSize = 10;
+        }
+        
+        
+        public void PresetOne()
+        {
+            ResetScene();
+            CreateTerrain("snow_grass3_d.jpg", "snow_grass3_n.jpg");
+            
+            RouteData[] routeData = new RouteData[7];
+            // Defining route
+            routeData[0] = new RouteData(new int[] { 0, 0, 0 }, new int[] { 1, 0, 0 });
+            routeData[1] = new RouteData(new int[] { 20, 0, 0 }, new int[] { 0, 0, 1 });
+            routeData[2] = new RouteData(new int[] { 20, 0, 50 }, new int[] { -1, 0, 0 });
+            routeData[3] = new RouteData(new int[] { -10, 0, 30 }, new int[] { -1, 0, 0 });
+            routeData[4] = new RouteData(new int[] { -30, 0, 10 }, new int[] { 0, 0, 0 });
+            routeData[5] = new RouteData(new int[] { -20, 0, 0 }, new int[] { 0, 0, 0 });
+            routeData[6] = new RouteData(new int[] { -10, 0, -10 }, new int[] { 0, 0, -1 });
+
+            CreateRoute(routeData);
+            
         }
 
+        #region Scene Code
+        /*
+         * This method gets the original scene, and is used to locate the ground plane node.
+         */
         public void GetScene()
         {
             this.connector.SendPacket(Scene.Get(), new Action<JObject>(data =>
@@ -35,6 +67,9 @@ namespace ConsoleApp1
             }));
         }
 
+        /*
+         * This method deletes the original groundplane and resets the entire scene. 
+         */
         public void ResetScene()
         {
             Console.WriteLine("Command: RESET SCENE");
@@ -51,8 +86,24 @@ namespace ConsoleApp1
                 }));
             }));
         }
+        #endregion
 
-        public void CreateTerrain()
+        #region Code for the terrain
+        /*
+         * This method creates a terrain to be used
+         */
+        public void CreateTerrain(string texture, string normal)
+        {
+            connector.SendPacket(Terrain.Add(new int[] { 256, 256 }, CreateHeightMap()), new Action<JObject>(data =>
+            {
+                CreateTerrainTexture(texture, normal);
+            }));
+        }
+
+        /*
+         * This method also creates a heightmap for the terrain.
+         */
+        public double[] CreateHeightMap()
         {
             double[] heightMap = new double[65536];
             Random random = new Random();
@@ -68,39 +119,41 @@ namespace ConsoleApp1
                     }
                     else
                     {
-                        heightMap[(i * 255) + j] = random.NextDouble()/4;
+                        heightMap[(i * 255) + j] = random.NextDouble()/8;
                     }
                 }
             }
 
-            connector.SendPacket(Terrain.Add(new int[] { 256, 256 }, heightMap), new Action<JObject>(data =>
-            {
-                CreateTerrainTexture();
-            }));
+            return heightMap;
         }
 
-        private void CreateTerrainTexture()
+        /*
+         * This method sets a texture on the terrain to make it visible.
+         */
+        private void CreateTerrainTexture(string texture, string normal)
         {
             string uuid = "";
-            this.connector.SendPacket(Node.AddTerrain("groundPlane", null, new TransformComponent(-128, -1, -128, 1, 0, 0, 0), true), new Action<JObject>(data =>
+            this.connector.SendPacket(Node.AddTerrain("groundPlane", null, 
+                new TransformComponent(-128, 0, -128, 1, 0, 0, 0), true), 
+                new Action<JObject>(data =>
             {
                 uuid = data["data"]["data"]["uuid"].ToString();
-                this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("terrain/lava_mars_d.jpg"), GetTextures("terrain/jungle_stone_s.jpg"), 0, 10, 0.2), new Action<JObject>(data =>
+                this.connector.SendPacket(Node.AddLayer(uuid, 
+                    GetTextures($"terrain/{texture}"), 
+                    GetTextures($"terrain/{normal}"), 0, 10, 0.2), 
+                    new Action<JObject>(data =>
                {
-                   Console.WriteLine("Texture Data: {0}", data);
+                   Console.WriteLine("Terrain texture has been Added!");
                }));
             }));
         }
+        #endregion
 
-        public void CreateRoute()
+        /*
+         * This method creates the route that the bike in the VR will follow.
+         */
+        public void CreateRoute(RouteData[] routeData)
         {
-            RouteData[] routeData = new RouteData[4];
-            // Defining route
-            routeData[0] = new RouteData(new int[] { 1, 0, 1}, new int[] { 1, 0, 0 });
-            routeData[1] = new RouteData(new int[] { 11, 0, 1 }, new int[] { 0, 0, 1 });
-            routeData[2] = new RouteData(new int[] { 11, 0, 11 }, new int[] { -1, 0, 0 });
-            routeData[3] = new RouteData(new int[] { 1, 0, 11 }, new int[] { 0, 0, -1 });
-
             this.connector.SendPacket(Route.Add(routeData), new Action<JObject>(data =>
             {
                 Console.WriteLine($"Response add: {data}");
@@ -110,44 +163,58 @@ namespace ConsoleApp1
                 }));
                 string roadID = data["data"]["data"]["uuid"].ToString();
                 AddRoad(data["data"]["data"]["uuid"].ToString());
-                this.connector.SendPacket(Node.AddModel("Fiets", new TransformComponent(1, 0, 1, 1, 0, 0, 0), new ModelComponent(GetModelObjects("bike/bike.fbx"), true, false, "")), new Action<JObject>(data =>
+                
+                this.connector.SendPacket(Node.AddModel("Fiets", 
+                        new TransformComponent(1, -1, 1, 1, 0, 0, 0), 
+                        new ModelComponent(GetModelObjects("bike/bike.fbx"), true, false, "")), 
+                    new Action<JObject>(data =>
                 {
-                    this.connector.SendPacket(Route.Follow(roadID, data["data"]["data"]["uuid"].ToString(),1, 0, "XZ", 1,false , new int[] { 0,0,0}, new int[] {0,0,0 } ), new Action<JObject>(data =>
-                    { 
+                    this.connector.SendPacket(Route.Follow(roadID, data["data"]["data"]["uuid"].ToString(),1, -1, "XZ", 1,false ,
+                        new int[] { 0, 0, 0}, new int[] {0, 0, 0 } ), new Action<JObject>(data =>
+                    {
+                        Console.WriteLine("Following the set route!");
                     }));
                 }));
                
             }));
         }
 
+        /*
+         * This method creates the road texture 
+         */
         private void AddRoad(string uuid)
         {
-            this.connector.SendPacket(Road.AddRoad(uuid, GetTextures("tarmac_diffuse.png"), GetTextures("tarmac_normal.png"), GetTextures("tarmax_specular.png"), 0), new Action<JObject>(data =>
+            this.connector.SendPacket(Road.AddRoad(uuid, 
+                GetTextures("tarmac_diffuse.png"), 
+                GetTextures("tarmac_normal.png"), 
+                GetTextures("tarmax_specular.png"), -3), 
+                new Action<JObject>(data =>
             {
                 Console.WriteLine($"Response show: {data}");
             }));
         }
 
+        /*
+         * This method is used to spawn in models such as: bikes, trees and/or cars.
+         */
         public void CreateObject(string desiredModel)
         {
             this.connector.SendPacket(Node.AddModel("car", new TransformComponent(2, 2, 2, 1, 0, 0, 0), new ModelComponent(GetModelObjects(desiredModel), true, false, "")), new Action<JObject>(data =>
             {
             }));
         }
-
-        /**
-         * Returns the root path with the given file name
+        
+        /*
+         * This method gets the models inside of the data/networkEngine/models directory.
          */
-        private string GetResourcePath(string fileName)
-        {
-            return Path.Join(runningPath, fileName);
-        }
-
         private string GetModelObjects(string objectname)
         {
             return $"data/NetworkEngine/models/{objectname}";
         }
 
+        /*
+         * This method gets the textures inside of the data/networkEngine/textures directory.
+         */
         private string GetTextures(string textureName)
         {
             return $"data/NetworkEngine/textures/{textureName}";
