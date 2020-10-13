@@ -4,11 +4,10 @@ using System;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
-
 using System.IO;
 using System.Reflection;
-
 using DoctorGui;
+
 namespace ConsoleApp1
 {
     class Program
@@ -83,10 +82,9 @@ namespace ConsoleApp1
             //     // No need to run this on this different thread
             //     ReadInput(serverCon);
             // }
-            
+
             VpnConnector connector = new VpnConnector(new JsonSerializerSettings());
         }
-    }
 
         public static void ReadInput(Object serverConnection)
         {
@@ -99,13 +97,13 @@ namespace ConsoleApp1
             while (!input.Equals("quit"))
             {
                 Console.WriteLine("Commands: \n" +
-                "- quit (Quit application)\n" +
-                "- chat\n" +
-                "- broadcast\n" +
-                "- resistance\n" +
-                "- start\n" +
-                "- stop\n"
-                //"- res (Send resistance)"
+                                  "- quit (Quit application)\n" +
+                                  "- chat\n" +
+                                  "- broadcast\n" +
+                                  "- resistance\n" +
+                                  "- start\n" +
+                                  "- stop\n"
+                    //"- res (Send resistance)"
                 );
 
                 input = Console.ReadLine();
@@ -151,5 +149,3 @@ namespace ConsoleApp1
         }
     }
 }
-
-
