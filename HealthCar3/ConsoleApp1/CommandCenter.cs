@@ -35,6 +35,10 @@ namespace ConsoleApp1
 
         public void PresetOne()
         {
+            // string roadTexture = GetRoadTextures("RoadTexture2.jpg");
+            // string roadNormal = GetRoadTextures("RoadTexture2_NORMAL.png");
+            // string roadSpecular = GetRoadTextures("RoadTexture2_SPECULAR.png");
+           
             ResetScene();
             CreateTerrain(this.terrainTexture, this.terrainNormal);
 
@@ -57,47 +61,47 @@ namespace ConsoleApp1
             switch (time)
             {
                 case SkyBoxTime.MORNING:
-                    this.connector.SendPacket(Skybox.SetTime(5), new Action<JObject>(data =>
+                    this.connector.SendPacket(Skybox.SetTime(5.0), new Action<JObject>(data =>
                     {
-                        this.connector.SendPacket(Skybox.Update("static",
-                                GetSkyBox("bluecloud_rt.jpg"), GetSkyBox("bluecloud_lf.jpg"),
-                                GetSkyBox("bluecloud_up.jpg"),
-                                GetSkyBox("bluecloud_dn.jpg"), GetSkyBox("bluecloud_bk.jpg"),
-                                GetSkyBox("bluecloud_ft.jpg")),
-                            new Action<JObject>(data => { Console.WriteLine("It's daytime!"); }));
+                        // this.connector.SendPacket(Skybox.Update("static",
+                        //         GetSkyBox("bluecloud_rt.jpg"), GetSkyBox("bluecloud_lf.jpg"),
+                        //         GetSkyBox("bluecloud_up.jpg"),
+                        //         GetSkyBox("bluecloud_dn.jpg"), GetSkyBox("bluecloud_bk.jpg"),
+                        //         GetSkyBox("bluecloud_ft.jpg")),
+                        //     new Action<JObject>(data => { Console.WriteLine("It's daytime!"); }));
                     }));
                     break;
                 case SkyBoxTime.AFTERNOON:
-                    this.connector.SendPacket(Skybox.SetTime(12), new Action<JObject>(data =>
+                    this.connector.SendPacket(Skybox.SetTime(12.0), new Action<JObject>(data =>
                     {
-                        this.connector.SendPacket(Skybox.Update("static",
-                                GetSkyBox("graycloud_rt.jpg"), GetSkyBox("graycloud_lf.jpg"),
-                                GetSkyBox("graycloud_up.jpg"),
-                                GetSkyBox("graycloud_dn.jpg"), GetSkyBox("graycloud_bk.jpg"),
-                                GetSkyBox("graycloud_ft.jpg")),
-                            new Action<JObject>(data => { Console.WriteLine("It's the afternoon!"); }));
+                        // this.connector.SendPacket(Skybox.Update("static",
+                        //         GetSkyBox("graycloud_rt.jpg"), GetSkyBox("graycloud_lf.jpg"),
+                        //         GetSkyBox("graycloud_up.jpg"),
+                        //         GetSkyBox("graycloud_dn.jpg"), GetSkyBox("graycloud_bk.jpg"),
+                        //         GetSkyBox("graycloud_ft.jpg")),
+                        //     new Action<JObject>(data => { Console.WriteLine("It's the afternoon!"); }));
                     }));
                     break;
                 case SkyBoxTime.EVENING:
-                    this.connector.SendPacket(Skybox.SetTime(18), new Action<JObject>(data =>
+                    this.connector.SendPacket(Skybox.SetTime(17.0), new Action<JObject>(data =>
                     {
-                        this.connector.SendPacket(Skybox.Update("static",
+                        this.connector.SendPacket(Skybox.Update("dynamic",
                                 GetSkyBox("yellowcloud_rt.jpg"), GetSkyBox("yellowcloud_lf.jpg"),
                                 GetSkyBox("yellowcloud_up.jpg"),
                                 GetSkyBox("yellowcloud_dn.jpg"), GetSkyBox("yellowcloud_bk.jpg"),
                                 GetSkyBox("yellowcloud_ft.jpg")),
-                            new Action<JObject>(data => { Console.WriteLine("It's in the evening!"); }));
+                            new Action<JObject>(data => { Console.WriteLine("It's the evening!"); }));
                     }));
                     break;
                 case SkyBoxTime.NIGHT:
-                    this.connector.SendPacket(Skybox.SetTime(22), new Action<JObject>(data =>
+                    this.connector.SendPacket(Skybox.SetTime(22.0), new Action<JObject>(data =>
                     {
-                        this.connector.SendPacket(Skybox.Update("static",
-                                GetSkyBox("graycloud_rt.jpg"), GetSkyBox("graycloud_lf.jpg"),
-                                GetSkyBox("graycloud_up.jpg"),
-                                GetSkyBox("graycloud_dn.jpg"), GetSkyBox("graycloud_bk.jpg"),
-                                GetSkyBox("graycloud_ft.jpg")),
-                            new Action<JObject>(data => { Console.WriteLine("It's nightTime!"); }));
+                        // this.connector.SendPacket(Skybox.Update("static",
+                        //         GetSkyBox("graycloud_rt.jpg"), GetSkyBox("graycloud_lf.jpg"),
+                        //         GetSkyBox("graycloud_up.jpg"),
+                        //         GetSkyBox("graycloud_dn.jpg"), GetSkyBox("graycloud_bk.jpg"),
+                        //         GetSkyBox("graycloud_ft.jpg")),
+                        //     new Action<JObject>(data => { Console.WriteLine("It's nightTime!"); }));
                     }));
                     break;
             }
@@ -122,7 +126,6 @@ namespace ConsoleApp1
                 this.connector.SendPacket(Node.Find("GroundPlane"),
                     new Action<JObject>(data =>
                     {
-                        Console.WriteLine("Scene data: {0}", data);
                         this.connector.SendPacket(Node.Delete(data["data"]["data"][0]["uuid"].ToString()),
                             new Action<JObject>(data => { Console.WriteLine("Ground layer Deleted!"); }));
                     }));

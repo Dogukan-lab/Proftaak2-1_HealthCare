@@ -86,6 +86,7 @@ namespace ConsoleApp1
             
             VpnConnector connector = new VpnConnector(new JsonSerializerSettings());
         }
+    }
 
         public static void ReadInput(Object serverConnection)
         {

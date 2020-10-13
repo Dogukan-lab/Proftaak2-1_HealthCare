@@ -22,7 +22,7 @@ namespace ConsoleApp1
         private SimForm simForm;
 
         //Attributes used to send data.
-        private readonly String IPAddress = "127.0.0.1";
+        private readonly string IPAddress = "127.0.0.1";
         private readonly int portNum = 1330;
 
         public Thread updateThread { get; }

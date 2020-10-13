@@ -34,7 +34,7 @@ namespace ConsoleApp1.command.scene
         /**
          * This method adds a terrain node to be used for texturing.
          */
-        public static dynamic AddTerrain(string name, string parent, TransformComponent transform, bool smoothnormals )
+        public static dynamic AddTerrain(string name, string parent, TransformComponent transform, bool smoothnormals)
         {
             dynamic packetData = new
             {
