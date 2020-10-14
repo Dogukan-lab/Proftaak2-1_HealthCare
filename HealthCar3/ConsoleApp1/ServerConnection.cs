@@ -8,6 +8,7 @@ using System.Threading;
 using Newtonsoft.Json.Linq;
 using PackageUtils;
 using System.IO;
+using Encryption.Shared;
 
 namespace ConsoleApp1
 {
@@ -25,18 +26,18 @@ namespace ConsoleApp1
         private bool loggedIn = false;
         private bool keyExchanged = false;
         private ConnectorOption co = null;
+        private Encryptor encryptor;
+        private Decryptor decryptor;
+
         public void SetConnectorOption(ConnectorOption co) { this.co = co; }
         public bool IsLoggedIn() { return this.loggedIn; }
         public ServerConnection()
         {
             clientConnection = new TcpClient();
 
-            Connect(IPAddress, port);
-        }
-        public ServerConnection(String IPAddress, int port)
-        {
-            clientConnection = new TcpClient();
-
+            encryptor = new Encryptor();
+            decryptor = new Decryptor();
+            
             Connect(IPAddress, port);
         }
 
@@ -143,6 +144,7 @@ namespace ConsoleApp1
         private void OnConnected()
         {
             connected = true;
+            InitializeRsa();
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
 
@@ -179,17 +181,38 @@ namespace ConsoleApp1
          */
         public void UpdateHeartRate(int heartRate)
         {
-            byte[] bytes = PackageWrapper.SerializeData("client/update/heartRate", new { heartRate = heartRate});
+            byte[] bytes = PackageWrapper.SerializeData("client/update/heartRate", new { heartRate = heartRate}, encryptor);
 
             if(connected)
                 stream.Write(bytes, 0, bytes.Length);
         }
         public void UpdateSpeed(float speed)
         {
-            byte[] bytes = PackageWrapper.SerializeData("client/update/speed", new { speed = speed});
+            byte[] bytes = PackageWrapper.SerializeData("client/update/speed", new { speed = speed}, encryptor);
 
             if(connected)
                 stream.Write(bytes, 0, bytes.Length);
+        }
+
+        /**
+         * Initializes and sets the RSA key in the decryptor and sends the public key to the server.
+         */
+        private void InitializeRsa()
+        {
+            (RSAParameters privkey, RSAParameters pubkey) keyset = encryptor.GenerateRsaKey();
+            decryptor.RsaPrivateKey = keyset.privkey;
+
+            byte[] bytes = PackageWrapper.SerializeData
+            (
+                "encrypt/key",
+                new
+                {
+                    exponent = keyset.pubkey.Exponent,
+                    modulus = keyset.pubkey.Modulus
+                }
+            );
+            
+            stream.Write(bytes, 0 , bytes.Length);
         }
     }
 }

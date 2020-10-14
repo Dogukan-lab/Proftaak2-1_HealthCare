@@ -3,8 +3,10 @@ using System.IO;
 using System.Net.Sockets;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using Encryption.Shared;
 using PackageUtils;
 
 namespace Server
@@ -34,12 +36,13 @@ namespace Server
         public Client(TcpClient tcpClient)
         {
             this.tcpClient = tcpClient;
+            this.encryptor = new Encryptor();
+            this.decryptor = new Decryptor();
             this.stream = this.tcpClient.GetStream();
-            
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
         /*
-         * Method that deserilises the JsonData
+         * Method that deserialises the JsonData
          */
         private void OnRead(IAsyncResult ar)
         {
