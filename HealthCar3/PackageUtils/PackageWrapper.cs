@@ -7,7 +7,7 @@ namespace PackageUtils
 {
     class PackageWrapper
     {
-        public static dynamic WrapWithTag(string tag, dynamic data)
+        private static dynamic WrapWithTag(string tag, dynamic data)
         {
             dynamic command = new
             {
