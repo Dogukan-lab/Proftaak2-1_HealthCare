@@ -12,10 +12,12 @@ namespace DoctorGui
 {
     public partial class SimDocLogin : Form
     {
+        private string username = "Keesbanaan";
+        private string password = "1234";
+
         public SimDocLogin()
         {
             InitializeComponent();
-            
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -31,11 +33,21 @@ namespace DoctorGui
 
         private void button2_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            SimDocHome simdochome = new SimDocHome(UsernameBox.Text);
-            simdochome.ShowDialog();
-                
-
+            if (UsernameBox.Text.Equals(username) && textBox2.Text.Equals(password))
+            {
+                Hide();
+                SimDocHome simdochome = new SimDocHome(UsernameBox.Text);
+                simdochome.ShowDialog();
+            }
+            else if (string.IsNullOrEmpty(UsernameBox.Text) || string.IsNullOrEmpty(textBox2.Text))
+            {
+                MessageBox.Show("You must enter a username and password");
+            }
+            else if (!UsernameBox.Text.Equals(username) || !textBox2.Text.Equals(password))
+            {
+                MessageBox.Show("Wrong username or password");
+            }
         }
     }
 }
+
