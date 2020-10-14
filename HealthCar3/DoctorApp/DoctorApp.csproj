@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UseWindowsForms>true</UseWindowsForms>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="LiveCharts.WinForms" Version="0.9.7.1" />
+      <PackageReference Include="LiveCharts.WinForms.NetCore3" Version="0.9.7" />
+      <PackageReference Include="MetroModernUI" Version="1.4.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    </ItemGroup>
+
+    <Import Project="..\PackageUtils\PackageUtils.projitems" Label="Shared" />
+
+</Project>
