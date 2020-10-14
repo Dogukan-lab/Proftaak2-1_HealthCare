@@ -11,12 +11,12 @@ namespace Server
         public string name { get; set; }
         public DateTime sessionStart { get; set; }
         public DateTime sessionEnd { get; set; }
-        private int maxHeartRate { get; set; }
-        private float maxSpeed { get; set; }
-        private float averageSpeed { get; set; }
-        private float averageHeartRate { get; set; }
-        private float maxResistance { get; set; }
-        private float lastResistance { get; set; }
+        public int maxHeartRate { get; set; }
+        public float maxSpeed { get; set; }
+        public float averageSpeed { get; set; }
+        public float averageHeartRate { get; set; }
+        public float maxResistance { get; set; }
+        public float lastResistance { get; set; }
 
         #region // Helper variables
         private int sumHeartRate = 0;

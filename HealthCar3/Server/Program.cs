@@ -1,13 +1,9 @@
 ﻿using Encryption.Shared;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using PackageUtils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 
 namespace Server
 {
@@ -19,14 +15,15 @@ namespace Server
     {
         private TcpListener listener;
         public static List<Client> clients;
-        //public static Dictionary<string, string> registeredClients; //<id, name>
         public static Dictionary<(string name, string password), string> registeredClients; //<(name, password), id>
-        public static List<dynamic> savedSession;
+        public static List<SessionData> savedSession;
 
         static void Main(string[] args)
         {
             Console.WriteLine("Hello Server!");
-            savedSession = new List<dynamic>();
+            
+            savedSession = StorageController.Load();
+            
             new Program().Listen();     
         }
         /*
@@ -123,7 +120,8 @@ namespace Server
          */
         internal static void SaveSession(Client client)
         {
-            savedSession.Add(client.GetSessionData().GetData());
+            savedSession.Add(client.GetSessionData());
+            StorageController.Save(savedSession);
         }
 
         /*
