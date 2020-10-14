@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{33B33A79-1FA3-4228-8B14-0B76C677E3D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BikeApp", "BikeApp\BikeApp.csproj", "{33B33A79-1FA3-4228-8B14-0B76C677E3D7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{40A56179-79FE-4C7C-9CDB-A01217428BA1} = {40A56179-79FE-4C7C-9CDB-A01217428BA1}
 	EndProjectSection
