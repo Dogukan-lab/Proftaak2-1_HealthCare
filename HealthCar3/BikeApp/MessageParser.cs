@@ -80,9 +80,7 @@ namespace BikeApp
                     if (this.destination != null)
                     {
                         // Scene is now fully initialized and can now execute commands 
-                        this.command.ResetScene();
-                        this.command.CreateTerrain();
-                        this.command.CreateRoute();
+                        this.command.PresetOne();
                     }
                     break;
             }
