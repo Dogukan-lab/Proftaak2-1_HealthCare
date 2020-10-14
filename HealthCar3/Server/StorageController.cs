@@ -18,11 +18,20 @@ namespace Server
 
         public static List<SessionData> Load()
         {
-            var serializer = new JsonSerializer();
-            using var file = new StreamReader(@"..\data\saved-records.json");
-            using var jsonTextReader = new JsonTextReader(file);
-            var userData = serializer.Deserialize<List<SessionData>>(jsonTextReader) ?? new List<SessionData>();
-            return userData;
+            if (File.Exists(@"..\data\saved-records.json"))
+            {
+                var serializer = new JsonSerializer();
+                using var file = new StreamReader(@"..\data\saved-records.json");
+                using var jsonTextReader = new JsonTextReader(file);
+                var userData = serializer.Deserialize<List<SessionData>>(jsonTextReader) ?? new List<SessionData>();
+                return userData;
+            }
+            else
+            {
+                Directory.CreateDirectory(@"..\data");
+                File.CreateText(@"..\data\saved-records.json");
+                return new List<SessionData>();
+            }
         }
     }
 }
