@@ -42,8 +42,17 @@ namespace DoctorGui
         private void HomeButton_Click(object sender, EventArgs e)
         {
             this.Hide();
+<<<<<<< Updated upstream:HealthCar3/DoctorGui/SimDocBikePatient.cs
             SimDocHome simDocHome = new SimDocHome("Welcome");
+=======
+            SimDocHome simDocHome = new SimDocHome("Place holder");
+>>>>>>> Stashed changes:HealthCar3/DocterGui/SimDocBikePatient.cs
             simDocHome.ShowDialog();
+        }
+
+        private void HomeButton_Click_1(object sender, EventArgs e)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -55,7 +55,7 @@ namespace ConsoleApp1.command.scene
         /**
          * This method adds a panel as a node.
          */
-        public static dynamic AddPanel(string name, string parent, PanelComponent panel)
+        public static dynamic AddPanel(string name, string parent, PanelComponent panel, TransformComponent transform)
         {
             dynamic packetData = new
             {
@@ -63,7 +63,8 @@ namespace ConsoleApp1.command.scene
                 parent = parent,
                 components = new
                 {
-                    panel = panel
+                    panel = panel,
+                    transform = transform
                 }
             };
             return CommandUtils.Wrap(packetData, prefix + "add");

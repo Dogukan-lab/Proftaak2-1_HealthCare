@@ -3,17 +3,25 @@ using ConsoleApp1.data;
 using ConsoleApp1.data.components;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Drawing;
+using System.Text;
 
 namespace ConsoleApp1
 {
     class CommandCenter
     {
+        public string panelUuid;
         private VpnConnector connector;
+
         /**
          * Controller for managing construction and management of commands.
          * Om bomen aan het landschap toe te voegen maak het terrein naam de parent.
          */
-        public CommandCenter(VpnConnector vpn) { connector = vpn; }
+        public CommandCenter(VpnConnector vpn)
+        {
+            connector = vpn;
+            this.panelUuid = "";
+        }
 
         /*
          * This method creates a preset VR environment
@@ -31,13 +39,13 @@ namespace ConsoleApp1
             routeData[3] = new RouteData(new int[] {-10, 0, 30}, new int[] {-1, 0, 0});
             routeData[4] = new RouteData(new int[] {-30, 0, 10}, new int[] {0, 0, 0});
             routeData[5] = new RouteData(new int[] {-20, 0, 0}, new int[] {0, 0, 0});
-            routeData[6] = new RouteData(new int[] {-10, 0, -10}, new int[] {0, 0, -1});
+            routeData[6] = new RouteData(new int[] {-10, 0, -10}, new int[] {1, 0, 0});
             
-            CreateRoute(routeData);
-            SetTime(SkyBoxTime.NIGHT);
+            CreateRoute(routeData, 0);
+            SetTime(SkyBoxTime.MORNING);
+            // UpdatePanel(this.panelUuid);
         }
 
-        //This region WORKS!
         #region Scene Code
         public void SetTime(SkyBoxTime time)
         {
@@ -176,7 +184,7 @@ namespace ConsoleApp1
                         new Action<JObject>(data =>
                         {
                             Console.WriteLine("Terrain texture has been Added!"); 
-                            CreateTrees();
+                            // CreateTrees();
                         }));
                 }));
         }
@@ -198,10 +206,7 @@ namespace ConsoleApp1
                     {
                         string uuid = data["data"]["data"]["uuid"].ToString();
                         this.connector.SendPacket(Node.AddLayer(uuid, GetModelObjects("trees/fantasy/Tree_10_Tree.png"), "", 0, 10, 0.2), 
-                            new Action<JObject>(data =>
-                            {
-                                Console.WriteLine("Tree texture has been added!");
-                            }));
+                            new Action<JObject>(data => { }));
                     }));
             }
         }
@@ -213,7 +218,7 @@ namespace ConsoleApp1
         /*
          * This method creates the route that the bike in the VR will follow.
          */
-        public void CreateRoute(RouteData[] routeData)
+        public void CreateRoute(RouteData[] routeData, int speed)
         {
             this.connector.SendPacket(Route.Add(routeData), new Action<JObject>(data =>
             {
@@ -228,7 +233,9 @@ namespace ConsoleApp1
                         new ModelComponent(GetModelObjects("bike/bike.fbx"), true, false, "")),
                     new Action<JObject>(data =>
                     {
-                        this.connector.SendPacket(Route.Follow(roadID, data["data"]["data"]["uuid"].ToString(), 1, -1,
+                        string parent = data["data"]["data"]["uuid"].ToString();
+                        CreatePanel(parent);
+                        this.connector.SendPacket(Route.Follow(roadID, data["data"]["data"]["uuid"].ToString(), speed, -1,
                                 "XZ", 1, false,
                                 new int[] {0, 0, 0}, new int[] {0, 0, 0}),
                             new Action<JObject>(data => { Console.WriteLine("Following the set route!"); }));
@@ -250,6 +257,71 @@ namespace ConsoleApp1
 
         #endregion
 
+        #region Panel code
+        
+        /*
+         * This method creates a panel.
+         */
+        public void CreatePanel(string nodeUuid)
+        {
+            this.connector.SendPacket(Node.AddPanel("Panel", nodeUuid, 
+                    new PanelComponent(0.5,0.5,512,512,0,0,0,1, false),
+                    new TransformComponent(-0.4,1.3,0.01,1,-20,90,0)), 
+                new Action<JObject>(data =>
+                {
+                    string uuid = data["data"]["data"]["uuid"].ToString();
+                    // ClearPanel(this.panelUuid);
+                    UpdatePanel(uuid);
+
+                }));
+        }
+        
+        /*
+         * This method clears the current panel that is being displayed.
+         */
+        private void ClearPanel(string uuid)
+        {
+            this.connector.SendPacket(Panel.Clear(uuid), new Action<JObject>(data =>
+            {
+                Console.WriteLine("Panel clear data: {0}", data);
+            }));
+        }
+
+        /*
+         * This method updates the panel through a panel.swap,
+         * and then draws the current values onto the panel.
+         */
+        public void UpdatePanel(string uuid)
+        {
+            ClearPanel(uuid);
+            DrawValues(uuid, 0, 100, 20);
+            //Image placing has not been able to work
+            // this.connector.SendPacket(Panel.Image(uuid, 
+            //     "data/NetworkEngine/textures/SkyBoxes/interstellar/interstellar_up.png", 
+            //     new double[] {0,0}, new double []{10,10}), new Action<JObject>(data =>
+            //     {
+            //         Console.WriteLine("Panel data: {0}", data);
+            //         
+            //     }));
+        }
+
+        public void DrawValues(string uuid, double speed, double heartrate, double resistance)
+        {
+            string finalVersion = $"Current speed: {speed}m/s\n Heart rate: {heartrate}bpm\n Current resistance: {resistance}%";
+            this.connector.SendPacket(Panel.Swap(uuid), new Action<JObject>(data =>
+            {
+                this.connector.SendPacket(Panel.DrawText(uuid, 
+                    "Hello World", 
+                    new double[]{0,0}, 1, new []{0,0,0,1}, "Arial"), new Action<JObject>(data =>
+                {
+                    Console.WriteLine("Panel text data: {0}", data);
+                }));
+            }));
+            
+        }
+
+        #endregion
+        
         /*
          * This method is used to spawn in models such as: bikes, trees and/or cars.
          */
@@ -261,7 +333,7 @@ namespace ConsoleApp1
                 new Action<JObject>(data => { Console.WriteLine("Desired object has been created!"); }));
         }
 
-        #region Getters for Objects and textures
+        #region Getters for Objects, textures and fonts
 
         /*
          * This method gets the models inside of the data/networkEngine/models directory.
@@ -282,6 +354,13 @@ namespace ConsoleApp1
         private string GetSkyBox(string skyboxTexture)
         {
             return $"data/NetworkEngine/textures/SkyBoxes/clouds/{skyboxTexture}";
+        }
+
+        private string GetFont(string font)
+        {
+            StringBuilder builder = new StringBuilder(@"..\Windows\Fonts\");
+            builder.Insert(builder.Length, font);
+            return builder.ToString();
         }
 
         #endregion
