@@ -13,17 +13,17 @@ namespace DoctorGui
         public SimDocPatientHistory()
         {
             InitializeComponent();
-            DoctorWelcome.Text = "Welcome Docter ";
+            
         }
 
-        private void Docter_Click(object sender, EventArgs e)
-        {
 
-        }
 
         private void SimDocHome_Load(object sender, EventArgs e)
         {
-
+            int w = Screen.PrimaryScreen.Bounds.Width;
+            int h = Screen.PrimaryScreen.Bounds.Height;
+            this.Location = new Point(0,0);
+            this.Size = new Size(w, h);
         }
 
         private void ExitButton_Click(object sender, EventArgs e)
@@ -34,17 +34,23 @@ namespace DoctorGui
 
         private void BikePatientButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
+             this.Hide();
             SimDocBikePatient simDocBikePatient = new SimDocBikePatient();
             simDocBikePatient.ShowDialog();
+        }
+
+        private void PatientHistoryButton_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            SimDocPatientHistory simDocPatientHistory = new SimDocPatientHistory();
+            simDocPatientHistory.ShowDialog();
         }
 
         private void HomeButton_Click(object sender, EventArgs e)
         {
             this.Hide();
-            SimDocHome simDocHome = new SimDocHome("Welcome");
-            simDocHome.ShowDialog();
-
+            SimDocHome simdochome = new SimDocHome("docter");
+            simdochome.ShowDialog();
         }
     }
 }

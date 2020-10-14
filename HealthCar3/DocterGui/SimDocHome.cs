@@ -48,5 +48,10 @@ namespace DoctorGui
             SimDocPatientHistory simDocPatientHistory = new SimDocPatientHistory();
             simDocPatientHistory.ShowDialog();
         }
+
+        private void Bike1Panel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
