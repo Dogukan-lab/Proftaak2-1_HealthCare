@@ -265,8 +265,8 @@ namespace ConsoleApp1
         public void CreatePanel(string nodeUuid)
         {
             this.connector.SendPacket(Node.AddPanel("Panel", nodeUuid, 
-                    new PanelComponent(0.5,0.5,512,512,0,0,0,1, false),
-                    new TransformComponent(-0.4,1.3,0.01,1,-20,90,0)), 
+                    new PanelComponent(0.5, 0.5, 512, 512, 1, 1, 1, 1, false),
+                    new TransformComponent(-0.4, 1.3, 0.01, 1, -20, 90, 0)), 
                 new Action<JObject>(data =>
                 {
                     string uuid = data["data"]["data"]["uuid"].ToString();
@@ -307,17 +307,19 @@ namespace ConsoleApp1
 
         public void DrawValues(string uuid, double speed, double heartrate, double resistance)
         {
-            string finalVersion = $"Current speed: {speed}m/s\n Heart rate: {heartrate}bpm\n Current resistance: {resistance}%";
-            this.connector.SendPacket(Panel.Swap(uuid), new Action<JObject>(data =>
-            {
-                this.connector.SendPacket(Panel.DrawText(uuid, 
-                    "Hello World", 
-                    new double[]{0,0}, 1, new []{0,0,0,1}, "Arial"), new Action<JObject>(data =>
-                {
-                    Console.WriteLine("Panel text data: {0}", data);
-                }));
-            }));
-            
+            string finalVersion = $"Current speed: {speed}m/s \n Current resistance: {resistance}%";
+            this.connector.SendPacket(Panel.DrawText(uuid,
+                    finalVersion, new double[] { 100, 100 }, 32, new[] { 0, 0, 0, 1 }, "Arial"), 
+                    new Action<JObject>(data =>
+                    {
+                        this.connector.SendPacket(Panel.DrawText(uuid, $"Heart rate: {heartrate}bpm"), ,);
+                        Console.WriteLine("Panel text data: {0}", data);
+                        this.connector.SendPacket(Panel.Swap(uuid), new Action<JObject>(data =>
+                        {
+                            Console.WriteLine("Panel swap data: {0}", data);
+                        }));
+                    }));
+           
         }
 
         #endregion
