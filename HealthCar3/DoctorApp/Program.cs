@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DoctorGui
@@ -36,7 +35,6 @@ namespace DoctorGui
             Thread consoleThread = new Thread(new ParameterizedThreadStart(ReadInput));
             consoleThread.Start(sc);
 
-            Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new SimDocLogin());
