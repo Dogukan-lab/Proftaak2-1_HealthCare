@@ -41,5 +41,12 @@ namespace DoctorGui
             SimDocPatientHistory simDocPatientHistory = new SimDocPatientHistory();
             simDocPatientHistory.ShowDialog();
         }
+
+        private void HomeButton_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            SimDocHome simDocHome = new SimDocHome("kees");
+            simDocHome.ShowDialog();
+        }
     }
 }
