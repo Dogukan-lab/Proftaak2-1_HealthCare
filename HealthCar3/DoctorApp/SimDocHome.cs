@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace DoctorGui
+namespace DoctorApp
 {
     public partial class SimDocHome : Form
     {

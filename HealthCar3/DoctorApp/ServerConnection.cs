@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 using PackageUtils;
 using System.IO;
 
-namespace DoctorGui
+namespace DoctorApp
 {
     class ServerConnection
     {

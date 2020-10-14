@@ -1,4 +1,4 @@
-﻿namespace DoctorGui
+﻿namespace DoctorApp
 {
     partial class SimDocLogin
     {
