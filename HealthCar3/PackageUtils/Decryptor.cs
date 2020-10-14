@@ -94,15 +94,15 @@ namespace Encryption.Shared
             // the decrypted text.
             string decrypted = null;
 
-            // Create an Rijndael object
+            // Create an Aes object
             // with the specified key and IV.
-            using (Rijndael rijAlg = Rijndael.Create())
+            using (Aes aesAlg = Aes.Create())
             {
-                rijAlg.Key = _aesKey;
-                rijAlg.IV = _aesIv;
+                aesAlg.Key = _aesKey;
+                aesAlg.IV = _aesIv;
 
                 // Create a decryptor to perform the stream transform.
-                ICryptoTransform decryptor = rijAlg.CreateDecryptor(rijAlg.Key, rijAlg.IV);
+                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
 
                 // Create the streams used for decryption.
                 using (MemoryStream msDecrypt = new MemoryStream(chunk))
