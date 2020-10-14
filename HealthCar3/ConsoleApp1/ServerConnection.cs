@@ -8,7 +8,6 @@ using System.Threading;
 using Newtonsoft.Json.Linq;
 using PackageUtils;
 using System.IO;
-using Encryption.Shared;
 
 namespace ConsoleApp1
 {
@@ -23,19 +22,20 @@ namespace ConsoleApp1
         private string uniqueId = "";
         private byte[] buffer = new byte[1024];
         private bool connected = false;
-        private bool keyExchanged = false;
+        private bool loggedIn = false;
         private ConnectorOption co = null;
-        private Encryptor encryptor;
-        private Decryptor decryptor;
-
         public void SetConnectorOption(ConnectorOption co) { this.co = co; }
+        public bool IsLoggedIn() { return this.loggedIn; }
         public ServerConnection()
         {
             clientConnection = new TcpClient();
 
-            encryptor = new Encryptor();
-            decryptor = new Decryptor();
-            
+            Connect(IPAddress, port);
+        }
+        public ServerConnection(String IPAddress, int port)
+        {
+            clientConnection = new TcpClient();
+
             Connect(IPAddress, port);
         }
 
@@ -72,21 +72,10 @@ namespace ConsoleApp1
         {
             try {
                 int receivedBytes = stream.EndRead(ar);
-                dynamic receivedData;
-
-                if (keyExchanged)
-                {
-                    receivedData = JsonConvert.DeserializeObject(decryptor.DecryptAES(buffer, 0, receivedBytes));
-                }
-                else
-                {
-                    string receivedText = System.Text.Encoding.ASCII.GetString(buffer, 0, receivedBytes);
-                    receivedData = JsonConvert.DeserializeObject(receivedText);
-                }
+                string receivedText = System.Text.Encoding.ASCII.GetString(buffer, 0, receivedBytes);
+                dynamic receivedData = JsonConvert.DeserializeObject(receivedText);
                 HandleData(receivedData);
                 stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
-
-                
             }
             catch (IOException)
             {
@@ -101,24 +90,14 @@ namespace ConsoleApp1
             string tag = jData["tag"].ToObject<string>();
             switch (tag)
             {
-                case "encrypt/key/success":
-                    byte[] key = decryptor.DecryptRSA(jData["data"].ToObject<JObject>()["key"].ToObject<byte[]>());
-                    byte[] iv = decryptor.DecryptRSA(jData["data"].ToObject<JObject>()["iv"].ToObject<byte[]>());
-                    
-                    encryptor.AesKey = key;
-                    encryptor.AesIv = iv;
-
-                    decryptor.AesKey = key;
-                    decryptor.AesIv = iv;
-
-                    keyExchanged = true;
-                    break;
                 case "client/register/success":
-                    Console.WriteLine($"Received Id: {jData["data"].ToObject<JObject>()["clientId"].ToObject<string>()}");
-                    uniqueId = jData["data"].ToObject<JObject>()["clientId"].ToObject<string>();
+                case "client/login/success":
+                    Console.WriteLine(data.data.message);
+                    loggedIn = true;
                     break;
                 case "client/register/error":
-                    Console.WriteLine($"ERROR: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
+                case "client/login/error":
+                    Console.WriteLine($"ERROR: {data.data.message}");
                     break;
                 case "session/resistance":
                     float resistance = float.Parse(jData["data"].ToObject<JObject>()["resistance"].ToObject<string>());
@@ -135,62 +114,14 @@ namespace ConsoleApp1
                     string message = jData["data"].ToObject<JObject>()["message"].ToObject<string>();
                     Console.WriteLine($"Received Message: {message}");
                     break;
-                case "chat/message/success":
-                case "chat/broadcast/success":
-                case "session/resistance/success":
-                case "session/start/success":
-                case "session/stop/success":
-                    Console.WriteLine($"Succes: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
-                    break;
-                case "chat/message/error":
-                case "chat/broadcast/error":
-                case "session/resistance/error":
-                case "session/start/error":
-                case "session/stop/error":
-                    Console.WriteLine($"ERROR: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
-                    break;
             }
         }
 
         private void OnConnected()
         {
             connected = true;
-            InitializeRsa();
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
-
-        // Test functions (move these to doctor ServerConnection)
-        public void ChatTest(string id, string message)
-        {
-            byte[] bytes = PackageWrapper.SerializeData("chat/message", new { clientId = id, message = message}, encryptor);
-
-            stream.Write(bytes, 0, bytes.Length);
-        }
-        public void BroadcastTest(string message)
-        {
-            byte[] bytes = PackageWrapper.SerializeData("chat/broadcast", new { message = message }, encryptor);
-
-            stream.Write(bytes, 0, bytes.Length);
-        }
-        public void SetNewResistance(string id, string resistance)
-        {
-            byte[] bytes = PackageWrapper.SerializeData("session/resistance", new { clientId = id, resistance = resistance }, encryptor);
-
-            stream.Write(bytes, 0, bytes.Length);
-        }
-        public void StartSession(string id)
-        {
-            byte[] bytes = PackageWrapper.SerializeData("session/start", new { clientId = id}, encryptor);
-
-            stream.Write(bytes, 0, bytes.Length);
-        }
-        public void StopSession(string id)
-        {
-            byte[] bytes = PackageWrapper.SerializeData("session/stop", new { clientId = id}, encryptor);
-
-            stream.Write(bytes, 0, bytes.Length);
-        }
-        // End of test functions
 
         /*
          * Method used to disconnect from the server.
@@ -204,9 +135,9 @@ namespace ConsoleApp1
         /*
          * Method used to register to the server
          */
-        public void RegisterToServer(string name)
+        public void RegisterToServer(string name, string password)
         {
-            byte[] bytes = PackageWrapper.SerializeData("client/register", new { name = name }, encryptor);
+            byte[] bytes = PackageWrapper.SerializeData("client/register", new { name = name, password = password });
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -214,9 +145,9 @@ namespace ConsoleApp1
         /*
          * Method used to login to the server
          */
-        public void LoginToServer(string name, string id)
+        public void LoginToServer(string name, string password)
         {
-            byte[] bytes = PackageWrapper.SerializeData("client/login", new { name = name, clientId = id}, encryptor);
+            byte[] bytes = PackageWrapper.SerializeData("client/login", new { name = name, password = password });
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -226,38 +157,17 @@ namespace ConsoleApp1
          */
         public void UpdateHeartRate(int heartRate)
         {
-            byte[] bytes = PackageWrapper.SerializeData("client/update/heartRate", new { heartRate = heartRate}, encryptor);
+            byte[] bytes = PackageWrapper.SerializeData("client/update/heartRate", new { heartRate = heartRate});
 
             if(connected)
                 stream.Write(bytes, 0, bytes.Length);
         }
         public void UpdateSpeed(float speed)
         {
-            byte[] bytes = PackageWrapper.SerializeData("client/update/speed", new { speed = speed}, encryptor);
+            byte[] bytes = PackageWrapper.SerializeData("client/update/speed", new { speed = speed});
 
             if(connected)
                 stream.Write(bytes, 0, bytes.Length);
-        }
-
-        /**
-         * Initializes and sets the RSA key in the decryptor and sends the public key to the server.
-         */
-        private void InitializeRsa()
-        {
-            (RSAParameters privkey, RSAParameters pubkey) keyset = encryptor.GenerateRsaKey();
-            decryptor.RsaPrivateKey = keyset.privkey;
-
-            byte[] bytes = PackageWrapper.SerializeData
-            (
-                "encrypt/key",
-                new
-                {
-                    exponent = keyset.pubkey.Exponent,
-                    modulus = keyset.pubkey.Modulus
-                }
-            );
-            
-            stream.Write(bytes, 0 , bytes.Length);
         }
     }
 }
