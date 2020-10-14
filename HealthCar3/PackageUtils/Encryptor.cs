@@ -117,15 +117,15 @@ namespace Encryption.Shared
             if (_aesIv == null || _aesIv.Length <= 0)
                 throw new ArgumentNullException("IV");
             byte[] encrypted;
-            // Create an Rijndael object
+            // Create an Aes object
             // with the specified key and IV.
-            using (Rijndael rijAlg = Rijndael.Create())
+            using (Aes aesAlg = Aes.Create())
             {
-                rijAlg.Key = _aesKey;
-                rijAlg.IV = _aesIv;
+                aesAlg.Key = _aesKey;
+                aesAlg.IV = _aesIv;
 
                 // Create an encryptor to perform the stream transform.
-                ICryptoTransform encryptor = rijAlg.CreateEncryptor(rijAlg.Key, rijAlg.IV);
+                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
 
                 // Create the streams used for encryption.
                 using (MemoryStream msEncrypt = new MemoryStream())
