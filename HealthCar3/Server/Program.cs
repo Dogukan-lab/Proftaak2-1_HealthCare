@@ -1,10 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Encryption.Shared;
+using PackageUtils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 
 namespace Server
 {
@@ -16,11 +15,15 @@ namespace Server
     {
         private TcpListener listener;
         public static List<Client> clients;
-        public static Dictionary<string, string> registeredClients;
+        public static Dictionary<(string name, string password), string> registeredClients; //<(name, password), id>
+        public static List<SessionData> savedSession;
 
         static void Main(string[] args)
         {
             Console.WriteLine("Hello Server!");
+            
+            savedSession = StorageController.Load();
+            
             new Program().Listen();     
         }
         /*
@@ -29,7 +32,7 @@ namespace Server
         public void Listen()
         {
             clients = new List<Client>();
-            registeredClients = new Dictionary<string, string>();
+            registeredClients = new Dictionary<(string, string), string>();
             //TODO don't know which ip address and port
             listener = new TcpListener(IPAddress.Any, 1330);
             listener.Start();
@@ -42,7 +45,7 @@ namespace Server
         private void Connect(IAsyncResult ar)
         {
             TcpClient tcpClient = listener.EndAcceptTcpClient(ar);
-            ClientData cd = new ClientData();
+            SessionData cd = new SessionData();
             Console.WriteLine($"Client connected from {tcpClient.Client.RemoteEndPoint}");
             clients.Add(new Client(tcpClient));
             listener.BeginAcceptTcpClient(new AsyncCallback(Connect), null);
@@ -68,26 +71,24 @@ namespace Server
             {
                 id += random.Next(0, 9);
             }
-            registeredClients.Add(id, name);
             return id;
         }
 
         /*
          * Sends the message to all the clients connected to the server.
          */
-        public static void Broadcast(byte[] bytes)
+        internal static void Broadcast(string tag, dynamic message)
         {
-            foreach(Client client in clients)
-            {
-                client.GetClientStream().Write(bytes, 0, bytes.Length);
-            }
+            foreach (Client client in clients)
+                if (client.IsLoggedIn())
+                    SendMessageToSpecificClient(client.GetId(), PackageWrapper.SerializeData(tag, message, client.GetEncryptor()));
         }
 
         /*
          * Sends the message to the given id.
          * Returns true if id is found in the list and false if no match is found.
          */
-        public static bool SendMessageToSpecificClient(string id, byte[] bytes)
+        internal static bool SendMessageToSpecificClient(string id, byte[] bytes)
         {
             foreach (Client client in clients)
             {
@@ -97,7 +98,7 @@ namespace Server
                     return true;
                 }
             }
-            return false;
+            return false; // No client found with the given id.
         }
 
         internal static bool ActiveSession(string id, out Client targetClient)
@@ -111,7 +112,69 @@ namespace Server
                     return client.IsSessionActive();
                 }
             }
-            return false;
+            return false; // No client found with the given id.
+        }
+
+        /*
+         * Saves the session for later viewing.
+         */
+        internal static void SaveSession(Client client)
+        {
+            savedSession.Add(client.GetSessionData());
+            StorageController.Save(savedSession);
+        }
+
+        /*
+         * Retrieves all the records of the given id.
+         */
+        internal static dynamic[] GetSession(string id)
+        {
+            List<dynamic> records = new List<dynamic>();
+            foreach(dynamic sd in savedSession)
+            {
+                if (sd.clientId == id)
+                    records.Add(sd);
+            }
+            if (records.Count > 0)
+                return records.ToArray();
+            else
+                return null; // return null if no records were found with the given id.
+        }
+
+        /*
+         * Sends a stop message to all the clients with an active session and saves the data
+         */
+        internal static void EmergencyStop(byte[] bytes)
+        {
+            foreach(var client in clients)
+            {
+                if (client.IsSessionActive())
+                {
+                    // Send stop message to client
+                    SendMessageToSpecificClient(client.GetId(), bytes);
+                    // Save the data
+                    SaveSession(client);
+                    // End session server side
+                    client.SetSession(false);
+                }
+            }
+        }
+
+        internal static bool ClientLogin(string name, string password)
+        {
+            return registeredClients.ContainsKey((name, password));
+        }
+
+        internal static Encryptor GetTargetClientEncryptor(string id)
+        {
+            foreach(var client in clients)
+            {
+                if(client.GetId() == id)
+                {
+                    return client.GetEncryptor();
+                }
+            }
+            return null;
         }
     }
 }
