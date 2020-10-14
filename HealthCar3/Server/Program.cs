@@ -21,7 +21,9 @@ namespace Server
         static void Main(string[] args)
         {
             Console.WriteLine("Hello Server!");
+            
             savedSession = StorageController.Load();
+            
             new Program().Listen();     
         }
         /*
@@ -30,7 +32,7 @@ namespace Server
         public void Listen()
         {
             clients = new List<Client>();
-            registeredClients = new Dictionary<string, string>();
+            registeredClients = new Dictionary<(string, string), string>();
             //TODO don't know which ip address and port
             listener = new TcpListener(IPAddress.Any, 1330);
             listener.Start();
@@ -43,7 +45,7 @@ namespace Server
         private void Connect(IAsyncResult ar)
         {
             TcpClient tcpClient = listener.EndAcceptTcpClient(ar);
-            ClientData cd = new ClientData();
+            SessionData cd = new SessionData();
             Console.WriteLine($"Client connected from {tcpClient.Client.RemoteEndPoint}");
             clients.Add(new Client(tcpClient));
             listener.BeginAcceptTcpClient(new AsyncCallback(Connect), null);
@@ -69,7 +71,6 @@ namespace Server
             {
                 id += random.Next(0, 9);
             }
-            registeredClients.Add(id, name);
             return id;
         }
 
@@ -87,7 +88,7 @@ namespace Server
          * Sends the message to the given id.
          * Returns true if id is found in the list and false if no match is found.
          */
-        public static bool SendMessageToSpecificClient(string id, byte[] bytes)
+        internal static bool SendMessageToSpecificClient(string id, byte[] bytes)
         {
             foreach (Client client in clients)
             {
@@ -97,7 +98,7 @@ namespace Server
                     return true;
                 }
             }
-            return false;
+            return false; // No client found with the given id.
         }
 
         internal static bool ActiveSession(string id, out Client targetClient)
@@ -111,7 +112,7 @@ namespace Server
                     return client.IsSessionActive();
                 }
             }
-            return false;
+            return false; // No client found with the given id.
         }
 
         /*

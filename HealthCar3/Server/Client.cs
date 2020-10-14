@@ -18,6 +18,7 @@ namespace Server
         private NetworkStream stream;
         private byte[] buffer = new byte[1024];
         private string id;
+        private string name;
         private bool sessionActive = false;
         private SessionData sessionData = null;
         private bool loggedIn = false;
@@ -32,17 +33,18 @@ namespace Server
         public bool IsLoggedIn() { return this.loggedIn; }
         public Encryptor GetEncryptor() { return this.encryptor; }
 
-
         public Client(TcpClient tcpClient)
         {
             this.tcpClient = tcpClient;
             this.encryptor = new Encryptor();
             this.decryptor = new Decryptor();
+
             this.stream = this.tcpClient.GetStream();
+            
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
         /*
-         * Method that deserialises the JsonData
+         * Method that deserilises the JsonData
          */
         private void OnRead(IAsyncResult ar)
         {
@@ -74,13 +76,34 @@ namespace Server
 
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
+
+        /*
+         * Starts the session with this client
+         */
+        public void StartSession()
+        {
+            sessionActive = true;
+            sessionData = new SessionData();
+            sessionData.clientId = id;
+            sessionData.sessionStart = DateTime.Now;
+            sessionData.name = name;
+        }
+        /*
+         * Stops the session with this client
+         */
+        public void EndSession()
+        {
+            sessionActive = false;
+            sessionData.sessionEnd = DateTime.Now;
+            Program.SaveSession(this);
+        }
+
         /*
          * Handles all the incoming data by looking at the tag in the received package
          */
         private void HandleData(dynamic data)
         {
-            JObject jData = data as JObject;
-            string tag = jData["tag"].ToObject<string>();
+            string tag = data.tag;
             byte[] bytes = new byte[0];
             string message = "";
             Client targetClient = null;
@@ -132,7 +155,7 @@ namespace Server
                     stream.Write(bytes, 0, bytes.Length);
                     break;
                 case "chat/broadcast":
-                    message = jData["data"].ToObject<JObject>()["message"].ToObject<string>();
+                    message = data.data.message;
                     if (message == "") // if the message is empty, send an error response.
                         bytes = PackageWrapper.SerializeData("chat/broadcast/error", new { message = "message is empty!" }, encryptor);
                     else // otherwise just send the message.
@@ -145,8 +168,8 @@ namespace Server
                     stream.Write(bytes, 0, bytes.Length);
                     break;
                 case "client/register":
-                    string name = jData["data"].ToObject<JObject>()["name"].ToObject<string>();                   
-                    if (CredentialVarificator.VerifyUserName(name))
+                    string name = data.data.name;                   
+                    if (CredentialVarificator.VerifyUsername(name))
                     {
                         id = Program.GenerateId(name);
                         this.name = name;
@@ -224,7 +247,6 @@ namespace Server
                                 targetClient = null;
                             }
                         }
-
                     }
                     stream.Write(bytes, 0, bytes.Length);
                     break;

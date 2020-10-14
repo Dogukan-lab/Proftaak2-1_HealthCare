@@ -30,6 +30,7 @@ namespace ConsoleApp1
         private Decryptor decryptor;
 
         public void SetConnectorOption(ConnectorOption co) { this.co = co; }
+        public bool IsLoggedIn() { return this.loggedIn; }
         public ServerConnection()
         {
             clientConnection = new TcpClient();
@@ -114,11 +115,13 @@ namespace ConsoleApp1
                     keyExchanged = true;
                     break;
                 case "client/register/success":
-                    Console.WriteLine($"Received Id: {jData["data"].ToObject<JObject>()["clientId"].ToObject<string>()}");
-                    uniqueId = jData["data"].ToObject<JObject>()["clientId"].ToObject<string>();
+                case "client/login/success":
+                    Console.WriteLine(data.data.message);
+                    loggedIn = true;
                     break;
                 case "client/register/error":
-                    Console.WriteLine($"ERROR: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
+                case "client/login/error":
+                    Console.WriteLine($"ERROR: {data.data.message}");
                     break;
                 case "session/resistance":
                     float resistance = float.Parse(data.data.resistance.ToObject<string>());
@@ -134,20 +137,6 @@ namespace ConsoleApp1
                 case "chat/broadcast":
                     string message = data.data.message.ToObject<string>();
                     Console.WriteLine($"Received Message: {message}");
-                    break;
-                case "chat/message/success":
-                case "chat/broadcast/success":
-                case "session/resistance/success":
-                case "session/start/success":
-                case "session/stop/success":
-                    Console.WriteLine($"Succes: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
-                    break;
-                case "chat/message/error":
-                case "chat/broadcast/error":
-                case "session/resistance/error":
-                case "session/start/error":
-                case "session/stop/error":
-                    Console.WriteLine($"ERROR: {jData["data"].ToObject<JObject>()["message"].ToObject<string>()}");
                     break;
             }
         }
@@ -172,7 +161,7 @@ namespace ConsoleApp1
         /*
          * Method used to register to the server
          */
-        public void RegisterToServer(string name)
+        public void RegisterToServer(string name, string password)
         {
             byte[] bytes = PackageWrapper.SerializeData("client/register", new { name = name, password = password }, encryptor);
             stream.Write(bytes, 0, bytes.Length);
@@ -181,7 +170,7 @@ namespace ConsoleApp1
         /*
          * Method used to login to the server
          */
-        public void LoginToServer(string name, string id)
+        public void LoginToServer(string name, string password)
         {
             byte[] bytes = PackageWrapper.SerializeData("client/login", new { name = name, password = password}, encryptor);
             stream.Write(bytes, 0, bytes.Length);
