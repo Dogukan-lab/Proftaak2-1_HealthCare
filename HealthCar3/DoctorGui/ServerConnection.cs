@@ -8,6 +8,7 @@ using System.Threading;
 using Newtonsoft.Json.Linq;
 using PackageUtils;
 using System.IO;
+using Encryption.Shared;
 
 namespace DoctorGui
 {
@@ -23,19 +24,17 @@ namespace DoctorGui
         private byte[] buffer = new byte[1024];
         private bool connected = false;
         private bool loggedIn = false;
+        private bool keyExchanged = false;
+        private Encryptor encryptor;
+        private Decryptor decryptor;
         public bool isConnected() { return this.connected; }
         public bool isLoggedIn() { return this.loggedIn; }
 
         public ServerConnection()
         {
             clientConnection = new TcpClient();
-
-            Connect(IPAddress, port);
-        }
-        public ServerConnection(String IPAddress, int port)
-        {
-            clientConnection = new TcpClient();
-
+            encryptor = new Encryptor();
+            decryptor = new Decryptor();
             Connect(IPAddress, port);
         }
 
@@ -57,8 +56,9 @@ namespace DoctorGui
             catch (System.Exception ex)
             {
                 Console.WriteLine(ex);
-                if (!clientConnection.Connected && totalTries < 3)
+                if (!clientConnection.Connected && totalTries < MAXRECONTRIES)
                 {
+                    totalTries++;
                     Connect(IPAddress, port);
                 }
                 else
@@ -73,8 +73,17 @@ namespace DoctorGui
             try
             {
                 int receivedBytes = stream.EndRead(ar);
-                string receivedText = System.Text.Encoding.ASCII.GetString(buffer, 0, receivedBytes);
-                dynamic receivedData = JsonConvert.DeserializeObject(receivedText);
+                dynamic receivedData;
+                
+                if (keyExchanged)
+                {
+                    receivedData = JsonConvert.DeserializeObject(decryptor.DecryptAES(buffer, 0, receivedBytes));
+                }
+                else
+                {
+                    string receivedText = Encoding.ASCII.GetString(buffer, 0, receivedBytes);
+                    receivedData = JsonConvert.DeserializeObject(receivedText);
+                }
                 HandleData(receivedData);
                 stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
             }
@@ -91,6 +100,18 @@ namespace DoctorGui
             string tag = jData["tag"].ToObject<string>();
             switch (tag)
             {
+                case "encrypt/key/success":
+                    byte[] key = decryptor.DecryptRSA(data.data.key.ToObject<byte[]>());
+                    byte[] iv = decryptor.DecryptRSA(data.data.iv.ToObject<byte[]>());
+
+                    encryptor.AesKey = key;
+                    encryptor.AesIv = iv;
+
+                    decryptor.AesKey = key;
+                    decryptor.AesIv = iv;
+
+                    keyExchanged = true;
+                    break;
                 case "doctor/login/success":
                     loggedIn = true;
                     Console.WriteLine(jData["data"].ToObject<JObject>()["message"].ToObject<string>());
@@ -128,6 +149,7 @@ namespace DoctorGui
         private void OnConnected()
         {
             connected = true;
+            InitializeRsa();
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
 
@@ -137,7 +159,7 @@ namespace DoctorGui
          */
         public void Chat(string id, string message)
         {
-            byte[] bytes = PackageWrapper.SerializeData("chat/message", new { clientId = id, message = message });
+            byte[] bytes = PackageWrapper.SerializeData("chat/message", new { clientId = id, message = message }, encryptor);
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -147,7 +169,7 @@ namespace DoctorGui
          */
         public void Broadcast(string message)
         {
-            byte[] bytes = PackageWrapper.SerializeData("chat/broadcast", new { message = message });
+            byte[] bytes = PackageWrapper.SerializeData("chat/broadcast", new { message = message }, encryptor);
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -157,7 +179,7 @@ namespace DoctorGui
          */
         public void SetNewResistance(string id, string resistance)
         {
-            byte[] bytes = PackageWrapper.SerializeData("session/resistance", new { clientId = id, resistance = resistance });
+            byte[] bytes = PackageWrapper.SerializeData("session/resistance", new { clientId = id, resistance = resistance }, encryptor);
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -167,7 +189,7 @@ namespace DoctorGui
          */
         public void StartSession(string id)
         {
-            byte[] bytes = PackageWrapper.SerializeData("session/start", new { clientId = id });
+            byte[] bytes = PackageWrapper.SerializeData("session/start", new { clientId = id }, encryptor);
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -177,7 +199,7 @@ namespace DoctorGui
          */
         public void StopSession(string id)
         {
-            byte[] bytes = PackageWrapper.SerializeData("session/stop", new { clientId = id });
+            byte[] bytes = PackageWrapper.SerializeData("session/stop", new { clientId = id }, encryptor);
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -187,7 +209,7 @@ namespace DoctorGui
          */
         public void GetSession(string id)
         {
-            byte[] bytes = PackageWrapper.SerializeData("doctor/clientHistory", new { clientId = id });
+            byte[] bytes = PackageWrapper.SerializeData("doctor/clientHistory", new { clientId = id }, encryptor);
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -196,7 +218,7 @@ namespace DoctorGui
          */
         public void EmergencyStopSessions()
         {
-            byte[] bytes = PackageWrapper.SerializeData("session/emergencyStop", new { });
+            byte[] bytes = PackageWrapper.SerializeData("session/emergencyStop", new { }, encryptor);
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -216,8 +238,26 @@ namespace DoctorGui
          */
         public void LoginToServer(string username, string password)
         {
-            byte[] bytes = PackageWrapper.SerializeData("doctor/login", new { username = username, password = password });
+            byte[] bytes = PackageWrapper.SerializeData("doctor/login", new { username = username, password = password }, encryptor);
         
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        private void InitializeRsa()
+        {
+            (RSAParameters privkey, RSAParameters pubkey) keyset = encryptor.GenerateRsaKey();
+            decryptor.RsaPrivateKey = keyset.privkey;
+
+            byte[] bytes = PackageWrapper.SerializeData
+            (
+                "encrypt/key",
+                new
+                {
+                    exponent = keyset.pubkey.Exponent,
+                    modulus = keyset.pubkey.Modulus
+                }
+            );
+
             stream.Write(bytes, 0, bytes.Length);
         }
     }

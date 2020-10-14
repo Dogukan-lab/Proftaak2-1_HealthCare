@@ -1,6 +1,6 @@
 ﻿namespace DoctorGui
 {
-    partial class SimDocHome
+    partial class SimDocPatientHistory
     {
         /// <summary>
         /// Required designer variable.
@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimDocHome));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimDocPatientHistory));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.PatientHistoryButton = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.BikePatientButton = new System.Windows.Forms.Button();
             this.HomeButton = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -46,7 +46,7 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.PatientHistoryButton);
+            this.panel1.Controls.Add(this.button3);
             this.panel1.Controls.Add(this.BikePatientButton);
             this.panel1.Controls.Add(this.HomeButton);
             this.panel1.Controls.Add(this.panel3);
@@ -55,23 +55,22 @@
             this.panel1.Size = new System.Drawing.Size(433, 1021);
             this.panel1.TabIndex = 0;
             // 
-            // PatientHistoryButton
+            // button3
             // 
-            this.PatientHistoryButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.PatientHistoryButton.BackColor = System.Drawing.Color.LightSteelBlue;
-            this.PatientHistoryButton.FlatAppearance.BorderSize = 0;
-            this.PatientHistoryButton.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.PatientHistoryButton.Image = ((System.Drawing.Image)(resources.GetObject("PatientHistoryButton.Image")));
-            this.PatientHistoryButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.PatientHistoryButton.Location = new System.Drawing.Point(0, 621);
-            this.PatientHistoryButton.Name = "PatientHistoryButton";
-            this.PatientHistoryButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.PatientHistoryButton.Size = new System.Drawing.Size(433, 210);
-            this.PatientHistoryButton.TabIndex = 1;
-            this.PatientHistoryButton.Text = "Patient History";
-            this.PatientHistoryButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.PatientHistoryButton.UseVisualStyleBackColor = false;
-            this.PatientHistoryButton.Click += new System.EventHandler(this.PatientHistoryButton_Click);
+            this.button3.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.button3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.button3.FlatAppearance.BorderSize = 0;
+            this.button3.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button3.Image = ((System.Drawing.Image)(resources.GetObject("button3.Image")));
+            this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button3.Location = new System.Drawing.Point(0, 621);
+            this.button3.Name = "button3";
+            this.button3.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.button3.Size = new System.Drawing.Size(433, 210);
+            this.button3.TabIndex = 1;
+            this.button3.Text = "Patient History";
+            this.button3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.button3.UseVisualStyleBackColor = false;
             // 
             // BikePatientButton
             // 
@@ -94,7 +93,7 @@
             // HomeButton
             // 
             this.HomeButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.HomeButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.HomeButton.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.HomeButton.FlatAppearance.BorderSize = 0;
             this.HomeButton.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.HomeButton.Image = ((System.Drawing.Image)(resources.GetObject("HomeButton.Image")));
@@ -107,6 +106,7 @@
             this.HomeButton.Text = "Home";
             this.HomeButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.HomeButton.UseVisualStyleBackColor = false;
+            this.HomeButton.Click += new System.EventHandler(this.HomeButton_Click);
             // 
             // panel3
             // 
@@ -171,7 +171,7 @@
             this.ExitButton.UseVisualStyleBackColor = true;
             this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
             // 
-            // SimDocHome
+            // SimDocPatientHistory
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.Highlight;
@@ -180,7 +180,7 @@
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "SimDocHome";
+            this.Name = "SimDocPatientHistory";
             this.Text = " ";
             this.Load += new System.EventHandler(this.SimDocHome_Load);
             this.panel1.ResumeLayout(false);
@@ -197,7 +197,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label Docter;
-        private System.Windows.Forms.Button PatientHistoryButton;
+        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button BikePatientButton;
         private System.Windows.Forms.Button HomeButton;
         private System.Windows.Forms.Button button1;

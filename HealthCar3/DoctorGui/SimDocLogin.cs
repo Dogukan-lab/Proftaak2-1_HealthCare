@@ -31,7 +31,7 @@ namespace DoctorGui
         private void button2_Click(object sender, EventArgs e)
         {
             this.Hide();
-            SimDocHome simdochome = new SimDocHome();
+            SimDocHome simdochome = new SimDocHome(UsernameBox.Text);
             simdochome.ShowDialog();
                 
 

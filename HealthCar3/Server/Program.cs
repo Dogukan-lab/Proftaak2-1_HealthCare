@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using Encryption.Shared;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using PackageUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,11 +80,11 @@ namespace Server
         /*
          * Sends the message to all the clients connected to the server.
          */
-        internal static void Broadcast(byte[] bytes)
+        internal static void Broadcast(string tag, dynamic message)
         {
-            foreach(Client client in clients)
-                if(client.IsLoggedIn())
-                    client.GetClientStream().Write(bytes, 0, bytes.Length);
+            foreach (Client client in clients)
+                if (client.IsLoggedIn())
+                    SendMessageToSpecificClient(client.GetId(), PackageWrapper.SerializeData(tag, message, client.GetEncryptor()));
         }
 
         /*
@@ -163,6 +165,18 @@ namespace Server
         internal static bool ClientLogin(string name, string password)
         {
             return registeredClients.ContainsKey((name, password));
+        }
+
+        internal static Encryptor GetTargetClientEncryptor(string id)
+        {
+            foreach(var client in clients)
+            {
+                if(client.GetId() == id)
+                {
+                    return client.GetEncryptor();
+                }
+            }
+            return null;
         }
     }
 }
