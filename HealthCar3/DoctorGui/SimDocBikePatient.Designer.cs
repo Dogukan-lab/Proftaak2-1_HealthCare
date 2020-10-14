@@ -1,6 +1,6 @@
 ﻿namespace DoctorGui
 {
-    partial class SimDocHome
+    partial class SimDocBikePatient
     {
         /// <summary>
         /// Required designer variable.
@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimDocHome));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimDocBikePatient));
             this.panel1 = new System.Windows.Forms.Panel();
             this.PatientHistoryButton = new System.Windows.Forms.Button();
-            this.BikePatientButton = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.HomeButton = new System.Windows.Forms.Button();
             this.panel3 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
@@ -47,7 +47,7 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.PatientHistoryButton);
-            this.panel1.Controls.Add(this.BikePatientButton);
+            this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.HomeButton);
             this.panel1.Controls.Add(this.panel3);
             this.panel1.Location = new System.Drawing.Point(-1, 0);
@@ -73,28 +73,27 @@
             this.PatientHistoryButton.UseVisualStyleBackColor = false;
             this.PatientHistoryButton.Click += new System.EventHandler(this.PatientHistoryButton_Click);
             // 
-            // BikePatientButton
+            // button2
             // 
-            this.BikePatientButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.BikePatientButton.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.BikePatientButton.FlatAppearance.BorderSize = 0;
-            this.BikePatientButton.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.BikePatientButton.Image = ((System.Drawing.Image)(resources.GetObject("BikePatientButton.Image")));
-            this.BikePatientButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.BikePatientButton.Location = new System.Drawing.Point(0, 405);
-            this.BikePatientButton.Name = "BikePatientButton";
-            this.BikePatientButton.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.BikePatientButton.Size = new System.Drawing.Size(459, 210);
-            this.BikePatientButton.TabIndex = 1;
-            this.BikePatientButton.Text = "Bike     Patient";
-            this.BikePatientButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.BikePatientButton.UseVisualStyleBackColor = false;
-            this.BikePatientButton.Click += new System.EventHandler(this.BikePatientButton_Click);
+            this.button2.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.button2.FlatAppearance.BorderSize = 0;
+            this.button2.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
+            this.button2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button2.Location = new System.Drawing.Point(0, 405);
+            this.button2.Name = "button2";
+            this.button2.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.button2.Size = new System.Drawing.Size(459, 210);
+            this.button2.TabIndex = 1;
+            this.button2.Text = "Bike     Patient";
+            this.button2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.button2.UseVisualStyleBackColor = false;
             // 
             // HomeButton
             // 
             this.HomeButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.HomeButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
+            this.HomeButton.BackColor = System.Drawing.Color.LightSteelBlue;
             this.HomeButton.FlatAppearance.BorderSize = 0;
             this.HomeButton.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.HomeButton.Image = ((System.Drawing.Image)(resources.GetObject("HomeButton.Image")));
@@ -107,6 +106,7 @@
             this.HomeButton.Text = "Home";
             this.HomeButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.HomeButton.UseVisualStyleBackColor = false;
+            this.HomeButton.Click += new System.EventHandler(this.HomeButton_Click);
             // 
             // panel3
             // 
@@ -171,7 +171,7 @@
             this.ExitButton.UseVisualStyleBackColor = true;
             this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
             // 
-            // SimDocHome
+            // SimDocBikePatient
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.Highlight;
@@ -180,7 +180,7 @@
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "SimDocHome";
+            this.Name = "SimDocBikePatient";
             this.Text = " ";
             this.Load += new System.EventHandler(this.SimDocHome_Load);
             this.panel1.ResumeLayout(false);
@@ -198,7 +198,7 @@
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label Docter;
         private System.Windows.Forms.Button PatientHistoryButton;
-        private System.Windows.Forms.Button BikePatientButton;
+        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button HomeButton;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Panel panel4;
