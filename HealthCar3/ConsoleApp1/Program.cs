@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using System.IO;
 using System.Reflection;
 
-using DoctorGui;
 namespace ConsoleApp1
 {
     class Program
