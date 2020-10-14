@@ -1,11 +1,9 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Encryption.Shared;
+using PackageUtils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography;
 
 namespace Server
 {
@@ -17,14 +15,15 @@ namespace Server
     {
         private TcpListener listener;
         public static List<Client> clients;
-        //public static Dictionary<string, string> registeredClients; //<id, name>
         public static Dictionary<(string name, string password), string> registeredClients; //<(name, password), id>
-        public static List<dynamic> savedSession;
+        public static List<SessionData> savedSession;
 
         static void Main(string[] args)
         {
             Console.WriteLine("Hello Server!");
-            savedSession = new List<dynamic>();
+            
+            savedSession = StorageController.Load();
+            
             new Program().Listen();     
         }
         /*
@@ -78,11 +77,11 @@ namespace Server
         /*
          * Sends the message to all the clients connected to the server.
          */
-        internal static void Broadcast(byte[] bytes)
+        internal static void Broadcast(string tag, dynamic message)
         {
-            foreach(Client client in clients)
-                if(client.IsLoggedIn())
-                    client.GetClientStream().Write(bytes, 0, bytes.Length);
+            foreach (Client client in clients)
+                if (client.IsLoggedIn())
+                    SendMessageToSpecificClient(client.GetId(), PackageWrapper.SerializeData(tag, message, client.GetEncryptor()));
         }
 
         /*
@@ -121,7 +120,8 @@ namespace Server
          */
         internal static void SaveSession(Client client)
         {
-            savedSession.Add(client.GetSessionData().GetData());
+            savedSession.Add(client.GetSessionData());
+            StorageController.Save(savedSession);
         }
 
         /*
@@ -163,6 +163,18 @@ namespace Server
         internal static bool ClientLogin(string name, string password)
         {
             return registeredClients.ContainsKey((name, password));
+        }
+
+        internal static Encryptor GetTargetClientEncryptor(string id)
+        {
+            foreach(var client in clients)
+            {
+                if(client.GetId() == id)
+                {
+                    return client.GetEncryptor();
+                }
+            }
+            return null;
         }
     }
 }

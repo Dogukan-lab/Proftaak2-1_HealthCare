@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DocterGui\DocterGui.csproj" />
     <ProjectReference Include="..\SimulatorGui\SimulatorGui.csproj" />
   </ItemGroup>
 
