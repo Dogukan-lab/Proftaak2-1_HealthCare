@@ -17,7 +17,9 @@ namespace SimulatorGui
             resistanceBox.Text = "0";
         }
 
-        // Speed data
+        /*
+         * Speed data
+         */
         public float GetSpeed()
         {
             return speedBox.Text.Length > 0? float.Parse(speedBox.Text) : 0;
@@ -31,7 +33,9 @@ namespace SimulatorGui
             return speedSwayBox.Text.Length > 0? float.Parse(speedSwayBox.Text) : 0;
         }
 
-        // Heart rate data
+        /*
+         *  Heart rate data
+         */
         public int GetHeartRate()
         {
             return heartRateBox.Text.Length > 0? int.Parse(heartRateBox.Text) : 0;
@@ -44,8 +48,10 @@ namespace SimulatorGui
         {
             return heartRateSway.Text.Length > 0? int.Parse(heartRateSway.Text) : 0;
         }
-
-        // Setting resistance thread safe
+        
+        /*
+         * Setting resistance thread safe
+         */
         private delegate void SetResistanceCallBack(float resistance);
         
         private void SetResistanceCB(float resistance)
@@ -59,7 +65,7 @@ namespace SimulatorGui
             if (resistanceBox.InvokeRequired)
             {
                 SetResistanceCallBack res = new SetResistanceCallBack(SetResistanceCB);
-                this.Invoke(res, new object[] { resistance });
+                Invoke(res, new object[] { resistance });
             }
             // if it is one the same thread no need to invoke
             else

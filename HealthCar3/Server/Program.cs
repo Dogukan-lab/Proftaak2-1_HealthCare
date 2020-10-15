@@ -9,21 +9,18 @@ namespace Server
 {
     /*
      * Class that allows the client to connect to the server
-     * :)
      */
-    class Program
+    internal class Program
     {
         private TcpListener listener;
-        public static List<Client> clients;
+        private static List<Client> clients;
         public static Dictionary<(string name, string password), string> registeredClients; //<(name, password), id>
-        public static List<SessionData> savedSession;
+        private static List<SessionData> savedSession;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("Hello Server!");
-            
             savedSession = StorageController.Load();
-            
             new Program().Listen();     
         }
         /*
@@ -33,12 +30,15 @@ namespace Server
         {
             clients = new List<Client>();
             registeredClients = new Dictionary<(string, string), string>();
+            
             //TODO don't know which ip address and port
             listener = new TcpListener(IPAddress.Any, 1330);
+            
             listener.Start();
             listener.BeginAcceptTcpClient(new AsyncCallback(Connect), null);
             Console.ReadLine();
         }
+        
         /*
         * Method that shows the connection to the server
         */
@@ -50,9 +50,10 @@ namespace Server
             clients.Add(new Client(tcpClient));
             listener.BeginAcceptTcpClient(new AsyncCallback(Connect), null);
         }
+        
        /*
-       * Method that removes the client when it disconnects
-       */
+        * Method that removes the client when it disconnects
+        */
         internal static void Disconnect(Client client)
         {
             clients.Remove(client);
@@ -67,7 +68,7 @@ namespace Server
         {
             Random random = new Random();
             string id = "";
-            for(int i = 0; i < 10; i++)
+            for(var i = 0; i < 10; i++)
             {
                 id += random.Next(0, 9);
             }
@@ -98,7 +99,9 @@ namespace Server
                     return true;
                 }
             }
-            return false; // No client found with the given id.
+            
+            //No client found with the given id.
+            return false; 
         }
 
         internal static bool ActiveSession(string id, out Client targetClient)
@@ -112,7 +115,9 @@ namespace Server
                     return client.IsSessionActive();
                 }
             }
-            return false; // No client found with the given id.
+            
+            //No client found with the given id.
+            return false;
         }
 
         /*
@@ -137,8 +142,9 @@ namespace Server
             }
             if (records.Count > 0)
                 return records.ToArray();
-            else
-                return null; // return null if no records were found with the given id.
+            
+            // return null if no records were found with the given id.
+            return null; 
         }
 
         /*
@@ -160,11 +166,17 @@ namespace Server
             }
         }
 
+        /*
+         * Checks if the client already has logged in.
+         */
         internal static bool ClientLogin(string name, string password)
         {
             return registeredClients.ContainsKey((name, password));
         }
 
+        /*
+         * TODO comment hier 
+         */
         internal static Encryptor GetTargetClientEncryptor(string id)
         {
             foreach(var client in clients)

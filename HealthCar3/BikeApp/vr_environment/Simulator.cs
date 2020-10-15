@@ -6,73 +6,75 @@ using SimulatorGui;
 
 namespace BikeApp.vr_environment
 {
+    /*
+     * This class is used to simulate the bluetooth bike.
+     */
     class Simulator : ConnectorOption
     {
-        public bool speedSway { get; set; }
-        public int speedSwayAmount { get; set; }
-        public bool heartRateSway { get; set; }
-        public int heartRateSwayAmount { get; set; }
+        public bool SpeedSway { get; }
+        public int SpeedSwayAmount { get; }
+        public bool HeartRateSway { get; }
+        public int HeartRateSwayAmount { get; }
 
         private int selectedHeartRate;
         private float selectedSpeed;
         private int updateInterval = 200;
         private Random random;
         private float resistance;
-        private SimForm simForm;
+        public SimForm SimForm;
 
-        //Attributes used to send data.
-        private readonly String IPAddress = "127.0.0.1";
+        /*
+         * Attributes used to send data.
+         */
+        private readonly string IPAddress = "127.0.0.1";
         private readonly int portNum = 1330;
 
-        public Thread updateThread { get; }
+        public Thread UpdateThread { get; }
         public Simulator(ServerConnection sc, SimForm simForm) : base(sc)
         {
             // Set the base values for the speed and the heart rate
             selectedSpeed = 0;
-            speedSway = true;
-            speedSwayAmount = 2;
-
+            SpeedSway = true;
+            SpeedSwayAmount = 2;
             selectedHeartRate = 80;
-            heartRateSway = true;
-            heartRateSwayAmount = 5;
-
+            HeartRateSway = true;
+            HeartRateSwayAmount = 5;
             resistance = 0;
             random = new Random();
-
-            this.simForm = simForm;
+            SimForm = simForm;
 
             // Create a new thread that updates our values 
-            updateThread = new Thread(new ThreadStart(UpdateValues));
+            UpdateThread = new Thread(UpdateValues);
         }
 
         private void UpdateValues()
         {
-            if (simForm.SpeedSwayEnabled())
+            if (SimForm.SpeedSwayEnabled())
             {
                 // Get a random value between the selected speed +- the sway
-                int minValue = Convert.ToInt32((simForm.GetSpeed() - simForm.GetSpeedSway()) * 100);
-                int maxValue = Convert.ToInt32((simForm.GetSpeed() + simForm.GetSpeedSway()) * 100);
+                int minValue = Convert.ToInt32((SimForm.GetSpeed() - SimForm.GetSpeedSway()) * 100);
+                int maxValue = Convert.ToInt32((SimForm.GetSpeed() + SimForm.GetSpeedSway()) * 100);
                 // Clamp the value between 0 and 50 for realistic values
                 float newValue = Math.Clamp(random.Next(minValue, maxValue) / 100f, 0, 50);
                 SetNewSpeed(newValue);
             }
             else
             {
-                SetNewSpeed(simForm.GetSpeed());
+                SetNewSpeed(SimForm.GetSpeed());
             }
 
-            if (simForm.HeartRateSwayEnabled())
+            if (SimForm.HeartRateSwayEnabled())
             {
                 // Get a random value between the selected heart rate +- the sway
-                int minValue = simForm.GetHeartRate() - simForm.GetHeartRateSway();
-                int maxValue = simForm.GetHeartRate() + simForm.GetHeartRateSway();
+                int minValue = SimForm.GetHeartRate() - SimForm.GetHeartRateSway();
+                int maxValue = SimForm.GetHeartRate() + SimForm.GetHeartRateSway();
                 // Clamp the value between 50 and 228 for realistic values
                 int newValue = Math.Clamp(random.Next(minValue, maxValue), 50, 228);
                 SetNewHeartRate(newValue);
             }
             else
             {
-                SetNewHeartRate(simForm.GetHeartRate());
+                SetNewHeartRate(SimForm.GetHeartRate());
             }
 
             // Wait an amount of time to update our values again
@@ -82,11 +84,14 @@ namespace BikeApp.vr_environment
         public void SetSelectedSpeed(float newSelectedSpeed) { selectedSpeed = newSelectedSpeed; }
         public void SetSelectedHeartRate(int newSelectedHeartRate) { selectedHeartRate = newSelectedHeartRate; }
 
-        public override void WriteResistance(float resistance)
+        /*
+         * This method writes a resistance to the simulated and bluetooth bike.
+         */
+        public override void WriteResistance(float resistanceAmount)
         {
-            this.resistance = Math.Clamp(resistance, 0, 100);
-            base.WriteResistance(this.resistance);
-            simForm.SetResistance(this.resistance);
+            resistance = Math.Clamp(resistanceAmount, 0, 100);
+            base.WriteResistance(resistance);
+            SimForm.SetResistance(resistance);
         }
     }
 }

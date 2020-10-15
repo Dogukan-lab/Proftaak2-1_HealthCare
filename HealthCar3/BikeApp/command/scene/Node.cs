@@ -53,7 +53,7 @@ namespace BikeApp.command.scene
         /*
          * This method adds a panel as a node.
          */
-        public static dynamic AddPanel(string panelName, string parentName, PanelComponent panelComponent)
+        public static dynamic AddPanel(string panelName, string parentName, PanelComponent panelComponent, TransformComponent transformComponent)
         {
             dynamic packetData = new
             {
@@ -61,7 +61,8 @@ namespace BikeApp.command.scene
                 parent = parentName,
                 components = new
                 {
-                    panel = panelComponent
+                    panel = panelComponent,
+                    transform = transformComponent
                 }
             };
             return CommandUtils.Wrap(packetData, Prefix + "add");

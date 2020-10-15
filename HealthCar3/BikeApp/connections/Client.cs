@@ -70,7 +70,7 @@ namespace BikeApp.connections
             if (connector is Simulator simulator)
             {
                 // Start the update thread
-                simulator.updateThread.Start();
+                simulator.UpdateThread.Start();
 
                 // Start the gui
                 Application.Run(simForm);
