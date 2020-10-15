@@ -5,81 +5,82 @@ namespace BikeApp.connections
     /*
      *This class will parse the needed assets to be sent from the connector to the application
      */
-    class MessageParser
+    internal class MessageParser
     {
-        private VpnConnector connector;
-        private CommandCenter command;
+        private readonly VpnConnector vpnConnector;
+        private readonly CommandCenter command;
         private string id;
         private string destination;
 
         public MessageParser(VpnConnector connector)
         {
-            this.connector = connector;
-            this.command = new CommandCenter(this.connector);
+            vpnConnector = connector;
+            command = new CommandCenter(vpnConnector);
         }
 
-        public string GetDestination() { return this.destination; }
+        public string GetDestination() { return destination; }
 
         /*
          * This method checks the current session for your computer name.
          * Then it gets the id and sets it inside of the for loop.
          */
-        public void GetSessionId(dynamic jsonData)
+        private void GetSessionId(dynamic jsonData)
         {
-            for (int i = 0; i < jsonData.data.Count; i++)
+            for (var i = 0; i < jsonData.data.Count; i++)
             {
                 if (jsonData.data[i].clientinfo.user == Environment.UserName)
                 {
-                    this.id = (string)jsonData.data[i].id;
+                    id = (string)jsonData.data[i].id;
                 }
             }
-            if (this.id == null)
-            {
-                Console.WriteLine("Error: Session not found. Please make sure you are connected to the network application!");
-                Environment.Exit(0);
-            }
+            if (id != null) return;
+            Environment.Exit(0);
+            throw new Exception(@"Error: Session not found. Please make sure you are connected to the network application!");
         }
 
         /**
          * Gets the response. From the response it gets
          * the id for the tunnel/send
          */
-        public void GetTunnelId(dynamic jsonData)
+        private void GetTunnelId(dynamic jsonData)
         {
-
-            if (jsonData.data.status == "ok")
-            {
-                this.destination = (string)jsonData.data.id;
-                Console.WriteLine("Destination has been set! {0}", this.destination);
-
-            }
+            if (jsonData.data.status != "ok") return;
+            destination = (string)jsonData.data.id;
+            Console.WriteLine(@"Destination has been set! {0}", destination);
         }
 
         /**
          * Parses the data received based on the given response id.
          */
-        public void Parse(string id, dynamic jsonData)
+        public void Parse(string uuId, dynamic jsonData)
         {
-            switch (id)
+            switch (uuId)
             {
                 case "session/list":
-                    GetSessionId(jsonData);
-                    if (this.id != null)
+                    try
                     {
-                        Console.WriteLine("Creating the tunnel...");
+                        GetSessionId(jsonData);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+                    if (id != null)
+                    {
+                        Console.WriteLine(@"Creating the tunnel...");
                         // Create the tunnel
-                        connector.Send(new { id = "tunnel/create", data = new { session = this.id, key = "" } });
+                        vpnConnector.Send(new { id = "tunnel/create", data = new { session = id, key = "" } });
                     }
                     break;
                 case "tunnel/create":
-                    Console.WriteLine("Tunnel has been created!");
+                    Console.WriteLine(@"Tunnel has been created!");
                     GetTunnelId(jsonData);
-                    if (this.destination != null)
+                    if (destination != null)
                     {
                         // Scene is now fully initialized and can now execute commands 
-                        this.command.ResetScene();
-                        this.command.CreateTerrain();
-                        this.command.CreateRoute();
+                        command.ResetScene();
+                        command.CreateTerrain();
+                        command.CreateRoute();
                     }
                     break;
             }

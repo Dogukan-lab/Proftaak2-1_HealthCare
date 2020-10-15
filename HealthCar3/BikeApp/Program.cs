@@ -3,7 +3,9 @@ using System;
 using System.Threading;
 using System.Windows.Forms;
 using BikeApp.connections;
+using BikeApp.connections.bluetooth;
 using BikeApp.vr_environment;
+using Newtonsoft.Json;
 
 namespace BikeApp
 {
@@ -11,7 +13,6 @@ namespace BikeApp
     {
         static void Main(string[] args)
         {
-            TempListenerClass listener = new TempListenerClass();
             ServerConnection serverCon = new ServerConnection();
             SimForm simForm = null;
 
@@ -25,17 +26,17 @@ namespace BikeApp
                 cInput = Console.ReadLine();
                 if (cInput == "login")
                 {
-                    Console.WriteLine("Name: ");
+                    Console.WriteLine(@"Name: ");
                     cInput = Console.ReadLine();
-                    Console.WriteLine("Password: ");
+                    Console.WriteLine(@"Password: ");
                     pInput = Console.ReadLine();
                     serverCon.LoginToServer(cInput, pInput);
                 }
                 else if (cInput == "register")
                 {
-                    Console.WriteLine("Name: ");
+                    Console.WriteLine(@"Name: ");
                     cInput = Console.ReadLine();
-                    Console.WriteLine("Password: ");
+                    Console.WriteLine(@"Password: ");
                     pInput = Console.ReadLine();
                     serverCon.RegisterToServer(cInput, pInput);
                 }
@@ -47,10 +48,10 @@ namespace BikeApp
             ConnectorOption connector = null;
             while (cInput == string.Empty)
             {
-                Console.WriteLine("Select bluetooth or simulator: |B|S|");
+                Console.WriteLine(@"Select bluetooth or simulator: |B|S|");
                 cInput = Console.ReadLine();
                 if (cInput.ToUpper() == "B")
-                    connector = new Bluetooth("Avans Bike AC74", "Avans Bike AC74", listener, serverCon);
+                    connector = new Bluetooth("Avans Bike AC74", "Avans Bike AC74", serverCon);
                 else if (cInput.ToUpper() == "S")
                 {
                     // Do the gui setup
@@ -58,7 +59,7 @@ namespace BikeApp
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
                     simForm = new SimForm();
-                    connector = new Simulator(listener, serverCon, simForm);
+                    connector = new Simulator(serverCon, simForm);
                 }
                 else
                     cInput = "";
@@ -80,7 +81,7 @@ namespace BikeApp
                 Thread.Sleep(4000);
             }
         }
-        /*VpnConnector connector = new VpnConnector(new JsonSerializerSettings());*/
+        VpnConnector connector = new VpnConnector(new JsonSerializerSettings());
     }
 }
 

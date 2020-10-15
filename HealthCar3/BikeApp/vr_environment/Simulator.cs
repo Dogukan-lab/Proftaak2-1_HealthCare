@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using BikeApp.connections;
-using BikeApp.interfaces;
+using BikeApp.connections.bluetooth;
 using SimulatorGui;
 
 namespace BikeApp.vr_environment
@@ -25,7 +25,7 @@ namespace BikeApp.vr_environment
         private readonly int portNum = 1330;
 
         public Thread updateThread { get; }
-        public Simulator(IValueChangeListener listener, ServerConnection sc, SimForm simForm) : base(listener, sc)
+        public Simulator(ServerConnection sc, SimForm simForm) : base(sc)
         {
             // Set the base values for the speed and the heart rate
             selectedSpeed = 0;
