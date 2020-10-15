@@ -1,20 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BikeApp.data.components
+﻿namespace BikeApp.data.components
 {
-    class TransformComponent
+    /*
+     * A transform component to be used inside of the VR environment.
+     */
+    internal class TransformComponent
     {
         public int[] position;
         public double scale;
         public int[] rotation;
 
-        public TransformComponent(int posx, int posy, int posz, double scale, int rotx, int roty, int rotz)
+        /*
+         * Initializes the values.
+         */
+        public TransformComponent(int posX, int posY, int posZ, double scaling, int rotX, int rotY, int rotZ)
         {
-            this.position = new int[] { posx, posy, posz };
-            this.scale = scale;
-            this.rotation = new int[] { rotx, roty, rotz };
+            position = new int[] { posX, posY, posZ };
+            scale = scaling;
+            rotation = new int[] { rotX, rotY, rotZ };
         }
     }
 }

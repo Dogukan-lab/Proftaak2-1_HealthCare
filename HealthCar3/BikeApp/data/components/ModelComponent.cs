@@ -1,22 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BikeApp.data.components
+﻿namespace BikeApp.data.components
 {
-    class ModelComponent
+    /*
+     * This is a component for models inside of the VR environment.
+     */
+    internal class ModelComponent
     {
         public string file;
         public bool cullbackfaces;
         public bool animated;
         public string animation;
 
-        public ModelComponent(string file, bool cullbackfaces, bool animated, string animation)
+        /*
+         * Constructor to initialize the values.
+         */
+        public ModelComponent(string fileName, bool hasCullbackfaces, bool isAnimated, string animationName)
         {
-            this.file = file;
-            this.cullbackfaces = cullbackfaces;
-            this.animated = animated;
-            this.animation = animation;
+            file = fileName;
+            cullbackfaces = hasCullbackfaces;
+            animated = isAnimated;
+            animation = animationName;
         }
     }
 }
