@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Security.Cryptography;
-using Newtonsoft.Json.Linq;
 using System.Text;
 using Encryption.Shared;
 using PackageUtils;
@@ -14,24 +13,24 @@ namespace Server
 
     internal class Client
     {
-        private TcpClient tcpClient;
-        private NetworkStream stream;
-        private byte[] buffer = new byte[1024];
+        private readonly TcpClient tcpClient;
+        private readonly NetworkStream stream;
+        private readonly byte[] buffer = new byte[1024];
         private string id;
         private string name;
-        private bool sessionActive = false;
-        private SessionData sessionData = null;
-        private bool loggedIn = false;
-        private bool keyExchanged = false;
-        private Encryptor encryptor;
-        private Decryptor decryptor;
-        public NetworkStream GetClientStream() { return this.stream; }
-        public string GetId() { return this.id; }
-        public bool IsSessionActive() { return this.sessionActive; }
-        public void SetSession(bool active) { this.sessionActive = active; }
-        public SessionData GetSessionData() { return this.sessionData; }
-        public bool IsLoggedIn() { return this.loggedIn; }
-        public Encryptor GetEncryptor() { return this.encryptor; }
+        private bool sessionActive;
+        private SessionData sessionData;
+        private bool loggedIn;
+        private bool keyExchanged;
+        private readonly Encryptor encryptor;
+        private readonly Decryptor decryptor;
+        public NetworkStream GetClientStream() { return stream; }
+        public string GetId() { return id; }
+        public bool IsSessionActive() { return sessionActive; }
+        public void SetSession(bool active) { sessionActive = active; }
+        public SessionData GetSessionData() { return sessionData; }
+        public bool IsLoggedIn() { return loggedIn; }
+        public Encryptor GetEncryptor() { return encryptor; }
 
         public Client(TcpClient tcpClient)
         {
@@ -39,8 +38,7 @@ namespace Server
             encryptor = new Encryptor();
             decryptor = new Decryptor();
             stream = this.tcpClient.GetStream();
-            
-            stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
+            stream.BeginRead(buffer, 0, buffer.Length, OnRead, null);
         }
         /*
          * Method that deserializes the JsonData
@@ -49,7 +47,7 @@ namespace Server
         {
             try
             {
-                int receivedBytes = stream.EndRead(ar);
+                var receivedBytes = stream.EndRead(ar);
                 dynamic receivedData;
                 
                 if (keyExchanged)
@@ -69,25 +67,22 @@ namespace Server
                 return;
             }
 
-           //Have to save data from client on server.
-           stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
+            //Have to save data from client on server.
+            stream.BeginRead(buffer, 0, buffer.Length, OnRead, null);
         }
 
         /*
          * Starts the session with this client
          */
-        public void StartSession()
+        private void StartSession()
         {
             sessionActive = true;
-            sessionData = new SessionData();
-            sessionData.clientId = id;
-            sessionData.sessionStart = DateTime.Now;
-            sessionData.name = name;
+            sessionData = new SessionData {clientId = id, sessionStart = DateTime.Now, name = name};
         }
         /*
          * Stops the session with this client
          */
-        public void EndSession()
+        private void EndSession()
         {
             sessionActive = false;
             sessionData.sessionEnd = DateTime.Now;
@@ -100,39 +95,38 @@ namespace Server
         private void HandleData(dynamic data)
         {
             string tag = data.tag;
-            byte[] bytes = new byte[0];
-            string message = "";
-            Client targetClient = null;
-            Encryptor targetEncryptor = null;
+            byte[] bytes;
+            Client targetClient;
+            Encryptor targetEncryptor;
+            dynamic message;
             switch (tag)
             {
                 case "encrypt/key" :
                     byte[] exponent = data.data.exponent.ToObject<byte[]>();
                     byte[] modulus = data.data.modulus.ToObject<byte[]>();
                     
-                    RSAParameters rsaPubkey = new RSAParameters() { Exponent = exponent, Modulus = modulus};
-                    (byte[] Key, byte[] iv) aesKeyset = encryptor.GenerateAesKey();
+                    var rsaPubKey = new RSAParameters() { Exponent = exponent, Modulus = modulus};
+                    (byte[] Key, byte[] iv) aesKeySet = encryptor.GenerateAesKey();
 
-                    decryptor.AesKey = aesKeyset.Key;
-                    decryptor.AesIv = aesKeyset.iv;
+                    decryptor.AesKey = aesKeySet.Key;
+                    decryptor.AesIv = aesKeySet.iv;
 
-                    encryptor.AesKey = aesKeyset.Key;
-                    encryptor.AesIv = aesKeyset.iv;
+                    encryptor.AesKey = aesKeySet.Key;
+                    encryptor.AesIv = aesKeySet.iv;
 
                     keyExchanged = true;
-                    aesKeyset = encryptor.EncryptRsa(aesKeyset.Key, aesKeyset.iv, rsaPubkey);
+                    aesKeySet = encryptor.EncryptRsa(aesKeySet.Key, aesKeySet.iv, rsaPubKey);
                     
                     bytes = PackageWrapper.SerializeData
                     (
                         "encrypt/key/success",
                         new
                         {
-                            key = aesKeyset.Key,
-                            iv = aesKeyset.iv
+                            key = aesKeySet.Key, aesKeySet.iv
                         }
                     );
             
-                    stream.Write(bytes, 0 , bytes.Length);
+                    tcpClient.GetStream().Write(bytes, 0 , bytes.Length);
                     break;
                 case "chat/message":
                     targetEncryptor = Program.GetTargetClientEncryptor((string)data.data.clientId);
@@ -141,14 +135,13 @@ namespace Server
                         bytes = PackageWrapper.SerializeData("chat/message/error", new { message = "message is empty!" }, encryptor);                    
                     else
                     {
-                        bytes = PackageWrapper.SerializeData("chat/message", new { message = message }, targetEncryptor);
+                        bytes = PackageWrapper.SerializeData("chat/message", new { message = (string) message }, targetEncryptor);
                         // Check if sending the message was successful. 
-                        if (!Program.SendMessageToSpecificClient((string)data.data.clientId, bytes))
-                            bytes = PackageWrapper.SerializeData("chat/message/error", new { message = "clientId is not valid!" }, encryptor);
-                        else
-                            bytes = PackageWrapper.SerializeData("chat/message/success", new { message = "message had been received!" }, encryptor);
+                        bytes = !Program.SendMessageToSpecificClient((string)data.data.clientId, bytes) ? 
+                            PackageWrapper.SerializeData("chat/message/error", new { message = "clientId is not valid!" }, encryptor) : 
+                            PackageWrapper.SerializeData("chat/message/success", new { message = "message has been received!" }, encryptor);
                     }
-                    stream.Write(bytes, 0, bytes.Length);
+                    tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                     break;
                 case "chat/broadcast":
                     message = data.data.message;
@@ -161,22 +154,22 @@ namespace Server
                         
                         bytes = PackageWrapper.SerializeData("chat/broadcast/success", new { message = "message has been received!" }, encryptor);
                     }
-                    stream.Write(bytes, 0, bytes.Length);
+                    tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                     break;
                 case "client/register":
-                    string name = data.data.name;                   
-                    if (CredentialVerificator.VerifyUsername(name))
+                    string clientName = data.data.name;                   
+                    if (CredentialVerificator.VerifyUsername(clientName))
                     {
-                        id = Program.GenerateId(name);
-                        this.name = name;
-                        Program.registeredClients.Add((name, (string)data.data.password), id);
+                        id = Program.GenerateId(clientName);
+                        name = clientName;
+                        Program.registeredClients.Add((clientName, (string)data.data.password), id);
                         Console.WriteLine($"New Client registered with id: {id}");
-                        bytes = PackageWrapper.SerializeData("client/register/success", new { clientId = id, clientName = name, message = "Login successful." }, encryptor);
+                        bytes = PackageWrapper.SerializeData("client/register/success", new { clientId = id, clientName, message = "Login successful." }, encryptor);
                         loggedIn = true;
                     }
                     else
                         bytes = PackageWrapper.SerializeData("client/register/error", new { message = "The username could not be set on the server." }, encryptor);
-                    stream.Write(bytes, 0, bytes.Length);
+                    tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                     break;
                 case "client/login":
                     if (Program.ClientLogin((string)data.data.name, (string)data.data.password))
@@ -190,7 +183,7 @@ namespace Server
                     else
                         bytes = PackageWrapper.SerializeData("client/login/error", new { message = "The username or password is not correct." }, encryptor);
 
-                    stream.Write(bytes, 0, bytes.Length);
+                    tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                     break;
                 case "doctor/login":
                     string username = data.data.username;
@@ -204,7 +197,7 @@ namespace Server
                     else
                         bytes = PackageWrapper.SerializeData("doctor/login/error", new { message = "The username or password is incorrect." }, encryptor);
 
-                    stream.Write(bytes, 0, bytes.Length);
+                    tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                     break;
                 case "client/update/heartRate":
                     targetEncryptor = Program.GetTargetClientEncryptor("0000");
@@ -213,7 +206,7 @@ namespace Server
                     // Update the session with the new received heart rate.
                     sessionData.NewHeartRate((int)data.data.heartRate);
                     // Send data to doctor client
-                    Program.SendMessageToSpecificClient("0000", PackageWrapper.SerializeData("client/update/heartRate", new { clientId = id, heartRate = data.data.heartRate }, targetEncryptor));
+                    Program.SendMessageToSpecificClient("0000", PackageWrapper.SerializeData("client/update/heartRate", new { clientId = id, data.data.heartRate }, targetEncryptor));
                     break;
                 case "client/update/speed":
                     targetEncryptor = Program.GetTargetClientEncryptor("0000");
@@ -222,7 +215,7 @@ namespace Server
                     // Update the session with the new received speed.
                     sessionData.newSpeed((float)data.data.speed);
                     // Send data to doctor client
-                    Program.SendMessageToSpecificClient("0000", PackageWrapper.SerializeData("client/update/speed", new { clientId = id, speed = data.data.speed }, targetEncryptor));
+                    Program.SendMessageToSpecificClient("0000", PackageWrapper.SerializeData("client/update/speed", new { clientId = id, data.data.speed }, targetEncryptor));
                     break;
                 case "session/resistance":
                     targetEncryptor = Program.GetTargetClientEncryptor((string)data.data.clientId);
@@ -231,7 +224,7 @@ namespace Server
                         bytes = PackageWrapper.SerializeData("session/resistance/error", new { message = "Resistance value is invalid!" }, encryptor);
                     else
                     {
-                        bytes = PackageWrapper.SerializeData("session/resistance", new { resistance = resistance }, targetEncryptor);
+                        bytes = PackageWrapper.SerializeData("session/resistance", new {resistance }, targetEncryptor);
                         // Check if sending the message was successful. 
                         if (!Program.SendMessageToSpecificClient((string)data.data.clientId, bytes))
                             bytes = PackageWrapper.SerializeData("session/resistance/error", new { message = "The Client Id could not be found." }, encryptor);
@@ -240,11 +233,10 @@ namespace Server
                             bytes = PackageWrapper.SerializeData("session/resistance/success", new { message = "Resistance has been updated." }, encryptor);
                             if (Program.ActiveSession((string)data.data.clientId, out targetClient)) {
                                 targetClient.sessionData.NewResistance(float.Parse(resistance));
-                                targetClient = null;
                             }
                         }
                     }
-                    stream.Write(bytes, 0, bytes.Length);
+                    tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                     break;
                 case "session/start":
                     targetEncryptor = Program.GetTargetClientEncryptor((string)data.data.clientId);
@@ -258,11 +250,10 @@ namespace Server
                         else
                         {                            
                             targetClient.StartSession();
-                            targetClient = null;
                             bytes = PackageWrapper.SerializeData("session/start/success", new { message = "Session successfully started." }, encryptor);
                         }
                     }
-                    stream.Write(bytes, 0, bytes.Length);
+                    tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                     break;
                 case "session/stop":
                     targetEncryptor = Program.GetTargetClientEncryptor((string)data.data.clientId);
@@ -276,23 +267,19 @@ namespace Server
                         else
                         {
                             targetClient.EndSession();
-                            targetClient = null;
                             bytes = PackageWrapper.SerializeData("session/stop/success", new { message = "Session successfully stopped." }, encryptor);
                         }
                     }
-                    stream.Write(bytes, 0, bytes.Length);
+                    tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                     break;
                 case "doctor/clientHistory":
-                    targetEncryptor = Program.GetTargetClientEncryptor((string)data.data.clientId);
+                    Program.GetTargetClientEncryptor((string)data.data.clientId);
                     dynamic session = Program.GetSession((string)data.data.clientId);
-                    if (session != null)
-                        bytes = PackageWrapper.SerializeData("doctor/clientHistory/success", session, encryptor);
-                    else
-                        bytes = PackageWrapper.SerializeData("doctor/clientHistory/error", new { message = "No session found with the given ID." }, encryptor);
-                    stream.Write(bytes, 0, bytes.Length);
+                    bytes = session != null ? (byte[]) PackageWrapper.SerializeData("doctor/clientHistory/success", session, encryptor) : PackageWrapper.SerializeData("doctor/clientHistory/error", new { message = "No session found with the given ID." }, encryptor);
+                    tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                     break;
                 case "session/emergencyStop":
-                    bytes = PackageWrapper.SerializeData("session/stop", new { }, targetEncryptor);
+                    bytes = PackageWrapper.SerializeData("session/stop", new { }, null);
                     Program.EmergencyStop(bytes);
                     break;
             }
