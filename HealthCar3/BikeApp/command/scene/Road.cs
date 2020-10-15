@@ -1,45 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-
-namespace BikeApp.command.scene
+﻿namespace BikeApp.command.scene
 {
-    static class Road
+    internal static class Road
     {
-        static string prefix = "scene/road/";
+        private const string Prefix = "scene/road/";
 
         /**
          * This method adds a route to the vr system
          */
-        public static dynamic AddRoad(string routeId, string diffuse, string normal, string specular, double heightoffset)
+        public static dynamic AddRoad(string routeId, string diffusePng, string normalPng, string specularPng, double heightOffset)
         {
             dynamic packetData = new
             {
                 route = routeId,
-                diffuse = diffuse,
-                normal = normal,
-                specular = specular,
-                heightoffset = heightoffset
+                diffuse = diffusePng,
+                normal = normalPng,
+                specular = specularPng,
+                heightoffset = heightOffset
             };
-            return CommandUtils.Wrap(packetData, prefix + "add");
+            return CommandUtils.Wrap(packetData, Prefix + "add");
         }
 
         /**
          * This method updates the route that has been set.
          */
-        public static dynamic Update(string roadId, string routeId, string diffuse, string normal, string specular, double heightoffset)
+        public static dynamic Update(string roadId, string routeId, string diffusePng, string normalPng, string specularPng, double heightOffset)
         {
             dynamic packetData = new
             {
                 id = roadId,
                 route = routeId,
-                diffuse = diffuse,
-                normal = normal,
-                specular = specular,
-                heightoffset = heightoffset
+                diffuse = diffusePng,
+                normal = normalPng,
+                specular = specularPng,
+                heightoffset = heightOffset
             };
-            return CommandUtils.Wrap(packetData, prefix + "update");
+            return CommandUtils.Wrap(packetData, Prefix + "update");
         }
     }
 }

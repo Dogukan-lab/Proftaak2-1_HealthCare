@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace BikeApp
+namespace BikeApp.connections.bluetooth
 {
-    class ConnectorOption
+    internal class ConnectorOption
     {
-        private int heartRate;
         private float speed;
-        private IValueChangeListener valueChangeListener;
-        private ServerConnection sc;
+        private readonly ServerConnection sc;
 
-        public ConnectorOption(IValueChangeListener listener, ServerConnection sc)
+        protected ConnectorOption(ServerConnection sc)
         {
-            valueChangeListener = listener;
             this.sc = sc;
         }
 
@@ -25,11 +20,10 @@ namespace BikeApp
             speed = newSpeed;
             //valueChangeListener.OnSpeedChange(speed);
             // Updates the value
-            sc.UpdateSpeed(newSpeed);
+            sc.UpdateSpeed(speed);
         }
         protected void SetNewHeartRate(int newHeartRate)
         {
-            heartRate = newHeartRate;
             //valueChangeListener.OnHeartRateChange(heartRate);
             // Updates the value
             sc.UpdateHeartRate(newHeartRate);
@@ -37,7 +31,7 @@ namespace BikeApp
 
         public virtual void WriteResistance(float resistance)
         {
-            Console.WriteLine($"Write {resistance}%");
+            Console.WriteLine($@"Write {resistance}%");
         }
     }
 }
