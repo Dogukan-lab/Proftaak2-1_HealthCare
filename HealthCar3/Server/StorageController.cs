@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Server
 {
-    class StorageController
+    internal static class StorageController
     {
         /**
          * Saves the sessionData to a file.
@@ -16,6 +16,9 @@ namespace Server
             serializer.Serialize(file, data);
         }
 
+        /**
+         * Loads data from a file.
+         */
         public static List<SessionData> Load()
         {
             if (File.Exists(@"..\data\saved-records.json"))
@@ -26,12 +29,9 @@ namespace Server
                 var userData = serializer.Deserialize<List<SessionData>>(jsonTextReader) ?? new List<SessionData>();
                 return userData;
             }
-            else
-            {
-                Directory.CreateDirectory(@"..\data");
-                File.CreateText(@"..\data\saved-records.json");
-                return new List<SessionData>();
-            }
+            Directory.CreateDirectory(@"..\data"); //creates the directory to prevent errors.
+            File.CreateText(@"..\data\saved-records.json");
+            return new List<SessionData>();
         }
     }
 }
