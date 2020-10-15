@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BikeApp.data
+﻿namespace BikeApp.data
 {
-    class RouteData
+    /*
+     * Data class that stores a position and direction.
+     */
+    internal class RouteData
     {
         public int[] pos;
         public int[] dir;
 
-        public RouteData(int[] pos, int[] dir)
+        /*
+         * Initializes the data.
+         */
+        public RouteData(int[] position, int[] direction)
         {
-            this.pos = pos;
-            this.dir = dir;
+            pos = position;
+            dir = direction;
         }
     }
 }

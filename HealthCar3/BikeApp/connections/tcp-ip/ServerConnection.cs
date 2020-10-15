@@ -1,54 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Net.Sockets;
-using System.Security.Cryptography;
-using Newtonsoft.Json;
-using System.Threading;
-using Newtonsoft.Json.Linq;
-using PackageUtils;
 using System.IO;
+using System.Net.Sockets;
+using System.Text;
+using BikeApp.connections.bluetooth;
 using Encryption.Shared;
+using Newtonsoft.Json;
+using PackageUtils;
 
-namespace BikeApp
+namespace BikeApp.connections
 {
-    class ServerConnection
+    internal class ServerConnection
     {
-        private TcpClient clientConnection;
+        private readonly TcpClient clientConnection;
         private NetworkStream stream;
-        private String IPAddress = "127.0.0.1";
-        private int port = 1330;
+        private const string IpAddress = "127.0.0.1";
+        private const int Port = 1330;
         private int totalTries;
-        private readonly int MAXRECONTRIES = 3;
-        private string uniqueId = "";
-        private byte[] buffer = new byte[1024];
-        private bool connected = false;
-        private bool loggedIn = false;
-        private bool keyExchanged = false;
-        private ConnectorOption co = null;
-        private Encryptor encryptor;
-        private Decryptor decryptor;
+        private const int MaxReconTries = 3;
+        private readonly byte[] buffer = new byte[1024];
+        private bool connected;
+        private bool loggedIn;
+        private bool keyExchanged;
+        private ConnectorOption co;
+        private readonly Encryptor encryptor;
+        private readonly Decryptor decryptor;
 
-        public void SetConnectorOption(ConnectorOption co) { this.co = co; }
-        public bool IsLoggedIn() { return this.loggedIn; }
+        public void SetConnectorOption(ConnectorOption connector) { co = connector; }
+        public bool IsLoggedIn() { return loggedIn; }
         public ServerConnection()
         {
             clientConnection = new TcpClient();
-
             encryptor = new Encryptor();
             decryptor = new Decryptor();
-            
-            Connect(IPAddress, port);
+            Connect(IpAddress, Port);
         }
 
         /*
          * Method used to make a connection with the server.
          */
-        private void Connect(string IPAddress, int port)
+        private void Connect(string ipAddress, int port)
         {
             try
             {
-                clientConnection.Connect(IPAddress, port);
+                clientConnection.Connect(ipAddress, port);
                 stream = clientConnection.GetStream();
 
                 if (clientConnection.Connected)
@@ -59,10 +53,10 @@ namespace BikeApp
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                if (!clientConnection.Connected && totalTries < MAXRECONTRIES)
+                if (!clientConnection.Connected && totalTries < MaxReconTries)
                 {
                     totalTries++;
-                    Connect(IPAddress, port);
+                    Connect(ipAddress, port);
                 }
                 else
                 {
@@ -74,37 +68,35 @@ namespace BikeApp
         private void OnRead(IAsyncResult ar)
         {
             try {
-                int receivedBytes = stream.EndRead(ar);
+                var receivedBytes = stream.EndRead(ar);
                 dynamic receivedData;
 
                 if (keyExchanged)
                 {
-                    receivedData = JsonConvert.DeserializeObject(decryptor.DecryptAES(buffer, 0, receivedBytes));
+                    receivedData = JsonConvert.DeserializeObject(decryptor.DecryptAes(buffer, 0, receivedBytes));
                 }
                 else
                 {
-                    string receivedText = Encoding.ASCII.GetString(buffer, 0, receivedBytes);
+                    var receivedText = Encoding.ASCII.GetString(buffer, 0, receivedBytes);
                     receivedData = JsonConvert.DeserializeObject(receivedText);
                 }
                 HandleData(receivedData);
-                stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);              
+                stream.BeginRead(buffer, 0, buffer.Length, OnRead, null);              
             }
             catch (IOException)
             {
                 OnDisconnect();
-                return;
             }
-    }
+        }
 
         private void HandleData(dynamic data)
         {
-            //JObject jData = data as JObject;
             string tag = data.tag;
             switch (tag)
             {
                 case "encrypt/key/success":
-                    byte[] key = decryptor.DecryptRSA(data.data.key.ToObject<byte[]>());
-                    byte[] iv = decryptor.DecryptRSA(data.data.iv.ToObject<byte[]>());
+                    byte[] key = decryptor.DecryptRsa(data.data.key.ToObject<byte[]>());
+                    byte[] iv = decryptor.DecryptRsa(data.data.iv.ToObject<byte[]>());
                     
                     encryptor.AesKey = key;
                     encryptor.AesIv = iv;
@@ -121,22 +113,22 @@ namespace BikeApp
                     break;
                 case "client/register/error":
                 case "client/login/error":
-                    Console.WriteLine($"ERROR: {data.data.message}");
+                    Console.WriteLine($@"ERROR: {data.data.message}");
                     break;
                 case "session/resistance":
                     float resistance = float.Parse(data.data.resistance.ToObject<string>());
                     co.WriteResistance(resistance);
                     break;
                 case "session/start":
-                    Console.WriteLine("Start session");
+                    Console.WriteLine(@"Start session");
                     break;
                 case "session/stop":
-                    Console.WriteLine("Stop session");
+                    Console.WriteLine(@"Stop session");
                     break;
                 case "chat/message":
                 case "chat/broadcast":
                     string message = data.data.message.ToObject<string>();
-                    Console.WriteLine($"Received Message: {message}");
+                    Console.WriteLine($@"Received Message: {message}");
                     break;
             }
         }
@@ -145,9 +137,8 @@ namespace BikeApp
         {
             connected = true;
             InitializeRsa();
-            stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
+            stream.BeginRead(buffer, 0, buffer.Length, OnRead, null);
         }
-
 
         /*
          * Method used to disconnect from the server.
@@ -163,7 +154,7 @@ namespace BikeApp
          */
         public void RegisterToServer(string name, string password)
         {
-            byte[] bytes = PackageWrapper.SerializeData("client/register", new { name = name, password = password }, encryptor);
+            var bytes = PackageWrapper.SerializeData("client/register", new {name, password }, encryptor);
             stream.Write(bytes, 0, bytes.Length);
         }
 
@@ -172,7 +163,7 @@ namespace BikeApp
          */
         public void LoginToServer(string name, string password)
         {
-            byte[] bytes = PackageWrapper.SerializeData("client/login", new { name = name, password = password}, encryptor);
+            var bytes = PackageWrapper.SerializeData("client/login", new {name, password}, encryptor);
             stream.Write(bytes, 0, bytes.Length);
         }
 
@@ -181,14 +172,15 @@ namespace BikeApp
          */
         public void UpdateHeartRate(int heartRate)
         {
-            byte[] bytes = PackageWrapper.SerializeData("client/update/heartRate", new { heartRate = heartRate}, encryptor);
+            var bytes = PackageWrapper.SerializeData("client/update/heartRate", new {heartRate}, encryptor);
 
             if(connected)
                 stream.Write(bytes, 0, bytes.Length);
         }
+        
         public void UpdateSpeed(float speed)
         {
-            byte[] bytes = PackageWrapper.SerializeData("client/update/speed", new { speed = speed}, encryptor);
+            var bytes = PackageWrapper.SerializeData("client/update/speed", new {speed}, encryptor);
 
             if(connected)
                 stream.Write(bytes, 0, bytes.Length);
@@ -199,16 +191,16 @@ namespace BikeApp
          */
         private void InitializeRsa()
         {
-            (RSAParameters privkey, RSAParameters pubkey) keyset = encryptor.GenerateRsaKey();
-            decryptor.RsaPrivateKey = keyset.privkey;
+            var (privateKey, pubKey) = encryptor.GenerateRsaKey();
+            decryptor.RsaPrivateKey = privateKey;
 
-            byte[] bytes = PackageWrapper.SerializeData
+            var bytes = PackageWrapper.SerializeData
             (
                 "encrypt/key",
                 new
                 {
-                    exponent = keyset.pubkey.Exponent,
-                    modulus = keyset.pubkey.Modulus
+                    exponent = pubKey.Exponent,
+                    modulus = pubKey.Modulus
                 }
             );
             

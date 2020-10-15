@@ -18,6 +18,9 @@
     <Reference Include="BLELibrary">
       <HintPath>BLELibrary.dll</HintPath>
     </Reference>
+    <Reference Include="BLELibrary, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>connections\bluetooth\BLELibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

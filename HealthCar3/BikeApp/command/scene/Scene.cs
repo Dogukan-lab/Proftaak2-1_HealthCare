@@ -1,37 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BikeApp.command.scene
+﻿namespace BikeApp.command.scene
 {
-    static  class Scene
+    internal static class Scene
     {
+        /*
+         * A prefix to not repeat the same string over and over.
+         */
+        private const string Prefix = "scene/";
 
-        static string prefix = "scene/";
-
-        /**
+        /*
          * This method gets the data inside of the scene in json format
          */
         public static dynamic Get()
         {
-            dynamic packetData = new
-            {
-            };
-            return CommandUtils.Wrap(packetData, prefix + "get");
+            dynamic packetData = new {};
+            return CommandUtils.Wrap(packetData, Prefix + "get");
         }
 
-        /**
+        /*
          * This method resets the scene to it's default state
          */
         public static dynamic Reset()
         {
-            dynamic packetData = new
-            {
-            };
-            return CommandUtils.Wrap(packetData, prefix + "reset");
+            dynamic packetData = new {};
+            return CommandUtils.Wrap(packetData, Prefix + "reset");
         }
 
-        /**
+        /*
          * This method saves the scene in a designated file.
          */
         public static dynamic Save(string filename)
@@ -41,22 +35,19 @@ namespace BikeApp.command.scene
                 filename = filename,
                 overwrite = true
             };
-            return CommandUtils.Wrap(packetData, prefix + "save");
+            return CommandUtils.Wrap(packetData, Prefix + "save");
         }
 
-        /**
+        /*
          * This method loads the scene from the save file
          */
         public static dynamic Load(string filename)
         {
-            dynamic packetData = new
-            {
-                filename = filename,
-            };
-            return CommandUtils.Wrap(packetData, prefix + "load");
+            dynamic packetData = new { filename = filename };
+            return CommandUtils.Wrap(packetData, Prefix + "load");
         }
 
-        /**
+        /*
          * This method casts a ray through the scene, and returns an array of collision points.
          */
         public static dynamic Raycast(int[] start, int[] direction, bool physics)
@@ -67,8 +58,7 @@ namespace BikeApp.command.scene
                 direction = direction,
                 physics = physics
             };
-            return CommandUtils.Wrap(packetData, prefix + "raycast");
+            return CommandUtils.Wrap(packetData, Prefix + "raycast");
         }
-
     }
 }

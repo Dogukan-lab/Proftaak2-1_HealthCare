@@ -1,51 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BikeApp.command.scene
+﻿namespace BikeApp.command.scene
 {
-    static class Terrain
+    internal static class Terrain
     {
-        static string prefix = "scene/terrain/";
+        /*
+         * A prefix to not repeat the same string over and over.
+         */
+        private const string Prefix = "scene/terrain/";
 
-        /**
+        /*
          * This method adds a skeleton terrain for the terrain textures.
          */
-        public static dynamic Add(int[] size, double[] height)
+        public static dynamic Add(int[] size, double[] heightMap)
         {
             dynamic packetData = new
             {
                 size = size,
-                heights = height
+                heights = heightMap
             };
-            return CommandUtils.Wrap(packetData, prefix + "add");
+            return CommandUtils.Wrap(packetData, Prefix + "add");
         }
 
-        /**
+        /*
          * This method updates the terrain
          */
         public static dynamic Update()
         {
-            dynamic packetData = new
-            {
-
-            };
-            return CommandUtils.Wrap(packetData, prefix + "update");
+            dynamic packetData = new {};
+            return CommandUtils.Wrap(packetData, Prefix + "update");
         }
 
-        /**
+        /*
          * This method deletes the terrain
          */
         public static dynamic Delete()
         {
-            dynamic packetData = new
-            {
-
-            };
-            return CommandUtils.Wrap(packetData, prefix + "delete");
+            dynamic packetData = new {};
+            return CommandUtils.Wrap(packetData, Prefix + "delete");
         }
 
-        /**
+        /*
          * This method gets the height map of the terrain
          */
         public static dynamic GetHeight(int[] position, int[,] positions)
@@ -55,7 +48,7 @@ namespace BikeApp.command.scene
                 position = position,
                 positions = positions
             };
-            return CommandUtils.Wrap(packetData, prefix + "update");
+            return CommandUtils.Wrap(packetData, Prefix + "update");
         }
     }
 }
