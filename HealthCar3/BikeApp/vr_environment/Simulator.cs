@@ -1,11 +1,10 @@
-﻿using SimulatorGui;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Threading;
-using Newtonsoft.Json;
+using BikeApp.connections;
+using BikeApp.interfaces;
+using SimulatorGui;
 
-namespace BikeApp
+namespace BikeApp.vr_environment
 {
     class Simulator : ConnectorOption
     {

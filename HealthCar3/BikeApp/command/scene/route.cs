@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using BikeApp.command.scene;
-
-namespace BikeApp.command.route
+﻿namespace BikeApp.command.scene
 {
     static class Route
     {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BikeApp.command.scene
+﻿namespace BikeApp.command
 {
     static class CommandUtils
     {

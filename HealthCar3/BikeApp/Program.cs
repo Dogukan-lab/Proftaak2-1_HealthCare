@@ -2,6 +2,8 @@
 using System;
 using System.Threading;
 using System.Windows.Forms;
+using BikeApp.connections;
+using BikeApp.vr_environment;
 
 namespace BikeApp
 {
