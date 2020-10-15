@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Text;
 using BikeApp.command.scene;
 using BikeApp.connections;
 using BikeApp.data;
 using BikeApp.data.components;
 using Newtonsoft.Json.Linq;
+
+// ReSharper disable StringLiteralTypo
 
 namespace BikeApp.vr_environment
 {
@@ -12,16 +13,15 @@ namespace BikeApp.vr_environment
      * Controller for managing construction and management of commands.
      * TODO Trees everywhere!
      * TODO Mount the camera to the bike or object.
+     * TODO make a panelUuid so that the values can be updated on the panel.
      */
     internal class CommandCenter
     {
-        public string panelUuid;
         private readonly VpnConnector connector;
 
         public CommandCenter(VpnConnector vpn)
         {
             connector = vpn;
-            panelUuid = "";
         }
 
         /*
@@ -33,18 +33,17 @@ namespace BikeApp.vr_environment
             CreateTerrain("snow_grass_d.jpg", "snow_grass_n.jpg");
 
             RouteData[] routeData = new RouteData[7];
-            // Defining route
-            routeData[0] = new RouteData(new int[] {0, 0, 0}, new int[] {1, 0, 0});
-            routeData[1] = new RouteData(new int[] {20, 0, 0}, new int[] {0, 0, 1});
-            routeData[2] = new RouteData(new int[] {20, 0, 50}, new int[] {-1, 0, 0});
-            routeData[3] = new RouteData(new int[] {-10, 0, 30}, new int[] {-1, 0, 0});
-            routeData[4] = new RouteData(new int[] {-30, 0, 10}, new int[] {0, 0, 0});
-            routeData[5] = new RouteData(new int[] {-20, 0, 0}, new int[] {0, 0, 0});
-            routeData[6] = new RouteData(new int[] {-10, 0, -10}, new int[] {1, 0, 0});
+            // Defining the route
+            routeData[0] = new RouteData(new[] {0, 0, 0}, new[] {1, 0, 0});
+            routeData[1] = new RouteData(new[] {20, 0, 0}, new[] {0, 0, 1});
+            routeData[2] = new RouteData(new[] {20, 0, 50}, new[] {-1, 0, 0});
+            routeData[3] = new RouteData(new[] {-10, 0, 30}, new[] {-1, 0, 0});
+            routeData[4] = new RouteData(new[] {-30, 0, 10}, new[] {0, 0, 0});
+            routeData[5] = new RouteData(new[] {-20, 0, 0}, new[] {0, 0, 0});
+            routeData[6] = new RouteData(new[] {-10, 0, -10}, new[] {1, 0, 0});
 
             CreateRoute(routeData, 3);
             SetTime(SkyBoxTime.Morning);
-            // UpdatePanel(this.panelUuid);
         }
 
         #region Scene Code
@@ -61,7 +60,7 @@ namespace BikeApp.vr_environment
                                 GetSkyBox("bluecloud_up.jpg"),
                                 GetSkyBox("bluecloud_dn.jpg"), GetSkyBox("bluecloud_bk.jpg"),
                                 GetSkyBox("bluecloud_ft.jpg")),
-                            new Action<JObject>(data => { Console.WriteLine("It's daytime!"); }));
+                            new Action<JObject>(updateData => { Console.WriteLine(@"It's daytime!"); }));
                     }));
                     break;
                 case SkyBoxTime.Afternoon:
@@ -72,7 +71,7 @@ namespace BikeApp.vr_environment
                                 GetSkyBox("graycloud_up.jpg"),
                                 GetSkyBox("graycloud_dn.jpg"), GetSkyBox("graycloud_bk.jpg"),
                                 GetSkyBox("graycloud_ft.jpg")),
-                            new Action<JObject>(data => { Console.WriteLine("It's the afternoon!"); }));
+                            new Action<JObject>(updateData => { Console.WriteLine(@"It's the afternoon!"); }));
                     }));
                     break;
                 case SkyBoxTime.Evening:
@@ -83,7 +82,7 @@ namespace BikeApp.vr_environment
                                 GetSkyBox("yellowcloud_up.jpg"),
                                 GetSkyBox("yellowcloud_dn.jpg"), GetSkyBox("yellowcloud_bk.jpg"),
                                 GetSkyBox("yellowcloud_ft.jpg")),
-                            new Action<JObject>(data => { Console.WriteLine("It's in the evening!"); }));
+                            new Action<JObject>(updateData => { Console.WriteLine(@"It's in the evening!"); }));
                     }));
                     break;
                 case SkyBoxTime.Night:
@@ -94,7 +93,7 @@ namespace BikeApp.vr_environment
                                 GetSkyBox("graycloud_up.jpg"),
                                 GetSkyBox("graycloud_dn.jpg"), GetSkyBox("graycloud_bk.jpg"),
                                 GetSkyBox("graycloud_ft.jpg")),
-                            new Action<JObject>(data => { Console.WriteLine("It's nightTime!"); }));
+                            new Action<JObject>(updateData => { Console.WriteLine(@"It's nightTime!"); }));
                     }));
                     break;
                 default:
@@ -109,22 +108,22 @@ namespace BikeApp.vr_environment
         public void GetScene()
         {
             connector.SendPacket(Scene.Get(),
-                new Action<JObject>(data => { Console.WriteLine("Scene data: {0}", data); }));
+                new Action<JObject>(data => { Console.WriteLine(@"Scene data: {0}", data); }));
         }
 
         /*
-         * This method deletes the original groundplane and resets the entire scene. 
+         * This method deletes the original ground plane and resets the entire scene. 
          */
         private void ResetScene()
         {
             connector.SendPacket(Scene.Reset(), new Action<JObject>(data =>
             {
-                Console.WriteLine("Scene has been reset!");
+                Console.WriteLine(@"Scene has been reset!");
                 connector.SendPacket(Node.Find("GroundPlane"),
-                    new Action<JObject>(data =>
+                    new Action<JObject>(nodeData =>
                     {
                         connector.SendPacket(Node.Delete(data["data"]?["data"]?[0]?["uuid"]?.ToString()),
-                            new Action<JObject>(data => { Console.WriteLine("Ground layer Deleted!"); }));
+                            new Action<JObject>(deleteData => { Console.WriteLine(@"Ground layer Deleted!"); }));
                     }));
             }));
         }
@@ -141,7 +140,7 @@ namespace BikeApp.vr_environment
             connector.SendPacket(Terrain.Add(new[] {256, 256}, CreateHeightMap()),
                 new Action<JObject>(data =>
                 {
-                    Console.WriteLine("Reached the terrain skeleton!");
+                    Console.WriteLine(@"Reached the terrain skeleton!");
                     CreateTerrainTexture(texture, normal);
                 }));
         }
@@ -187,10 +186,10 @@ namespace BikeApp.vr_environment
                     this.connector.SendPacket(Node.AddLayer(uuid,
                             GetTextures($"terrain/{texture}"),
                             GetTextures($"terrain/{normal}"), 0, 10, 0.2),
-                        new Action<JObject>(data =>
+                        new Action<JObject>(layerData =>
                         {
-                            Console.WriteLine("Terrain texture has been Added!");
-                            // CreateTrees();
+                            Console.WriteLine(@"Terrain texture has been Added!");
+                            CreateTrees();
                         }));
                 }));
         }
@@ -202,18 +201,18 @@ namespace BikeApp.vr_environment
          */
         private void CreateTrees()
         {
-            Random random = new Random();
-            for (int i = 0; i < 100; i++)
+            var random = new Random();
+            for (var i = 0; i < 100; i++)
             {
-                this.connector.SendPacket(Node.AddModel(("Tree" + i),
+                connector.SendPacket(Node.AddModel(("Tree" + i),
                         new TransformComponent(random.NextDouble() * 100, 0, random.NextDouble() * 100, 1, 0, 0, 0),
                         new ModelComponent(GetModelObjects("trees/fantasy/tree6.obj"), false, false, "")),
                     new Action<JObject>(data =>
                     {
-                        string uuid = data["data"]?["data"]?["uuid"]?.ToString();
+                        var uuid = data["data"]?["data"]?["uuid"]?.ToString();
                         connector.SendPacket(
                             Node.AddLayer(uuid, GetModelObjects("trees/fantasy/Tree_10_Tree.png"), "", 0, 10, 0.2),
-                            new Action<JObject>(data => { Console.WriteLine("Tree texture has been added!"); }));
+                            new Action<JObject>(layerData => { Console.WriteLine(@"Tree texture has been added!"); }));
                     }));
             }
         }
@@ -230,21 +229,21 @@ namespace BikeApp.vr_environment
             connector.SendPacket(Route.Add(routeData), new Action<JObject>(data =>
             {
                 connector.SendPacket(Route.ShowRoute(true),
-                    new Action<JObject>(data => { Console.WriteLine(@"Route skeleton had been made"); }));
-                string roadID = data["data"]["data"]["uuid"].ToString();
-                AddRoad(roadID);
+                    new Action<JObject>(showRoute => { Console.WriteLine(@"Route skeleton had been made"); }));
+                var roadId = data["data"]?["data"]?["uuid"]?.ToString();
+                AddRoad(roadId);
 
-                connector.SendPacket(Node.AddModel("Fiets",
+                connector.SendPacket(Node.AddModel("Bike",
                         new TransformComponent(1, -1, 1, 1, 0, 0, 0),
                         new ModelComponent(GetModelObjects("bike/bike.fbx"), true, false, "")),
-                    new Action<JObject>(data =>
+                    new Action<JObject>(modelData =>
                     {
-                        string parent = data["data"]["data"]["uuid"].ToString();
+                        string parent = data["data"]?["data"]?["uuid"]?.ToString();
                         CreatePanel(parent);
-                        connector.SendPacket(Route.Follow(roadID, data["data"]["data"]["uuid"].ToString(),
+                        connector.SendPacket(Route.Follow(roadId, data["data"]?["data"]?["uuid"]?.ToString(),
                                 speed, -1, "XZ", 1, false,
-                                new int[] {0, 0, 0}, new int[] {0, 0, 0}),
-                            new Action<JObject>(data => { Console.WriteLine("Following the set route!"); }));
+                                new[] {0, 0, 0}, new[] {0, 0, 0}),
+                            new Action<JObject>(followData => { Console.WriteLine(@"Following the set route!"); }));
                     }));
             }));
         }
@@ -257,8 +256,8 @@ namespace BikeApp.vr_environment
             connector.SendPacket(Road.AddRoad(uuid,
                     GetTextures("tarmac_diffuse.png"),
                     GetTextures("tarmac_normal.png"),
-                    GetTextures("tarmax_specular.png"), 0),
-                new Action<JObject>(data => { Console.WriteLine("Bike now following a textured road!"); }));
+                    GetTextures("tarmac_specular.png"), 0),
+                new Action<JObject>(data => { Console.WriteLine(@"Bike now following a textured road!"); }));
         }
 
         #endregion
@@ -275,7 +274,7 @@ namespace BikeApp.vr_environment
                     new TransformComponent(-0.4, 1.3, 0.01, 1, -20, 90, 0)),
                 new Action<JObject>(data =>
                 {
-                    string uuid = data["data"]["data"]["uuid"].ToString();
+                    string uuid = data["data"]?["data"]?["uuid"]?.ToString();
                     UpdatePanel(uuid);
                 }));
         }
@@ -286,7 +285,7 @@ namespace BikeApp.vr_environment
         private void ClearPanel(string uuid)
         {
             connector.SendPacket(Panel.Clear(uuid),
-                new Action<JObject>(data => { Console.WriteLine("Panel clear data: {0}", data); }));
+                new Action<JObject>(data => { Console.WriteLine(@"Panel has been cleared!"); }));
         }
 
         /*
@@ -299,26 +298,26 @@ namespace BikeApp.vr_environment
             DrawValues(uuid, 0, 100, 20);
         }
 
-        private void DrawValues(string uuid, double speed, double heartrate, double resistance)
+        private void DrawValues(string uuid, double speed, double heartRate, double resistance)
         {
-            string finalVersion = $"Current speed: {speed}m/s";
-            this.connector.SendPacket(Panel.DrawText(uuid,
-                    finalVersion, new double[] {100, 100}, 32, new[] {0, 0, 0, 1}, "Arial"),
+            connector.SendPacket(Panel.DrawText(uuid,
+                    $"Current speed: {speed}m/s", new double[] {100, 100}, 32, new[] {0, 0, 0, 1}, "Arial"),
                 new Action<JObject>(data =>
                 {
-                    this.connector.SendPacket(Panel.DrawText(uuid, $"Heart rate: {heartrate}bpm",
-                        new double[] {100, 200}, 32, new[] {0, 0, 0, 1}, "Arial"), new Action<JObject>(data =>
-                    {
-                        this.connector.SendPacket(Panel.DrawText(uuid,
-                                $"Current resistance: {resistance}%",
-                                new double[] {100, 300}, 32, new[] {0, 0, 0, 1}, "Arial"),
-                            new Action<JObject>(data =>
-                            {
-                                this.connector.SendPacket(Panel.Swap(uuid),
-                                    new Action<JObject>(
-                                        data => { Console.WriteLine("Panel swap data: {0}", data); }));
-                            }));
-                    }));
+                    this.connector.SendPacket(Panel.DrawText(uuid, $"Heart rate: {heartRate}bpm",
+                            new double[] {100, 200}, 32, new[] {0, 0, 0, 1}, "Arial"),
+                        new Action<JObject>(lineOne =>
+                        {
+                            connector.SendPacket(Panel.DrawText(uuid,
+                                    $"Current resistance: {resistance}%",
+                                    new double[] {100, 300}, 32, new[] {0, 0, 0, 1}, "Arial"),
+                                new Action<JObject>(lineTwo =>
+                                {
+                                    connector.SendPacket(Panel.Swap(uuid),
+                                        new Action<JObject>(
+                                            panelSwap => { Console.WriteLine(@"Panel swap data: {0}", data); }));
+                                }));
+                        }));
                 }));
         }
 
@@ -332,7 +331,7 @@ namespace BikeApp.vr_environment
             connector.SendPacket(Node.AddModel(desiredModel,
                     new TransformComponent(2, 2, 2, 1, 0, 0, 0),
                     new ModelComponent(GetModelObjects(desiredModel), true, false, "")),
-                new Action<JObject>(data => { Console.WriteLine("Desired object has been created!"); }));
+                new Action<JObject>(data => { Console.WriteLine(@"Desired object has been created!"); }));
         }
 
         #region Getters for Objects, textures and fonts
@@ -340,9 +339,9 @@ namespace BikeApp.vr_environment
         /*
          * This method gets the models inside of the data/networkEngine/models directory.
          */
-        private string GetModelObjects(string objectname)
+        private string GetModelObjects(string objectName)
         {
-            return $"data/NetworkEngine/models/{objectname}";
+            return $"data/NetworkEngine/models/{objectName}";
         }
 
         /*
@@ -353,16 +352,12 @@ namespace BikeApp.vr_environment
             return $"data/NetworkEngine/textures/{textureName}";
         }
 
+        /*
+         * This method gets the textures inside of the data/networkEngine/textures/SkyBox directory.
+         */
         private string GetSkyBox(string skyboxTexture)
         {
             return $"data/NetworkEngine/textures/SkyBoxes/clouds/{skyboxTexture}";
-        }
-
-        private string GetFont(string font)
-        {
-            StringBuilder builder = new StringBuilder(@"..\Windows\Fonts\");
-            builder.Insert(builder.Length, font);
-            return builder.ToString();
         }
 
         #endregion
