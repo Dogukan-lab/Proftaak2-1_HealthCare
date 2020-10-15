@@ -1,14 +1,15 @@
 using System;
 using System.Threading;
 using System.Windows.Forms;
+// ReSharper disable LocalizableElement
 
 namespace DoctorApp
 {
     internal static class Program
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
+        /*
+         * The main entry point for the application.
+         */
         [STAThread]
         private static void Main()
         {
@@ -16,9 +17,9 @@ namespace DoctorApp
             while (!sc.IsConnected()) { /* Wait until connected.*/ }
             while (!sc.IsLoggedIn())
             {
-                Console.Write(@"Login:" + @"username: ");
+                Console.Write("Login" + "\nusername: ");
                 var username = Console.ReadLine();
-                Console.Write(@"password: ");
+                Console.Write("password: ");
                 var password = Console.ReadLine();
 
                 sc.LoginToServer(username, password);
@@ -42,17 +43,7 @@ namespace DoctorApp
             
             while (input != null && !input.Equals("quit"))
             {
-                Console.WriteLine(@"Commands: 
-                - quit (Quit application)
-                - chat
-                - broadcast
-                - resistance
-                - start
-                - stop
-                - record
-                - emergencyStop
-                "
-                );
+                Console.WriteLine("Commands: -quit (Quit application) -chat -broadcast -resistance -start -stop -record -emergencyStop");
                 input = Console.ReadLine();
                 string idInput;
                 switch (input)
@@ -60,37 +51,37 @@ namespace DoctorApp
                     case "quit": // Quit the application
                         return;
                     case "broadcast":
-                        Console.WriteLine(@"Message: ");
+                        Console.WriteLine("Message: ");
                         input = Console.ReadLine();
                         sc?.Broadcast(input);
                         break;
                     case "chat":
-                        Console.WriteLine(@"Id: ");
+                        Console.WriteLine("Id: ");
                         idInput = Console.ReadLine();
-                        Console.WriteLine(@"Message: ");
+                        Console.WriteLine("Message: ");
                         input = Console.ReadLine();
                         sc?.Chat(idInput, input);
                         break;
                     case "resistance": // Send resistance to the bike
-                        Console.WriteLine(@"Id: ");
+                        Console.WriteLine("Id: ");
                         idInput = Console.ReadLine();
-                        Console.WriteLine(@"Amount of resistance: ");
+                        Console.WriteLine("Amount of resistance: ");
                         input = Console.ReadLine();
                         sc?.SetNewResistance(idInput, input);
                         Console.WriteLine("");
                         break;
                     case "start":
-                        Console.WriteLine(@"Id: ");
+                        Console.WriteLine("Id: ");
                         idInput = Console.ReadLine();
                         sc?.StartSession(idInput);
                         break;
                     case "stop":
-                        Console.WriteLine(@"Id: ");
+                        Console.WriteLine("Id: ");
                         idInput = Console.ReadLine();
                         sc?.StopSession(idInput);
                         break;
                     case "record":
-                        Console.WriteLine(@"Id: ");
+                        Console.WriteLine("Id: ");
                         idInput = Console.ReadLine();
                         sc?.GetSession(idInput);
                         break;
@@ -98,7 +89,7 @@ namespace DoctorApp
                         sc?.EmergencyStopSessions();
                         break;
                     default: // Unknown command
-                        Console.WriteLine(@"Not a valid command.");
+                        Console.WriteLine("Not a valid command.");
                         break;
                 }
             }

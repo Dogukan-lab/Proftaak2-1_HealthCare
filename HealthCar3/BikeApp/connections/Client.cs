@@ -17,7 +17,7 @@ namespace BikeApp.connections
             string cInput;
             while (!serverCon.IsLoggedIn())
             {
-                Console.WriteLine(@"Select: " + @"- login\n" + @"- register\n");
+                Console.WriteLine(@"Select: " + "\n-login\n" + "- register\n");
                 cInput = Console.ReadLine();
                 string pInput;
                 switch (cInput)
