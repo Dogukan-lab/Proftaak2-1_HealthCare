@@ -30,21 +30,21 @@ namespace BikeApp
         {
             this.connector.SendPacket(Scene.Get(), new Action<JObject>(data =>
             {
-                Console.WriteLine("Scene data: {0}", data);
+                Console.WriteLine(@"Scene data: {0}", data);
             }));
         }
 
         public void ResetScene()
         {
-            Console.WriteLine("Command: RESET SCENE");
+            Console.WriteLine(@"Command: RESET SCENE");
             this.connector.SendPacket(Scene.Reset(), new Action<JObject>(data =>
             {
-                Console.WriteLine("Scene has been reset!");
+                Console.WriteLine(@"Scene has been reset!");
                 connector.SendPacket(Node.Find("GroundPlane"), new Action<JObject>(data =>
                 {
                     this.connector.SendPacket(Node.Delete(data["data"]["data"][0]["uuid"].ToString()), new Action<JObject>(data =>
                     {
-                        Console.WriteLine("Ground layer Deleted!");
+                        Console.WriteLine(@"Ground layer Deleted!");
                     }));
 
                 }));
@@ -86,7 +86,7 @@ namespace BikeApp
                 uuid = data["data"]["data"]["uuid"].ToString();
                 this.connector.SendPacket(Node.AddLayer(uuid, GetTextures("terrain/lava_mars_d.jpg"), GetTextures("terrain/jungle_stone_s.jpg"), 0, 10, 0.2), new Action<JObject>(data =>
                {
-                   Console.WriteLine("Texture Data: {0}", data);
+                   Console.WriteLine(@"Texture Data: {0}", data);
                }));
             }));
         }
@@ -102,10 +102,10 @@ namespace BikeApp
 
             this.connector.SendPacket(Route.Add(routeData), new Action<JObject>(data =>
             {
-                Console.WriteLine($"Response add: {data}");
+                Console.WriteLine($@"Response add: {data}");
                 this.connector.SendPacket(Route.ShowRoute(true), new Action<JObject>(data =>
                 {
-                    Console.WriteLine($"Response show: {data}");
+                    Console.WriteLine($@"Response show: {data}");
                 }));
                 string roadID = data["data"]["data"]["uuid"].ToString();
                 AddRoad(data["data"]["data"]["uuid"].ToString());
@@ -123,7 +123,7 @@ namespace BikeApp
         {
             this.connector.SendPacket(Road.AddRoad(uuid, GetTextures("tarmac_diffuse.png"), GetTextures("tarmac_normal.png"), GetTextures("tarmax_specular.png"), 0), new Action<JObject>(data =>
             {
-                Console.WriteLine($"Response show: {data}");
+                Console.WriteLine($@"Response show: {data}");
             }));
         }
 

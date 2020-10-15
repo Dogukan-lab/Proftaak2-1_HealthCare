@@ -1,55 +1,57 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Avans.TI.BLE;
-using BikeApp.connections;
-using BikeApp.interfaces;
 
-namespace BikeApp
+namespace BikeApp.connections.bluetooth
 {
-    class Bluetooth : ConnectorOption
+    internal class Bluetooth : ConnectorOption
     {
-        private int errorCode = 0;
-        private Decoder decoder;
-        public BLE bleBike { get; }
-        public BLE bleHeart { get; }
-        public Bluetooth(string bikeID, string heartMonitorID, IValueChangeListener listener, ServerConnection sc) : base(listener, sc)
+        private int errorCode;
+        private readonly Decoder decoder;
+        private BLE BleBike { get; }
+        private BLE BleHeart { get; }
+        public Bluetooth(string bikeId, string heartMonitorId, ServerConnection sc) : base(sc)
         {
             decoder = new Decoder();
-
-            bleBike = new BLE();
-            bleHeart = new BLE();
+            BleBike = new BLE();
+            BleHeart = new BLE();
 
             // Connect to the devices
-            ConnectToDevices(bikeID, heartMonitorID);
+            var connectionTask = ConnectToDevices(bikeId, heartMonitorId);
+            connectionTask.Start();
         }
-
-        public async Task ConnectToDevices(string bikeID, string heartMonitorID)
+        
+        private async Task ConnectToDevices(string bikeId, string heartMonitorId)
         {
-            // Connect to the bike
-            errorCode = await bleBike.OpenDevice(bikeID);
-            // Set the service
-            errorCode = await bleBike.SetService("6e40fec1-b5a3-f393-e0a9-e50e24dcca9e");
-            // Subscribe
-            bleBike.SubscriptionValueChanged += BleBike_SubscriptionValueChanged;
-            errorCode = await bleBike.SubscribeToCharacteristic("6e40fec2-b5a3-f393-e0a9-e50e24dcca9e");
+            try
+            {
+                // Connect to the bike
+                errorCode = await BleBike.OpenDevice(bikeId);
+                // Set the service
+                errorCode = await BleBike.SetService("6e40fec1-b5a3-f393-e0a9-e50e24dcca9e");
+                // Subscribe
+                BleBike.SubscriptionValueChanged += BleBike_SubscriptionValueChanged;
+                errorCode = await BleBike.SubscribeToCharacteristic("6e40fec2-b5a3-f393-e0a9-e50e24dcca9e");
 
-            // Connect to the heart monitor
-            errorCode = await bleHeart.OpenDevice(heartMonitorID);
-            // Set the service
-            errorCode = await bleHeart.SetService("HeartRate");
-            // Subscribe
-            bleHeart.SubscriptionValueChanged += BleBike_SubscriptionValueChanged;
-            errorCode = await bleHeart.SubscribeToCharacteristic("HeartRateMeasurement");
+                // Connect to the heart monitor
+                errorCode = await BleHeart.OpenDevice(heartMonitorId);
+                // Set the service
+                errorCode = await BleHeart.SetService("HeartRate");
+                // Subscribe
+                BleHeart.SubscriptionValueChanged += BleBike_SubscriptionValueChanged;
+                errorCode = await BleHeart.SubscribeToCharacteristic("HeartRateMeasurement");
+            }
+            catch (ApplicationException e)
+            {
+                throw new ApplicationException(e.ToString() + errorCode);
+            }
         }
 
         private void BleBike_SubscriptionValueChanged(object sender, BLESubscriptionValueChangedEventArgs e)
         {
             if(e.Data[0] == 0x00) // if first byte 0x00 we got the heart rate package
             {
-                SetNewHeartRate(decoder.DecodeHeartMonitor(e));
+                SetNewHeartRate(Decoder.DecodeHeartMonitor(e));
             }
             else if (e.Data[4] == 0x10) // if fifth byte 0x10 we got the bike package
             {
@@ -57,20 +59,20 @@ namespace BikeApp
             }
         }
 
-        public async override void WriteResistance(float resistance)
+        public override async void WriteResistance(float resistance)
         {
-            byte byteResistance = Convert.ToByte(Math.Clamp(resistance * 2, 0, 200));
+            var byteResistance = Convert.ToByte(Math.Clamp(resistance * 2, 0, 200));
             base.WriteResistance(byteResistance / 2f);
             byte[] data = { 0x4A, 0x09, 0x4E, 0x05, 0x30, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, byteResistance, 0x00};
             // Calculate our sumbyte
-            byte sumByte = data[0];
-            for(int i = 1; i < data.Length-1; i++)
+            var sumByte = data[0];
+            for(var i = 1; i < data.Length-1; i++)
             {
                 sumByte ^= data[i];
             }
-            data[data.Length - 1] = sumByte;
+            data[^1] = sumByte;
             // Write the bytes
-            await bleBike.WriteCharacteristic("6e40fec3-b5a3-f393-e0a9-e50e24dcca9e", data);
+            await BleBike.WriteCharacteristic("6e40fec3-b5a3-f393-e0a9-e50e24dcca9e", data);
         }
     }
 }

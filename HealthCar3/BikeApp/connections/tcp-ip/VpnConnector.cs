@@ -4,7 +4,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using BikeApp.command;
-using BikeApp.command.scene;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -13,21 +12,18 @@ namespace BikeApp.connections
     /**
      * Connects to the remote server and manages this connection
      */
-    class VpnConnector
+    internal class VpnConnector
     {
         private dynamic jsonData;
-        private JsonSerializerSettings serializerSettings;
+        private readonly JsonSerializerSettings serializerSettings;
         private TcpClient client;
-        private MessageParser parser;
-        private NetworkStream stream = default;
-        private static readonly string address = "145.48.6.10";
-        private static readonly int port = 6666;
+        private readonly MessageParser parser;
+        private NetworkStream stream;
+        private const string Address = "145.48.6.10";
+        private const int Port = 6666;
         private string responseId;
         private int timeoutCounter;
-        private static readonly int timeoutMax = 3;
-
-        public NetworkStream Stream { get; private set; }
-        public bool IsConnected() { return client.Connected; }
+        private const int TimeoutMax = 3;
         public VpnConnector(JsonSerializerSettings jsonSerializerSettings)
         {
             serializerSettings = jsonSerializerSettings;
@@ -42,27 +38,24 @@ namespace BikeApp.connections
          */
         private void Connect()
         {
+            var listenThread = new Thread(Listen);
             try
             {
                 client = new TcpClient();
-                client.Connect(address, port); //attempts to connect to the VPN server.
-                if (client.Connected)
-                {
-                    Send(new { id = "session/list" });
-                    Thread listenThread = new Thread(new ThreadStart(Listen));
-                    listenThread.Start();
-
-                }
+                client.Connect(Address, Port); //attempts to connect to the VPN server.
+                if (!client.Connected) return;
+                Send(new { id = "session/list" });
+                listenThread.Start();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message); //Writes message on failure.
                 timeoutCounter++;
-                if (timeoutCounter < timeoutMax) //Retries the connection up to the given maximum.
+                if (timeoutCounter < TimeoutMax) //Retries the connection up to the given maximum.
                 {
                     if (client.Connected)
                     {
-                        Console.WriteLine("Connection restored. Sending message.");
+                        Console.WriteLine(@"Connection restored. Sending message.");
                     }
                     else
                     {
@@ -71,11 +64,10 @@ namespace BikeApp.connections
                 }
                 else
                 {
-                    Console.WriteLine("Connection failed, check connection settings.");
+                    Console.WriteLine(@"Connection failed, check connection settings.");
                     Disconnect();
                 }
             }
-
         }
 
         /**
@@ -97,7 +89,7 @@ namespace BikeApp.connections
                 Console.WriteLine(ex.Message);
                 if (!client.Connected)
                 {
-                    Console.WriteLine("Connection error. Attempting to reconnect."); //if not connected will attempt to reconnect once before failing.
+                    Console.WriteLine(@"Connection error. Attempting to reconnect."); //if not connected will attempt to reconnect once before failing.
                     Connect();
                 }
             }
@@ -107,10 +99,10 @@ namespace BikeApp.connections
         /**
          * Read count amount of bytes
          */
-        byte[] readTotalBytes(int count)
+        private byte[] ReadTotalBytes(int count)
         {
-            byte[] buffer = new byte[count];
-            int received = 0;
+            var buffer = new byte[count];
+            var received = 0;
             while (received < count)
                 received += stream.Read(buffer, received, count - received);
             return buffer;
@@ -119,35 +111,31 @@ namespace BikeApp.connections
         /**
          * Listens for a response from the server.
          */
-        public void Listen()
+        private void Listen()
         {
-            byte[] lengthBuffer = readTotalBytes(4); //first four bytes indicate length.
-
-            int bytesize = BitConverter.ToInt32(lengthBuffer); //converts the length to a readable number.
-
-            byte[] bytes = readTotalBytes(bytesize); //read the all the bytes
-            try
+            while (true)
             {
-                jsonData = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(bytes), serializerSettings); //converts the response bytes to string data.
-                //Console.WriteLine(jsonData);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.StackTrace + "\nMake sure you connect to the network application.");
-            }
-            finally
-            {
-                // if init command, no callback
-                if (responseId == "session/list" || responseId == "tunnel/create")
+                var lengthBuffer = ReadTotalBytes(4); //first four bytes indicate length.
+                var byteSize = BitConverter.ToInt32(lengthBuffer); //converts the length to a readable number.
+                var bytes = ReadTotalBytes(byteSize); //read the all the bytes
+                try
                 {
-                    parser.Parse(responseId, jsonData);//sends the response to the parser.
+                    jsonData = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(bytes), serializerSettings); //converts the response bytes to string data.
                 }
-                else
-                    HandleCallBack(jsonData);
-
-                //Console.WriteLine(responseId);
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.StackTrace + @"Make sure you connect to the network application.");
+                }
+                finally
+                {
+                    // if init command, no callback
+                    if (responseId == "session/list" || responseId == "tunnel/create")
+                    {
+                        parser.Parse(responseId, jsonData); //sends the response to the parser.
+                    }
+                    else HandleCallBack(jsonData);
+                }
             }
-            Listen();
         }
 
         /**
@@ -156,33 +144,22 @@ namespace BikeApp.connections
         private void Disconnect()
         {
             client.Dispose();
-            if (stream != null)
-                stream.Close();
+            stream?.Close();
         }
 
         // Dictionary to keep track of the callbacks
-        Dictionary<int, Action<JObject>> callbacks = new Dictionary<int, Action<JObject>>();
-        int currentSerial = 0;
-        /**
-         * Wrap the data in the tunnel and set the destination and serial.
-         * Syntax for SendPacket
-         * SendPacket("scene/node/add", dynamic, (data) => {
-         *     Console.WriteLine("Model got added");
-         * });
-         */
+        private readonly Dictionary<int, Action<JObject>> callbacks = new Dictionary<int, Action<JObject>>();
+        private int currentSerial;
         public void SendPacket(dynamic data, Action<JObject> callback)
         {
-
             dynamic packet = new
             {
                 id = "tunnel/send",
                 data = new
                 {
-                    dest = this.parser.GetDestination(),
-                    data = data
+                    dest = parser.GetDestination(), data
                 }
             };
-
             // Send the whole packet
             Send(packet);
             // Add serial to callbacks
@@ -197,25 +174,17 @@ namespace BikeApp.connections
          */
         private void HandleCallBack(dynamic data)
         {
-            JObject packetData = data as JObject;
+            var packetData = data as JObject;
 
-            if (packetData["data"].ToObject<JObject>()["data"].ToObject<JObject>()["id"].ToObject<string>() == "callback")
+            if (packetData?["data"]?.ToObject<JObject>()?["data"]?.ToObject<JObject>()?["id"]?.ToObject<string>() == "callback")
             {
-                //Console.WriteLine("Reached here!!");
-                HandleButton(packetData);
                 return;
             }
 
             // Find the matching serial number 
-            int receivedSerial = packetData["data"].ToObject<JObject>()["data"].ToObject<JObject>()["serial"].ToObject<int>();
+            var receivedSerial = packetData?["data"]?.ToObject<JObject>()?["data"]?.ToObject<JObject>()?["serial"]?.ToObject<int>();
             // Execute the corresponding callback
-            callbacks[receivedSerial].Invoke(packetData["data"] as JObject);
-        }
-
-        private void HandleButton(JObject data)
-        {
-            string button = data["data"].ToObject<JObject>()["data"].ToObject<JObject>()["data"].ToObject<JObject>()["button"].ToObject<string>();
-            bool on = data["data"].ToObject<JObject>()["data"].ToObject<JObject>()["data"].ToObject<JObject>()["state"].ToObject<string>() == "on" ? true : false;
+            if (receivedSerial != null) callbacks[(int) receivedSerial].Invoke(packetData["data"] as JObject);
         }
     }
 }
