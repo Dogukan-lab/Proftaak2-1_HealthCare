@@ -1,38 +1,32 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
 namespace DoctorApp
 {
-    static class Program
+    internal static class Program
     {
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        private static void Main()
         {
-            ServerConnection sc = new ServerConnection();
-
-            while (!sc.isConnected()) { /* Wait until connected.*/ }
-
-
-            while (!sc.isLoggedIn())
+            var sc = new ServerConnection();
+            while (!sc.IsConnected()) { /* Wait until connected.*/ }
+            while (!sc.IsLoggedIn())
             {
-                Console.Write("Login:\n" +
-                    "username: ");
-                string username = Console.ReadLine();
-                Console.Write("password: ");
-                string password = Console.ReadLine();
+                Console.Write(@"Login:" + @"username: ");
+                var username = Console.ReadLine();
+                Console.Write(@"password: ");
+                var password = Console.ReadLine();
 
                 sc.LoginToServer(username, password);
                 Thread.Sleep(2000);
             }
 
             // Start the command thread
-            Thread consoleThread = new Thread(new ParameterizedThreadStart(ReadInput));
+            var consoleThread = new Thread(ReadInput);
             consoleThread.Start(sc);
 
             Application.EnableVisualStyles();
@@ -40,72 +34,71 @@ namespace DoctorApp
             Application.Run(new SimDocLogin());
         }
 
-        public static void ReadInput(Object serverConnection)
+        private static void ReadInput(Object serverConnection)
         {
             var sc = serverConnection as ServerConnection;
 
-            string input = "";
-            string idInput = "";
-
-            while (!input.Equals("quit"))
+            var input = "";
+            
+            while (input != null && !input.Equals("quit"))
             {
-                Console.WriteLine("Commands: \n" +
-                "- quit (Quit application)\n" +
-                "- chat\n" +
-                "- broadcast\n" +
-                "- resistance\n" +
-                "- start\n" +
-                "- stop\n" +
-                "- record\n" +
-                "- emergencystop\n"
-                //"- res (Send resistance)"
+                Console.WriteLine(@"Commands: 
+                - quit (Quit application)
+                - chat
+                - broadcast
+                - resistance
+                - start
+                - stop
+                - record
+                - emergencyStop
+                "
                 );
-
                 input = Console.ReadLine();
+                string idInput;
                 switch (input)
                 {
                     case "quit": // Quit the application
                         return;
                     case "broadcast":
-                        Console.WriteLine("Message: ");
+                        Console.WriteLine(@"Message: ");
                         input = Console.ReadLine();
-                        sc.Broadcast(input);
+                        sc?.Broadcast(input);
                         break;
                     case "chat":
-                        Console.WriteLine("Id: ");
+                        Console.WriteLine(@"Id: ");
                         idInput = Console.ReadLine();
-                        Console.WriteLine("Message: ");
+                        Console.WriteLine(@"Message: ");
                         input = Console.ReadLine();
-                        sc.Chat(idInput, input);
+                        sc?.Chat(idInput, input);
                         break;
                     case "resistance": // Send resistance to the bike
-                        Console.WriteLine("Id: ");
+                        Console.WriteLine(@"Id: ");
                         idInput = Console.ReadLine();
-                        Console.WriteLine("Amount of resistance: ");
+                        Console.WriteLine(@"Amount of resistance: ");
                         input = Console.ReadLine();
-                        sc.SetNewResistance(idInput, input);
+                        sc?.SetNewResistance(idInput, input);
                         Console.WriteLine("");
                         break;
                     case "start":
-                        Console.WriteLine("Id: ");
+                        Console.WriteLine(@"Id: ");
                         idInput = Console.ReadLine();
-                        sc.StartSession(idInput);
+                        sc?.StartSession(idInput);
                         break;
                     case "stop":
-                        Console.WriteLine("Id: ");
+                        Console.WriteLine(@"Id: ");
                         idInput = Console.ReadLine();
-                        sc.StopSession(idInput);
+                        sc?.StopSession(idInput);
                         break;
                     case "record":
-                        Console.WriteLine("Id: ");
+                        Console.WriteLine(@"Id: ");
                         idInput = Console.ReadLine();
-                        sc.GetSession(idInput);
+                        sc?.GetSession(idInput);
                         break;
-                    case "emergencystop":
-                        sc.EmergencyStopSessions();
+                    case "emergencyStop":
+                        sc?.EmergencyStopSessions();
                         break;
                     default: // Unknown command
-                        Console.WriteLine("Not a valid command.");
+                        Console.WriteLine(@"Not a valid command.");
                         break;
                 }
             }
