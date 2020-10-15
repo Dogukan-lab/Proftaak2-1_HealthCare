@@ -77,7 +77,7 @@ namespace BikeApp.connections
                 }
                 else
                 {
-                    string receivedText = Encoding.ASCII.GetString(buffer, 0, receivedBytes);
+                    var receivedText = Encoding.ASCII.GetString(buffer, 0, receivedBytes);
                     receivedData = JsonConvert.DeserializeObject(receivedText);
                 }
                 HandleData(receivedData);
@@ -91,7 +91,6 @@ namespace BikeApp.connections
 
         private void HandleData(dynamic data)
         {
-            //JObject jData = data as JObject;
             string tag = data.tag;
             switch (tag)
             {
