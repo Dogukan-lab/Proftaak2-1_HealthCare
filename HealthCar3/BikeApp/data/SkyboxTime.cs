@@ -2,6 +2,6 @@
 {
     public enum SkyBoxTime
     {
-        MORNING, AFTERNOON, EVENING, NIGHT
+        Morning, Afternoon, Evening, Night
     }
 }
