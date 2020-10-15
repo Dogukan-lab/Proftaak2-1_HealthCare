@@ -1,33 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BikeApp.command.scene
+﻿namespace BikeApp.command.scene
 {
-    static class Skybox
+    internal static class Skybox
     {
-        static string prefix = "scene/skybox/";
+        /*
+         * A prefix to not repeat the same string over and over.
+         */
+        private const string Prefix = "scene/skybox/";
 
-        /**
+        /*
          * This method sets the time inside of the vr environment
          */
         public static dynamic SetTime(int time)
         {
-            dynamic packetData = new
-            {
-                time = time
-            };
-            return CommandUtils.Wrap(packetData, prefix + "settime");
+            dynamic packetData = new { time = time };
+            return CommandUtils.Wrap(packetData, Prefix + "settime");
         }
 
-        /**
+        /*
          * This method updates or changes the skybox. For instance update the time to change the skybox to night.
          */
-        public static dynamic Update(string type, string xPos, string xNeg, string yPos, string yNeg, string zPos, string zNeg )
+        public static dynamic Update(string skyboxType, string xPos, string xNeg, string yPos, string yNeg, string zPos, string zNeg)
         {
             dynamic packetData = new
             {
-                type = type,
+                type = skyboxType,
                 files = new
                 {
                     xpos = xPos,
@@ -38,8 +34,7 @@ namespace BikeApp.command.scene
                     zneg = zNeg
                 }
             };
-            return CommandUtils.Wrap(packetData, prefix + "update");
+            return CommandUtils.Wrap(packetData, Prefix + "update");
         }
-
     }
 }

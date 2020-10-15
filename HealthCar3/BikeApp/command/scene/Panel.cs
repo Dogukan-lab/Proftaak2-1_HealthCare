@@ -1,101 +1,91 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BikeApp.command.scene
+﻿namespace BikeApp.command.scene
 {
-    /**
+    /*
      * This class is used to create a panel
-     * TODO Utils class for the wrapper.
+     * TODO comeback once you have tried the new structure
      */ 
-    static class Panel
+    internal static class Panel
     {
-        static string prefix = "scene/panel/";
-
-        /**
-         * Clears the desired panel
+        /*
+         * A prefix to not repeat the same string over and over.
          */
-        public static dynamic Clear(string id)
+        private const string Prefix = "scene/panel/";
+
+        /*
+         * Clears the current panel
+         */
+        public static dynamic Clear(string panelUuid)
         {
-            dynamic packetData = new
-            {
-                id = id
-            };
-            return CommandUtils.Wrap(packetData, prefix + "clear");                          
+            dynamic packetData = new { id = panelUuid };
+            return CommandUtils.Wrap(packetData, Prefix + "clear");                          
         }
 
-        /**
-         * This method swaps the buffers for the desired panel
+        /*
+         * This method swaps the buffers for the current panel
          */
-        public static dynamic Swap(string id)
+        public static dynamic Swap(string panelUuid)
         {
-            dynamic packetData = new
-            {
-                id = id
-            };
-            return CommandUtils.Wrap(packetData, prefix + "swap");
+            dynamic packetData = new { id = panelUuid };
+            return CommandUtils.Wrap(packetData, Prefix + "swap");
         }
 
-        /**
+        /*
          * This method draws multiple lines on the the backbuffer for the desired panel
          */
-        public static dynamic DrawLines(string id, int width, int[,] lines)
+        public static dynamic DrawLines(string panelUuid, int width, int[,] lines)
         {
             dynamic packetData = new
             {
-                id = id,
-                widht = width,
+                id = panelUuid,
+                width = width,
                 lines = lines
             };
-            return CommandUtils.Wrap(packetData, prefix + "drawlines");
+            return CommandUtils.Wrap(packetData, Prefix + "drawlines");
         }
 
-        /**
+        /*
          * This method changes the clear color on the desired panel
          */
-        public static dynamic SetClearColor(string id, int[] color)
+        public static dynamic SetClearColor(string panelUuid, int[] color)
         {
             dynamic packetData = new
             {
-                id = id,
+                id = panelUuid,
                 color = color
             };
-            return CommandUtils.Wrap(packetData, prefix + "setclearcolor");
+            return CommandUtils.Wrap(packetData, Prefix + "setclearcolor");
         }
 
-        /**
-         * This method draws a text on the desired panel
+        /*
+         * This method draws a text on the current panel
          */
-        public static dynamic DrawText(string id, string text, double[] position, double size, int[] color, string font)
+        public static dynamic DrawText(string panelUuid, string text, double[] position, double size, int[] color, string font)
         {
             dynamic packetData = new
             {
-                id = id,
+                id = panelUuid,
                 text = text,
                 position = position,
                 size = size,
                 color = color,
                 font = font
             };
-            return CommandUtils.Wrap(packetData, prefix + "drawtext");
+            return CommandUtils.Wrap(packetData, Prefix + "drawtext");
         }
 
-        /**
-         * This method draws an image on the desired panel
+        /*
+         * This method draws an image on the current panel
          */
-        public static dynamic Image(string id, string image, double[] position, double[] size)
+        public static dynamic Image(string panelUuid, string desiredImage, double[] position, double[] size)
         {
             dynamic packetData = new
             {
-                id = id,
-                image = image,
+                id = panelUuid,
+                image = desiredImage,
                 position = position,
                 size = size
-
             };
-            return CommandUtils.Wrap(packetData, prefix + "image");
+            return CommandUtils.Wrap(packetData, Prefix + "image");
         }
-
-        
     }
 }
