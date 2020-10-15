@@ -73,7 +73,7 @@ namespace BikeApp.connections
 
                 if (keyExchanged)
                 {
-                    receivedData = JsonConvert.DeserializeObject(decryptor.DecryptAES(buffer, 0, receivedBytes));
+                    receivedData = JsonConvert.DeserializeObject(decryptor.DecryptAes(buffer, 0, receivedBytes));
                 }
                 else
                 {
@@ -95,8 +95,8 @@ namespace BikeApp.connections
             switch (tag)
             {
                 case "encrypt/key/success":
-                    byte[] key = decryptor.DecryptRSA(data.data.key.ToObject<byte[]>());
-                    byte[] iv = decryptor.DecryptRSA(data.data.iv.ToObject<byte[]>());
+                    byte[] key = decryptor.DecryptRsa(data.data.key.ToObject<byte[]>());
+                    byte[] iv = decryptor.DecryptRsa(data.data.iv.ToObject<byte[]>());
                     
                     encryptor.AesKey = key;
                     encryptor.AesIv = iv;

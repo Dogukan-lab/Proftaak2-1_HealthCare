@@ -1,5 +1,4 @@
-﻿﻿using System;
-using System.ComponentModel;
+﻿using System;
 using System.IO;
 using System.Security.Cryptography;
 
@@ -7,23 +6,15 @@ namespace Encryption.Shared
 {
     public class Encryptor
     {
-        private byte[] _aesKey;
-        private byte[] _aesIv;
-        
-        /**
-         * Encrypts data using RSA and AES.
-         */
-        public Encryptor()
-        {
-            
-        }
+        private byte[] aesKey;
+        private byte[] aesIv;
 
         /*
          * setter property for EAS key.
          */
         public byte[] AesKey
         {
-            set => _aesKey = value;
+            set => aesKey = value;
         }
 
         /*
@@ -31,7 +22,7 @@ namespace Encryption.Shared
          */
         public byte[] AesIv
         {
-            set => _aesIv = value;
+            set => aesIv = value;
         }
 
         /**
@@ -44,7 +35,7 @@ namespace Encryption.Shared
 
             //Create a new instance of RSACryptoServiceProvider to generate
             //public and private key data.
-            using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
+            using (var rsa = new RSACryptoServiceProvider())
             {
                 privateKey = rsa.ExportParameters(true); //true marks a private key.
                 pubKey = rsa.ExportParameters(false); //false marks a public key.
@@ -61,37 +52,37 @@ namespace Encryption.Shared
             // Create a new instance of the Rijndael
             // class.  This generates a new key and initialization
             // vector (IV).
-            using (Rijndael rijndael = Rijndael.Create())
+            using (var rijndael = Rijndael.Create())
             {
-                _aesKey = rijndael.Key;
-                _aesIv = rijndael.IV;
+                aesKey = rijndael.Key;
+                aesIv = rijndael.IV;
             }
             
-            return (_aesKey, _aesIv);
+            return (aesKey, aesIv);
         }
 
         /**
          * Encrypts and AES key using the RSA public key.
          */
-        public (byte[] key, byte[] iv) EncryptRsa(byte[] key, byte[] iv, RSAParameters pubkey)
+        public (byte[] key, byte[] iv) EncryptRsa(byte[] key, byte[] iv, RSAParameters pubKey)
         {
             try
             {
                 byte[] encryptedKey;
                 byte[] encryptedIv;
                 //Create a new instance of RSACryptoServiceProvider.
-                using (RSACryptoServiceProvider RSA = new RSACryptoServiceProvider())
+                using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
                 {
 
                     //Import the RSA Key information. This only needs
                     //to include the public key information.
-                    RSA.ImportParameters(pubkey);
+                    rsa.ImportParameters(pubKey);
 
                     //Encrypt the passed byte array and specify OAEP padding.  
                     //OAEP padding is only available on Microsoft Windows XP or
                     //later.  
-                    encryptedKey = RSA.Encrypt(key, false);
-                    encryptedIv = RSA.Encrypt(iv, false);
+                    encryptedKey = rsa.Encrypt(key, false);
+                    encryptedIv = rsa.Encrypt(iv, false);
                 }
                 return (encryptedKey, encryptedIv);
             }
@@ -111,37 +102,31 @@ namespace Encryption.Shared
         {
             // Check arguments.
             if (data == null || data.Length <= 0)
-                throw new ArgumentNullException("data");
-            if (_aesKey == null || _aesKey.Length <= 0)
-                throw new ArgumentNullException("Key");
-            if (_aesIv == null || _aesIv.Length <= 0)
-                throw new ArgumentNullException("IV");
-            byte[] encrypted;
+                throw new ArgumentNullException(nameof(data));
+            if (aesKey == null || aesKey.Length <= 0)
+                throw new ArgumentNullException(nameof(data));
+            if (aesIv == null || aesIv.Length <= 0)
+                throw new ArgumentNullException(nameof(data));
             // Create an Aes object
             // with the specified key and IV.
-            using (Aes aesAlg = Aes.Create())
+            using var aesAlg = Aes.Create();
+            if (aesAlg == null) return null;
+            aesAlg.Key = aesKey;
+            aesAlg.IV = aesIv;
+
+            // Create an encryptor to perform the stream transform.
+            var encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+
+            // Create the streams used for encryption.
+            using var msEncrypt = new MemoryStream();
+            using var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write);
+            using (var swEncrypt = new StreamWriter(csEncrypt))
             {
-                aesAlg.Key = _aesKey;
-                aesAlg.IV = _aesIv;
-
-                // Create an encryptor to perform the stream transform.
-                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
-
-                // Create the streams used for encryption.
-                using (MemoryStream msEncrypt = new MemoryStream())
-                {
-                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                    {
-                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
-                        {
-
-                            //Write all data to the stream.
-                            swEncrypt.Write(data);
-                        }
-                        encrypted = msEncrypt.ToArray();
-                    }
-                }
+                //Write all data to the stream.
+                swEncrypt.Write(data);
             }
+
+            var encrypted = msEncrypt.ToArray();
 
             // Return the encrypted bytes from the memory stream.
             return encrypted;
