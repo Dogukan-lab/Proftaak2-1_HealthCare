@@ -7,8 +7,8 @@ namespace BikeApp
     {
         private static void Main()
         {
-            Client.Initialize();
-            // var vpnConnector = new VpnConnector(new JsonSerializerSettings());
+            // Client.Initialize();
+            var vpnConnector = new VpnConnector(new JsonSerializerSettings());
         }
     }
 }

@@ -59,7 +59,7 @@
         /*
          * This method draws a text on the current panel
          */
-        public static dynamic DrawText(string panelUuid, string text, double[] position, double size, int[] color, string font)
+        public static dynamic DrawText(string panelUuid, string text, int[] position, double size, int[] color, string font)
         {
             dynamic packetData = new
             {
