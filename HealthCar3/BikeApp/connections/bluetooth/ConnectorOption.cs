@@ -14,7 +14,7 @@ namespace BikeApp.connections.bluetooth
 
         protected void SetNewSpeed(float newSpeed)
         {
-            if (newSpeed == 0xFFFF) //todo, warning?
+            if (newSpeed == 0xFFFF)
                 return;
 
             speed = newSpeed;
