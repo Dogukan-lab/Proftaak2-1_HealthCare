@@ -57,7 +57,6 @@ namespace BikeApp.connections
 
         /**
          * Parses the data received based on the given response id.
-         * TODO first switch-case needs to be refactored. 
          */
         public void Parse(string id, dynamic jsonData)
         {

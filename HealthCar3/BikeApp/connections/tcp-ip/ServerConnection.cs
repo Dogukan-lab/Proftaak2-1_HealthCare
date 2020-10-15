@@ -31,7 +31,6 @@ namespace BikeApp.connections
         public ServerConnection()
         {
             clientConnection = new TcpClient();
-
             encryptor = new Encryptor();
             decryptor = new Decryptor();
             
