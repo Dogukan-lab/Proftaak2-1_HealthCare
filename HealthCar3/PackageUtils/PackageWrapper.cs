@@ -1,19 +1,16 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Text;
 using Encryption.Shared;
 
 namespace PackageUtils
 {
-    class PackageWrapper
+    internal static class PackageWrapper
     {
         private static dynamic WrapWithTag(string tag, dynamic data)
         {
             dynamic command = new
             {
-                tag = tag,
-                data = data
+                tag, data
             };
             return command;
         }

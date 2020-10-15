@@ -54,7 +54,7 @@ namespace Server
                 
                 if (keyExchanged)
                 {
-                    receivedData = JsonConvert.DeserializeObject(decryptor.DecryptAES(buffer, 0, receivedBytes));
+                    receivedData = JsonConvert.DeserializeObject(decryptor.DecryptAes(buffer, 0, receivedBytes));
                 }
                 else
                 {
@@ -165,7 +165,7 @@ namespace Server
                     break;
                 case "client/register":
                     string name = data.data.name;                   
-                    if (CredentialVarificator.VerifyUsername(name))
+                    if (CredentialVerificator.VerifyUsername(name))
                     {
                         id = Program.GenerateId(name);
                         this.name = name;
