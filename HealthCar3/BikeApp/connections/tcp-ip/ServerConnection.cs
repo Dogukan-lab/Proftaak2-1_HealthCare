@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
 using System.Net.Sockets;
 using System.Security.Cryptography;
-using Newtonsoft.Json;
-using System.Threading;
-using Newtonsoft.Json.Linq;
-using PackageUtils;
-using System.IO;
+using System.Text;
 using Encryption.Shared;
+using Newtonsoft.Json;
+using PackageUtils;
 
-namespace BikeApp
+namespace BikeApp.connections
 {
     class ServerConnection
     {

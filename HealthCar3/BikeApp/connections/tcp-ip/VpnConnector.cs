@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Net.Sockets;
-using System.Runtime.CompilerServices;
 using System.Text;
-using BikeApp.data;
+using System.Threading;
+using BikeApp.command;
+using BikeApp.command.scene;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Threading;
-using System.Linq;
-using BikeApp.command.scene;
 
-namespace BikeApp
+namespace BikeApp.connections
 {
     /**
      * Connects to the remote server and manages this connection

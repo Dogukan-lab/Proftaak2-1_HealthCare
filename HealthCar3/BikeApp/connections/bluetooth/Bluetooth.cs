@@ -4,6 +4,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Avans.TI.BLE;
+using BikeApp.connections;
+using BikeApp.interfaces;
 
 namespace BikeApp
 {

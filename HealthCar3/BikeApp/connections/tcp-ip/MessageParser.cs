@@ -1,8 +1,6 @@
-﻿using BikeApp.data;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 
-namespace BikeApp
+namespace BikeApp.connections
 {
     /*
      *This class will parse the needed assets to be sent from the connector to the application
