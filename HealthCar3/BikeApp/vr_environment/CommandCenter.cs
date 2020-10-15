@@ -229,9 +229,8 @@ namespace BikeApp.vr_environment
         {
             connector.SendPacket(Route.Add(routeData), new Action<JObject>(data =>
             {
-                Console.WriteLine($"Response add: {data}");
                 connector.SendPacket(Route.ShowRoute(true),
-                    new Action<JObject>(data => { Console.WriteLine("Route skeleton had been made"); }));
+                    new Action<JObject>(data => { Console.WriteLine(@"Route skeleton had been made"); }));
                 string roadID = data["data"]["data"]["uuid"].ToString();
                 AddRoad(roadID);
 

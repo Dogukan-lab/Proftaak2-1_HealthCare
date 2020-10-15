@@ -18,7 +18,7 @@ namespace Server
         public float maxResistance { get; set; }
         public float lastResistance { get; set; }
 
-        #region // Helper variables
+        #region Helper variables
         private int sumHeartRate = 0;
         private float sumSpeed = 0;
         private int countHeartRate = 0;
@@ -42,7 +42,7 @@ namespace Server
         /*
          * Calculates new average and checks for new max value for heart rate.
          */
-        public void newHeartRate(int newHeartRate)
+        public void NewHeartRate(int newHeartRate)
         {
             countHeartRate++;
             sumHeartRate += newHeartRate;
@@ -56,7 +56,7 @@ namespace Server
         /*
          * Updates the last resistance and checks if its the max resistance this session.
          */
-        public void newResistance(float newResistance)
+        public void NewResistance(float newResistance)
         {
             lastResistance = newResistance;
             if (lastResistance > maxResistance)

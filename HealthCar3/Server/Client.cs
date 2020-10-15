@@ -12,7 +12,7 @@ using PackageUtils;
 namespace Server
 {
 
-    class Client
+    internal class Client
     {
         private TcpClient tcpClient;
         private NetworkStream stream;
@@ -36,15 +36,14 @@ namespace Server
         public Client(TcpClient tcpClient)
         {
             this.tcpClient = tcpClient;
-            this.encryptor = new Encryptor();
-            this.decryptor = new Decryptor();
-
-            this.stream = this.tcpClient.GetStream();
+            encryptor = new Encryptor();
+            decryptor = new Decryptor();
+            stream = this.tcpClient.GetStream();
             
             stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
         /*
-         * Method that deserilises the JsonData
+         * Method that deserializes the JsonData
          */
         private void OnRead(IAsyncResult ar)
         {
@@ -59,11 +58,10 @@ namespace Server
                 }
                 else
                 {
-                    string receivedText = System.Text.Encoding.ASCII.GetString(buffer, 0, receivedBytes);
+                    var receivedText = Encoding.ASCII.GetString(buffer, 0, receivedBytes);
                     receivedData = JsonConvert.DeserializeObject(receivedText);
                 }
                 HandleData(receivedData);
-                //Console.WriteLine(receivedText);
             }
             catch (IOException)
             {
@@ -71,10 +69,8 @@ namespace Server
                 return;
             }
 
-            //TODO 
-            //Have to save data from client on server..
-
-            stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
+           //Have to save data from client on server.
+           stream.BeginRead(buffer, 0, buffer.Length, new AsyncCallback(OnRead), null);
         }
 
         /*
@@ -215,7 +211,7 @@ namespace Server
                     if (!sessionActive) { return; } // if we are not currently in a session do not save the data.
                     //Console.WriteLine($"{id}: {data.data.heartRate} BPM");
                     // Update the session with the new received heart rate.
-                    sessionData.newHeartRate((int)data.data.heartRate);
+                    sessionData.NewHeartRate((int)data.data.heartRate);
                     // Send data to doctor client
                     Program.SendMessageToSpecificClient("0000", PackageWrapper.SerializeData("client/update/heartRate", new { clientId = id, heartRate = data.data.heartRate }, targetEncryptor));
                     break;
@@ -243,7 +239,7 @@ namespace Server
                         {
                             bytes = PackageWrapper.SerializeData("session/resistance/success", new { message = "Resistance has been updated." }, encryptor);
                             if (Program.ActiveSession((string)data.data.clientId, out targetClient)) {
-                                targetClient.sessionData.newResistance(float.Parse(resistance));
+                                targetClient.sessionData.NewResistance(float.Parse(resistance));
                                 targetClient = null;
                             }
                         }
