@@ -1,4 +1,5 @@
 ﻿using System;
+using BikeApp.vr_environment;
 
 namespace BikeApp.connections
 {
@@ -78,9 +79,7 @@ namespace BikeApp.connections
                     if (destination != null)
                     {
                         // Scene is now fully initialized and can now execute commands 
-                        command.ResetScene();
-                        command.CreateTerrain();
-                        command.CreateRoute();
+                        command.PresetOne();
                     }
                     break;
             }
