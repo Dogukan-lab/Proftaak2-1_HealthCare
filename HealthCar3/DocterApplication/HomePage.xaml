@@ -8,7 +8,7 @@
         Title="HomePage" Height="800" Width="1200"
          AllowsTransparency="True" Background="White"
         WindowStyle="None" ResizeMode="NoResize" 
-        MouseDown="Window_MouseDown">
+        MouseDown="Window_MouseDown" Icon="/Images/PhotoDocter.png">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="29*"/>
@@ -60,7 +60,7 @@
             </Grid.Background>
 
             <Grid Background="#FFFE9168">
-                <Image Source="/PhotoDocter.png" 
+                <Image Source="/Images/PhotoDocter.png" 
                        Width="80" 
                        HorizontalAlignment="Center"/>
 
@@ -68,35 +68,23 @@
 
             <StackPanel Grid.Row="1">
                 <Button 
+                    
                     Background="Red"
-                    Margin="0,40,0,0">
+                    Margin="10,40,10,10"
+                    Style="{StaticResource HomeButton}">
                     <Grid Width="150">
                         <IconPacks:PackIconMaterial Kind="Home"
-                                                    HorizontalAlignment="Right"
+                                                    Margin="10,0,0,0"
+                                                    HorizontalAlignment="Left"
                                                     VerticalAlignment="Center"
                                                     />
                         <TextBlock Text="HOME"
                                    FontSize="22"
                                    FontWeight="Bold"
-                                   HorizontalAlignment="Center"/>
+                                   HorizontalAlignment="Center"
+                                   Margin="4"/>
                     </Grid>
                 </Button>
-               
-                <Button 
-                    Background="Red"
-                    Margin="0,40,0,0">
-                    <Grid Width="150">
-                        <IconPacks:PackIconMaterial Kind="Home"
-                                                    HorizontalAlignment="Right"
-                                                    VerticalAlignment="Center"
-                                                    />
-                        <TextBlock Text="HOME"
-                                   FontSize="22"
-                                   FontWeight="Bold"
-                                   HorizontalAlignment="Center"/>
-                    </Grid>
-                </Button>
-                
             </StackPanel>
             
         </Grid>

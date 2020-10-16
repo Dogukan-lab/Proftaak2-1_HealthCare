@@ -8,7 +8,7 @@
         Title="Login" Height="500" Width="350"
         AllowsTransparency="True" Background="AliceBlue"
         WindowStyle="None" ResizeMode="NoResize" 
-        MouseDown="Window_MouseDown">
+        MouseDown="Window_MouseDown" Icon="/Images/PhotoDocter.png">
 
     <Grid>
         <Grid>
@@ -22,7 +22,7 @@
 
 
             <StackPanel VerticalAlignment="Center">
-                <Image Source="/PhotoDocter.png" Width="80"/>
+                <Image Source="/Images/PhotoDocter.png" Width="80"/>
                 <TextBlock Text="Login Doctor"
                            FontWeight="Heavy"
                            FontSize="22"
