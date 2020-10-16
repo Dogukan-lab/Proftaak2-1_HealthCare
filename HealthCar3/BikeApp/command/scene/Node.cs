@@ -125,18 +125,13 @@ namespace BikeApp.command.scene
         /*
          * This method updates the position of a node.
          */
-        public static dynamic Update(string uuid, string parentId, TransformComponent transformComponent, string animationName, double setSpeed)
+        public static dynamic Update(string uuid, string parentId, TransformComponent transformComponent)
         {
             dynamic packetData = new
             {
                 id = uuid,
                 parent = parentId,
                 transform = transformComponent,
-                animation = new
-                {
-                    name = animationName,
-                    speed = setSpeed
-                }
             };
             return CommandUtils.Wrap(packetData, Prefix + "update");
         }

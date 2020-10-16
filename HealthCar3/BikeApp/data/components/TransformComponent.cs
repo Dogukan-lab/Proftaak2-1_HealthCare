@@ -25,5 +25,33 @@
             scale = scaling;
             rotation = rot;
         }
+
+        public double[] GetPos()
+        {
+            return position;
+        }
+
+        public double[] GetRot()
+        {
+            return rotation;
+        }
+
+        public string ToString()
+        {
+            string position = "";
+            string rotation = "";
+            
+            foreach (var pos in GetPos())
+            {
+                position += pos;
+            }
+
+            foreach (var rot in GetRot())
+            {
+                rotation += rot;
+            }
+            
+            return $"Position: {position}\t Rotation: {rotation}";
+        }
     }
 }

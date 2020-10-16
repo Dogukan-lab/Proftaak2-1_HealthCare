@@ -16,6 +16,7 @@ namespace BikeApp.connections
     internal class VpnConnector
     {
         private dynamic jsonData;
+        private bool isAttached;
         private CommandCenter commandCenter;
         private readonly JsonSerializerSettings serializerSettings;
         private TcpClient client;
@@ -33,6 +34,7 @@ namespace BikeApp.connections
             parser = new MessageParser(this);
             timeoutCounter = 0;
             commandCenter = new CommandCenter(this);
+            isAttached = true;
             Connect();
         }
 
@@ -182,7 +184,14 @@ namespace BikeApp.connections
             if (packetData?["data"]?.ToObject<JObject>()?["data"]?.ToObject<JObject>()?["id"]?.ToObject<string>() == "callback")
             {
                 //Maybe in the future?
-                commandCenter.AttachCamera(true);
+                if (isAttached)
+                {
+                    commandCenter.AttachCamera(isAttached);
+                    isAttached = false;
+                }
+                else
+                    Console.WriteLine("IS ATTAFCESDFUYSD? {0}", isAttached);
+                isAttached = true;
                 return;
             }
 

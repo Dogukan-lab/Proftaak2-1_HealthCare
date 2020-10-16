@@ -34,17 +34,19 @@ namespace BikeApp.vr_environment
             ResetScene();
             CreateTerrain("snow_grass_d.jpg", "snow_grass_n.jpg");
 
-            // var routeData = new RouteData[7];
+            var routeData = new RouteData[7];
             // Defining route
-            // routeData[0] = new RouteData(new[] {0, 0, 0}, new[] {1, 0, 0});
-            // routeData[1] = new RouteData(new[] {20, 0, 0}, new[] {0, 0, 1});
-            // routeData[2] = new RouteData(new[] {20, 0, 50}, new[] {-1, 0, 0});
-            // routeData[3] = new RouteData(new[] {-10, 0, 30}, new[] {-1, 0, 0});
-            // routeData[4] = new RouteData(new[] {-30, 0, 10}, new[] {0, 0, 0});
-            // routeData[5] = new RouteData(new[] {-20, 0, 0}, new[] {0, 0, 0});
-            // routeData[6] = new RouteData(new[] {-10, 0, -10}, new[] {1, 0, 0});
-            //
-            // CreateRoute(routeData, 3);
+            routeData[0] = new RouteData(new[] {0, 0, 0}, new[] {1, 0, 0});
+            routeData[1] = new RouteData(new[] {20, 0, 0}, new[] {0, 0, 1});
+            routeData[2] = new RouteData(new[] {20, 0, 50}, new[] {-1, 0, 0});
+            routeData[3] = new RouteData(new[] {-10, 0, 30}, new[] {-1, 0, 0});
+            routeData[4] = new RouteData(new[] {-30, 0, 10}, new[] {0, 0, 0});
+            routeData[5] = new RouteData(new[] {-20, 0, 0}, new[] {0, 0, 0});
+            routeData[6] = new RouteData(new[] {-10, 0, -10}, new[] {1, 0, 0});
+
+            CreateRoute(routeData, 3);
+
+            // CreateObject("Bike", "bike/bike.fbx");
 
             SetTime(SkyBoxTime.Morning);
         }
@@ -59,17 +61,27 @@ namespace BikeApp.vr_environment
                             new Action<JObject>(bikeData =>
                             {
                                 var component = new TransformComponent(
-                                    bikeData["data"]?["data"]?[0]?["position"]?.ToObject<double[]>(),
-                                    1, bikeData["data"]?["data"]?[0]?["rotation"]?.ToObject<double[]>());
+                                    new[] {-10, -1.5, -2.47},
+                                    1, new double[] {0, 90, 0});
+
                                 connector.SendPacket(Node.Update(
                                         cameraData["data"]?["data"]?[0]?["uuid"]?.ToString(),
                                         bikeData["data"]?["data"]?[0]?["uuid"]?.ToString(),
-                                        null, "", 0),
-                                    new Action<JObject>(data => { Console.WriteLine("Camera has been attached!"); }));
+                                        component),
+                                    new Action<JObject>(data => {}));
                             }));
                     }));
             else
                 Console.WriteLine("Make a detach function!");
+            connector.SendPacket(Node.Find("Camera"),
+                new Action<JObject>(cameraData =>
+                {
+                    connector.SendPacket(Node.Update(
+                            cameraData["data"]?["data"]?[0]?["uuid"]?.ToString(),
+                            null,
+                            null),
+                        new Action<JObject>(data => {}));
+                }));
         }
 
         #region Scene Code
@@ -257,7 +269,7 @@ namespace BikeApp.vr_environment
                 var roadId = data["data"]?["data"]?["uuid"]?.ToString();
                 AddRoad(roadId);
 
-                connector.SendPacket(Node.AddModel("Bike", "",
+                connector.SendPacket(Node.AddModel("Bike", null,
                         new TransformComponent(1, -1, 1, 1, 0, 0, 0),
                         new ModelComponent(GetModelObjects("bike/bike.fbx"), true, false, "")),
                     new Action<JObject>(bikeData =>
@@ -362,15 +374,6 @@ namespace BikeApp.vr_environment
                 {
                     var uuid = parentData["data"]?["data"]?["uuid"]?.ToString();
                     CreatePanel(uuid);
-
-                    connector.SendPacket(Node.Find("Camera"),
-                        new Action<JObject>(cameraData =>
-                        {
-                            connector.SendPacket(Node.Update(cameraData["data"]["data"][0]["uuid"].ToString(), uuid,
-                                component,
-                                "", 0
-                            ), new Action<JObject>(data => { Console.WriteLine("Works?"); }));
-                        }));
                 }));
         }
 
