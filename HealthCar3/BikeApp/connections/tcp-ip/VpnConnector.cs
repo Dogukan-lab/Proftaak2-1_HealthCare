@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using BikeApp.command;
+using BikeApp.vr_environment;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -15,6 +16,7 @@ namespace BikeApp.connections
     internal class VpnConnector
     {
         private dynamic jsonData;
+        private CommandCenter commandCenter;
         private readonly JsonSerializerSettings serializerSettings;
         private TcpClient client;
         private readonly MessageParser parser;
@@ -30,6 +32,7 @@ namespace BikeApp.connections
             serializerSettings.NullValueHandling = NullValueHandling.Ignore;
             parser = new MessageParser(this);
             timeoutCounter = 0;
+            commandCenter = new CommandCenter(this);
             Connect();
         }
 
@@ -178,6 +181,8 @@ namespace BikeApp.connections
 
             if (packetData?["data"]?.ToObject<JObject>()?["data"]?.ToObject<JObject>()?["id"]?.ToObject<string>() == "callback")
             {
+                //Maybe in the future?
+                commandCenter.AttachCamera(true);
                 return;
             }
 

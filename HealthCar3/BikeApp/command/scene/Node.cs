@@ -15,11 +15,12 @@ namespace BikeApp.command.scene
         /*
          * This method adds a model such a tree, bike or house.
          */
-        public static dynamic AddModel(string objectName, TransformComponent transformComponent, ModelComponent modelComponent)    
+        public static dynamic AddModel(string objectName, string parentId, TransformComponent transformComponent, ModelComponent modelComponent)    
         {
             dynamic packetData = new
             {
                 name = objectName,
+                parent = parentId,
                 components = new
                 {
                     transform = transformComponent,
@@ -124,12 +125,12 @@ namespace BikeApp.command.scene
         /*
          * This method updates the position of a node.
          */
-        public static dynamic Update(string guid, string parentObject, TransformComponent transformComponent, string animationName, double setSpeed)
+        public static dynamic Update(string uuid, string parentId, TransformComponent transformComponent, string animationName, double setSpeed)
         {
             dynamic packetData = new
             {
-                id = guid,
-                parent = parentObject,
+                id = uuid,
+                parent = parentId,
                 transform = transformComponent,
                 animation = new
                 {
