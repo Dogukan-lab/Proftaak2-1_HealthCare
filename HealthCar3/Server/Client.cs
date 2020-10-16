@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Text;
 using Encryption.Shared;
 using PackageUtils;
@@ -40,6 +41,7 @@ namespace Server
             stream = this.tcpClient.GetStream();
             stream.BeginRead(buffer, 0, buffer.Length, OnRead, null);
         }
+
         /*
          * Method that deserializes the JsonData
          */
@@ -49,7 +51,7 @@ namespace Server
             {
                 var receivedBytes = stream.EndRead(ar);
                 dynamic receivedData;
-                
+
                 if (keyExchanged)
                 {
                     receivedData = JsonConvert.DeserializeObject(decryptor.DecryptAes(buffer, 0, receivedBytes));
@@ -77,8 +79,9 @@ namespace Server
         private void StartSession()
         {
             sessionActive = true;
-            sessionData = new SessionData {clientId = id, sessionStart = DateTime.Now, name = name};
+            sessionData = new SessionData { clientId = id, sessionStart = DateTime.Now, name = name };
         }
+
         /*
          * Stops the session with this client
          */
@@ -101,11 +104,11 @@ namespace Server
             dynamic message;
             switch (tag)
             {
-                case "encrypt/key" :
+                case "encrypt/key":
                     byte[] exponent = data.data.exponent.ToObject<byte[]>();
                     byte[] modulus = data.data.modulus.ToObject<byte[]>();
-                    
-                    var rsaPubKey = new RSAParameters() { Exponent = exponent, Modulus = modulus};
+
+                    var rsaPubKey = new RSAParameters() { Exponent = exponent, Modulus = modulus };
                     (byte[] Key, byte[] iv) aesKeySet = encryptor.GenerateAesKey();
 
                     decryptor.AesKey = aesKeySet.Key;
@@ -116,29 +119,30 @@ namespace Server
 
                     keyExchanged = true;
                     aesKeySet = encryptor.EncryptRsa(aesKeySet.Key, aesKeySet.iv, rsaPubKey);
-                    
+
                     bytes = PackageWrapper.SerializeData
                     (
                         "encrypt/key/success",
                         new
                         {
-                            key = aesKeySet.Key, aesKeySet.iv
+                            key = aesKeySet.Key,
+                            aesKeySet.iv
                         }
                     );
-            
-                    tcpClient.GetStream().Write(bytes, 0 , bytes.Length);
+
+                    tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                     break;
                 case "chat/message":
                     targetEncryptor = Program.GetTargetClientEncryptor((string)data.data.clientId);
                     message = data.data.message;
                     if (message == "")
-                        bytes = PackageWrapper.SerializeData("chat/message/error", new { message = "message is empty!" }, encryptor);                    
+                        bytes = PackageWrapper.SerializeData("chat/message/error", new { message = "message is empty!" }, encryptor);
                     else
                     {
-                        bytes = PackageWrapper.SerializeData("chat/message", new { message = (string) message }, targetEncryptor);
+                        bytes = PackageWrapper.SerializeData("chat/message", new { message = (string)message }, targetEncryptor);
                         // Check if sending the message was successful. 
-                        bytes = !Program.SendMessageToSpecificClient((string)data.data.clientId, bytes) ? 
-                            PackageWrapper.SerializeData("chat/message/error", new { message = "clientId is not valid!" }, encryptor) : 
+                        bytes = !Program.SendMessageToSpecificClient((string)data.data.clientId, bytes) ?
+                            PackageWrapper.SerializeData("chat/message/error", new { message = "clientId is not valid!" }, encryptor) :
                             PackageWrapper.SerializeData("chat/message/success", new { message = "message has been received!" }, encryptor);
                     }
                     tcpClient.GetStream().Write(bytes, 0, bytes.Length);
@@ -151,14 +155,14 @@ namespace Server
                     {
                         //bytes = PackageWrapper.SerializeData("chat/broadcast", new { message = (string)data.data.message }, encryptor);
                         Program.Broadcast(tag, data.data);
-                        
+
                         bytes = PackageWrapper.SerializeData("chat/broadcast/success", new { message = "message has been received!" }, encryptor);
                     }
                     tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                     break;
                 case "client/register":
-                    string clientName = data.data.name;                   
-                    if (CredentialVerificator.VerifyUsername(clientName))
+                    string clientName = data.data.name;
+                    if (VerifyUsername(clientName))
                     {
                         id = Program.GenerateId(clientName);
                         name = clientName;
@@ -189,7 +193,7 @@ namespace Server
                     string username = data.data.username;
                     string password = data.data.password;
 
-                    if(username == "kees" && password == "banaan")
+                    if (username == "kees" && password == "banaan")
                     {
                         bytes = PackageWrapper.SerializeData("doctor/login/success", new { message = "Login successful" }, encryptor);
                         id = "0000"; // standard doctor ID
@@ -224,14 +228,15 @@ namespace Server
                         bytes = PackageWrapper.SerializeData("session/resistance/error", new { message = "Resistance value is invalid!" }, encryptor);
                     else
                     {
-                        bytes = PackageWrapper.SerializeData("session/resistance", new {resistance }, targetEncryptor);
+                        bytes = PackageWrapper.SerializeData("session/resistance", new { resistance }, targetEncryptor);
                         // Check if sending the message was successful. 
                         if (!Program.SendMessageToSpecificClient((string)data.data.clientId, bytes))
                             bytes = PackageWrapper.SerializeData("session/resistance/error", new { message = "The Client Id could not be found." }, encryptor);
                         else
                         {
                             bytes = PackageWrapper.SerializeData("session/resistance/success", new { message = "Resistance has been updated." }, encryptor);
-                            if (Program.ActiveSession((string)data.data.clientId, out targetClient)) {
+                            if (Program.ActiveSession((string)data.data.clientId, out targetClient))
+                            {
                                 targetClient.sessionData.NewResistance(float.Parse(resistance));
                             }
                         }
@@ -248,7 +253,7 @@ namespace Server
                         if (!Program.SendMessageToSpecificClient((string)data.data.clientId, bytes))
                             bytes = PackageWrapper.SerializeData("session/start/error", new { message = "The Client Id could not be found." }, encryptor);
                         else
-                        {                            
+                        {
                             targetClient.StartSession();
                             bytes = PackageWrapper.SerializeData("session/start/success", new { message = "Session successfully started." }, encryptor);
                         }
@@ -275,7 +280,7 @@ namespace Server
                 case "doctor/clientHistory":
                     Program.GetTargetClientEncryptor((string)data.data.clientId);
                     dynamic session = Program.GetSession((string)data.data.clientId);
-                    bytes = session != null ? (byte[]) PackageWrapper.SerializeData("doctor/clientHistory/success", session, encryptor) : PackageWrapper.SerializeData("doctor/clientHistory/error", new { message = "No session found with the given ID." }, encryptor);
+                    bytes = session != null ? (byte[])PackageWrapper.SerializeData("doctor/clientHistory/success", session, encryptor) : PackageWrapper.SerializeData("doctor/clientHistory/error", new { message = "No session found with the given ID." }, encryptor);
                     tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                     break;
                 case "session/emergencyStop":
@@ -283,6 +288,15 @@ namespace Server
                     Program.EmergencyStop(bytes);
                     break;
             }
+        }
+
+        /*
+         *  Method checks if the username consists only of letters.
+         */
+        private bool VerifyUsername(string name)
+        {
+            var validCharacters = new Regex(@"^[a-zA-Z\ ]+$");
+            return validCharacters.IsMatch(name);
         }
     }
 }
