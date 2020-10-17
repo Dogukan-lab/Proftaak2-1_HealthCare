@@ -22,9 +22,8 @@ namespace DocterApplication
     {
         private Boolean MouseEnterUsername = false;
         private Boolean MouseEnterPassword = false;
-        private String Username { get; set; }
+      
 
-        HomePage homePage { get; set; }
         public LoginWindow()
         {
             InitializeComponent();
@@ -74,11 +73,10 @@ namespace DocterApplication
         //Check login than open HomePage
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Username = UsernameBox.Text;
-
-            this.homePage = new HomePage(this.Username);
             this.Hide();
-            homePage.Show();
+            Layout layout = new Layout(UsernameBox.Text);
+            layout.Show();
+
         }
     }
 }

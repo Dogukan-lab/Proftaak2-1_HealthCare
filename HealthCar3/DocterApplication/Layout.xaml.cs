@@ -15,26 +15,17 @@ namespace DocterApplication
     /// <summary>
     /// Interaction logic for HomePage.xaml
     /// </summary>
-    public partial class HomePage : Window
+    public partial class Layout : Window
     {
-        String Username { get; set; }
-
-
-
-        public HomePage(String Username)
+        public Layout(String Username)
         {
             InitializeComponent();
-            this.Username = Username;
-            WelcomeDocter.Text = "Welcome Doctor " + this.Username;
+
+            WelcomeDocter.Text = "Welcome Doctor " + Username;
+            
+            HomeUserControl.Visibility = Visibility.Visible;
 
         }
-
-        public HomePage()
-        {
-            InitializeComponent();
-            WelcomeDocter.Text = this.Username;
-        }
-
 
         //Dragging Window
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -51,19 +42,32 @@ namespace DocterApplication
             Application.Current.Shutdown();
         }
 
+        
         private void PatientButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
-            PatientPage patientPage = new PatientPage(Username);
-            patientPage.Show();
+            
+            HomeUserControl.Visibility = Visibility.Hidden;
+            HistoryUserControl.Visibility = Visibility.Hidden;
+
+            PatientUserControl.Visibility = Visibility.Visible;
+           
         }
 
         private void HistoryButton_Click(object sender, RoutedEventArgs e)
         {
+            HomeUserControl.Visibility = Visibility.Hidden;
+            PatientUserControl.Visibility = Visibility.Hidden;
 
-            this.Hide();
-            HistoryPage historyPage = new HistoryPage(Username);
-            historyPage.Show();
+            HistoryUserControl.Visibility = Visibility.Visible;
+
+        }
+
+        private void HomeButton_Click(object sender, RoutedEventArgs e)
+        {
+            PatientUserControl.Visibility = Visibility.Hidden;
+            HistoryUserControl.Visibility = Visibility.Hidden;
+
+            HomeUserControl.Visibility = Visibility.Visible;
         }
     }
 }
