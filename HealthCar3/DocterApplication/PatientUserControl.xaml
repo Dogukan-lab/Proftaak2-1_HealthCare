@@ -3,20 +3,48 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              xmlns:local="clr-namespace:DocterApplication"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Label Content="PatientUSer" HorizontalAlignment="Left" Margin="216,122,0,0" VerticalAlignment="Top" Height="184" Width="376" FontSize="55" RenderTransformOrigin="0.5,0.5">
-            <Label.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleY="-0.612"/>
-                    <RotateTransform/>
-                    <TranslateTransform Y="-1.238"/>
-                </TransformGroup>
-            </Label.RenderTransform>
-        </Label>
+             d:DesignHeight="700" d:DesignWidth="1020">
 
+
+    <Grid Grid.Column="1" Grid.Row="1">
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="316"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="1">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50*"/>
+                    <RowDefinition Height="300"/>
+                    <RowDefinition Height="50*"/>
+                    <RowDefinition Height="300"/>
+
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0">
+                    <Label Content="Heartrate" FontSize="20"/>
+                </Grid>
+
+
+                <Grid Grid.Row="1" >
+                    <lvc:CartesianChart></lvc:CartesianChart>
+                </Grid>
+
+                <Grid Grid.Row="2">
+                    <Label Content="Speed" FontSize="20"/>
+                </Grid>
+
+                <Grid Grid.Row="3">
+                    <lvc:CartesianChart></lvc:CartesianChart>
+                </Grid>
+            </Grid>
+
+        </Grid>
     </Grid>
 </UserControl>

@@ -22,7 +22,12 @@
 
 
             <StackPanel VerticalAlignment="Center">
-                <Image Source="/Images/PhotoDocter.png" Width="80"/>
+                
+                <IconPacks:PackIconMaterial Kind ="Doctor" 
+                                            VerticalAlignment="Center" 
+                                            HorizontalAlignment="Center" Width="80" Height="80"
+                                            />
+                
                 <TextBlock Text="Login Doctor"
                            FontWeight="Heavy"
                            FontSize="22"

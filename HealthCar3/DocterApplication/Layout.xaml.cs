@@ -20,10 +20,8 @@ namespace DocterApplication
         public Layout(String Username)
         {
             InitializeComponent();
-
             WelcomeDocter.Text = "Welcome Doctor " + Username;
-            
-            HomeUserControl.Visibility = Visibility.Visible;
+            HomeUserControl.Visibility = Visibility.Hidden;
 
         }
 

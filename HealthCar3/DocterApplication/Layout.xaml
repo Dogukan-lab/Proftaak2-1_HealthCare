@@ -3,6 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+
         xmlns:local="clr-namespace:DocterApplication" xmlns:IconPacks="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks.Material"
         mc:Ignorable="d"
         Title="HomePage" Height="800" Width="1200"
@@ -60,9 +62,10 @@
             </Grid.Background>
 
             <Grid Background="#FFFE9168">
-                <Image Source="/Images/PhotoDocter.png" 
-                       Width="80" 
-                       HorizontalAlignment="Center"/>
+                <IconPacks:PackIconMaterial Kind ="Doctor" 
+                                            VerticalAlignment="Center" 
+                                            HorizontalAlignment="Center" Width="80" Height="80"
+                                            />
 
             </Grid>
 
@@ -105,6 +108,25 @@
                     </Grid>
                 </Button>
 
+                <Button 
+                    Name="ChatButton"
+                    Background="Red"
+                    Margin="10,30,10,10"
+                    Style="{StaticResource HomeButton}" >
+                    <Grid Width="150">
+                        <IconPacks:PackIconMaterial Kind="Chat"
+                                                    Margin="10,0,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Center"
+                                                    />
+                        <TextBlock Text="Chat"
+                                   FontSize="22"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   Margin="4"/>
+                    </Grid>
+                </Button>
+
 
                 <Button 
                     Name="HistoryButton"
@@ -131,9 +153,12 @@
 
 
 
+
         </Grid>
         <Grid Grid.Column="1" 
-               Grid.Row="1">
+               Grid.Row="1" 
+              Name="GridUserControls" Visibility="Visible">
+            
             <Grid Name="HomeUserControl" Visibility="Hidden">
                 <local:HomeUserControl></local:HomeUserControl>
             </Grid>
@@ -145,6 +170,64 @@
             <Grid Name="HistoryUserControl" Visibility="Hidden">
                 <local:HistoryUserControl></local:HistoryUserControl>
             </Grid>
+            
+            <TabControl>
+                <TabItem Header="Bike 1">
+                    <Grid>
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="316"/>
+                            </Grid.ColumnDefinitions>
+
+
+                            <Grid Grid.Column="0">
+                                <Label Content="Client: " Margin="10" FontSize="30"/>
+
+                                <TextBox Text="Hee"/> 
+                                
+
+                            </Grid>
+                            
+                            <Grid Grid.Column="1">
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="50*"/>
+                                    <RowDefinition Height="300"/>
+                                    <RowDefinition Height="50*"/>
+                                    <RowDefinition Height="300"/>
+
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0">
+                                    <Label Content="Heartrate" FontSize="20"/>
+                                </Grid>
+
+
+                                <Grid Grid.Row="1" >
+                                    <lvc:CartesianChart></lvc:CartesianChart>
+                                </Grid>
+
+                                <Grid Grid.Row="2">
+                                    <Label Content="Speed" FontSize="20"/>
+                                </Grid>
+
+                                <Grid Grid.Row="3">
+                                    <lvc:CartesianChart></lvc:CartesianChart>
+                                </Grid>
+                                
+                                
+                            </Grid>
+
+                        </Grid>
+                    </Grid>
+
+
+                </TabItem>
+            </TabControl>
+
+
+
         </Grid>
     </Grid>
 </Window>
