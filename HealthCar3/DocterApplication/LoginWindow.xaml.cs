@@ -18,13 +18,14 @@ namespace DocterApplication
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class LoginWindow : Window
     {
         private Boolean MouseEnterUsername = false;
         private Boolean MouseEnterPassword = false;
         private String Username { get; set; }
 
-        public MainWindow()
+        HomePage homePage { get; set; }
+        public LoginWindow()
         {
             InitializeComponent();
         }
@@ -75,9 +76,9 @@ namespace DocterApplication
         {
             this.Username = UsernameBox.Text;
 
-            HomePage homepage = new HomePage(this.Username);
-            this.Visibility = Visibility.Hidden;
-            homepage.Show();
+            this.homePage = new HomePage(this.Username);
+            this.Hide();
+            homePage.Show();
         }
     }
 }

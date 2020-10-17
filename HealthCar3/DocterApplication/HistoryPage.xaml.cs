@@ -13,28 +13,16 @@ using System.Windows.Shapes;
 namespace DocterApplication
 {
     /// <summary>
-    /// Interaction logic for HomePage.xaml
+    /// Interaction logic for HistoryPage.xaml
     /// </summary>
-    public partial class HomePage : Window
+    public partial class HistoryPage : Window
     {
-        String Username { get; set; }
-
-
-
-        public HomePage(String Username)
+        private String Username;
+        public HistoryPage(string Username)
         {
-            InitializeComponent();
             this.Username = Username;
-            WelcomeDocter.Text = "Welcome Doctor " + this.Username;
-
-        }
-
-        public HomePage()
-        {
             InitializeComponent();
-            WelcomeDocter.Text = this.Username;
         }
-
 
         //Dragging Window
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -51,19 +39,19 @@ namespace DocterApplication
             Application.Current.Shutdown();
         }
 
+        private void HomeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            HomePage homepage = new HomePage();
+            homepage.Show();
+        }
+
         private void PatientButton_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
             PatientPage patientPage = new PatientPage(Username);
             patientPage.Show();
-        }
 
-        private void HistoryButton_Click(object sender, RoutedEventArgs e)
-        {
-
-            this.Hide();
-            HistoryPage historyPage = new HistoryPage(Username);
-            historyPage.Show();
         }
     }
 }

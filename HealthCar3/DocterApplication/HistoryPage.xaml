@@ -1,11 +1,11 @@
-﻿<Window x:Class="DocterApplication.HomePage"
+﻿<Window x:Class="DocterApplication.HistoryPage"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DocterApplication" xmlns:IconPacks="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks.Material"
         mc:Ignorable="d"
-        Title="HomePage" Height="800" Width="1200"
+        Title="HistoryPage" Height="800" Width="1200"
          AllowsTransparency="True" Background="AliceBlue"
         WindowStyle="None" ResizeMode="NoResize" 
         MouseDown="Window_MouseDown" >
@@ -71,7 +71,7 @@
                     Name="HomeButton"
                     Background="Red"
                     Margin="10,40,10,10"
-                    Style="{StaticResource HomeButton}">
+                    Style="{StaticResource HomeButton}" Click="HomeButton_Click">
                     <Grid Width="150">
                         <IconPacks:PackIconMaterial Kind="Home"
                                                     Margin="10,0,0,0"
@@ -110,7 +110,7 @@
                     Name="HistoryButton"
                     Background="Red"
                     Margin="10,30,10,10"
-                    Style="{StaticResource HomeButton}" Click="HistoryButton_Click">
+                    Style="{StaticResource HomeButton}">
                     <Grid Width="150">
                         <IconPacks:PackIconMaterial Kind="History"
                                                     Margin="10,0,0,0"
@@ -131,85 +131,6 @@
 
 
 
-        </Grid>
-        <Grid Grid.Column="1" 
-               Grid.Row="1">
-            <ScrollViewer>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="340"/>
-                        <ColumnDefinition Width="340"/>
-                        <ColumnDefinition Width="340"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Grid Grid.Row= "0" >
-                        <Rectangle  Height="250"
-                                Margin="20"
-                                Fill="#FFFE9168"
-                                RadiusX="10"
-                                RadiusY="10"
-                                />
-                        <Grid Margin="20,60,20,60">
-                            <Label Content ="Bike 1"
-                                   FontSize="33"
-                                   Margin="5"/>
-
-                            <Label Content="Client: "
-                                   FontSize="22"
-                                   Margin="50,50,0,0"
-                                   />
-                            <Label Content="Heartrate: "
-                                   FontSize="22"
-                                   Margin="50,85,0,0"
-                                   />
-                            <Label Content="Speed: "
-                                   FontSize="22"
-                                   Margin="50,120,0,0"
-                                   />
-                            <Label Content="Resistance: "
-                                   FontSize="22"
-                                   Margin="50,155,0,0"
-                                   />
-                            <Button Height="40" 
-                                Width="150" 
-                                Margin="100,190,0,0"
-                                Content="Emergency Button"
-                                Style="{StaticResource HomeButton}"
-                                Background="Red"
-                                FontWeight="Heavy"
-                                />
-                            <Label Content=" "
-                                   FontSize="22"
-                                   Margin="200,50,0,164"
-                               Name="ClientBox"
-                                   />
-                            <Label Content=" "
-                                   FontSize="22"
-                                   Margin="200,85,0,0"
-                               Name="HeartrateBox" Height="35" VerticalAlignment="Top"
-                                   />
-                            <Label Content=""
-                                   FontSize="22"
-                                   Margin="200,120,0,84"
-                               Name="SpeedBox"
-                                   />
-                            <Label Content=""
-                                   FontSize="22"
-                                   Margin="200,155,0,60"
-                               Name="ResistanceBox"
-                                   />
-                        </Grid>
-                    </Grid>
-
-
-
-                </Grid>
-
-            </ScrollViewer>
         </Grid>
     </Grid>
 </Window>
