@@ -14,8 +14,4 @@
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.6.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="PhotoDocter.png" />
-  </ItemGroup>
-
 </Project>

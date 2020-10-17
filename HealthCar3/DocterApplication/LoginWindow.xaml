@@ -8,7 +8,7 @@
         Title="Login" Height="500" Width="350"
         AllowsTransparency="True" Background="AliceBlue"
         WindowStyle="None" ResizeMode="NoResize" 
-        MouseDown="Window_MouseDown" Icon="/Images/PhotoDocter.png">
+        MouseDown="Window_MouseDown" >
 
     <Grid>
         <Grid>
