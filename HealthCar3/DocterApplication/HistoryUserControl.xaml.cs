@@ -27,5 +27,15 @@ namespace DocterApplication
         {
 
         }
+
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void StopButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

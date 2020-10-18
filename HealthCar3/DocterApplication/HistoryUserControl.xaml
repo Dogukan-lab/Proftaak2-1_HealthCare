@@ -22,8 +22,14 @@
 
                 <Grid Grid.Column="0" Grid.Row="0">
                     <Grid Height="60" Width="400" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <Grid Height="60" Width="100" HorizontalAlignment="Left">
-                        <Label Content="Client: "  FontSize="30" Name="ClientLabel"/>
+                    <Grid Height="60" Width="120" HorizontalAlignment="Left">
+                        <Label Content="Session: "  FontSize="30" Name="ClientLabel"/>
+                    </Grid>
+
+                    <Grid Height="35" Width="140" Margin="100,0,0,10">
+                        <ListBox>
+                            
+                        </ListBox>
                     </Grid>
                     
                 </Grid>
@@ -74,10 +80,29 @@
                         </Grid>
                     </Grid>
 
-                    <Button  Height="40" Width="100" Style="{StaticResource HomeButton}" HorizontalAlignment="Right" Content="Start Session" Background="Red" FontWeight="Heavy" VerticalAlignment="Top" Margin="40"/>
-                    <Button  Height="40" Width="100" Style="{StaticResource HomeButton}" HorizontalAlignment="Right" Content="Stop Session" Background="Red" FontWeight="Heavy" VerticalAlignment="Top" Margin="40,100,40,40"/>
+                    <Button  Name="StartButton" Height="40" Width="100" Style="{StaticResource HomeButton}" HorizontalAlignment="Right" Content="Start Session" Background="Red" FontWeight="Heavy" VerticalAlignment="Top" Margin="40" Click="StartButton_Click"/>
+                    <Button  Name="StopButton" Height="40" Width="100" Style="{StaticResource HomeButton}" HorizontalAlignment="Right" Content="Stop Session" Background="Red" FontWeight="Heavy" VerticalAlignment="Top" Margin="40,100,40,40" Click="StopButton_Click"/>
 
-                    <Label Content="Chat" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="33"/>
+
+                <Grid Height="40" Width="225"  Margin="375,175,00,00" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Label Content="Start Time: "  FontSize="20" HorizontalAlignment="Left"/>
+                    <Grid HorizontalAlignment="Right" Height="40" Width="100" >
+                        <Border BorderBrush="Black" BorderThickness="2" >
+                            <Label Content="20"  FontSize="20" HorizontalAlignment="Center" Name="DatumLabel"/>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <Grid Height="40" Width="225"  Margin="375,250,00,00" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Label Content="Stop Time: "  FontSize="20" HorizontalAlignment="Left"/>
+                    <Grid HorizontalAlignment="Right" Height="40" Width="100" >
+                        <Border BorderBrush="Black" BorderThickness="2" >
+                            <Label Content="20"  FontSize="20" HorizontalAlignment="Center" Name="StopLabel"/>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <Label Content="Chat" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="33"/>
 
                     
 

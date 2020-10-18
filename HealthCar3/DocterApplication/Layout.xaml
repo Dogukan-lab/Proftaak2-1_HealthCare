@@ -144,7 +144,7 @@
                 <local:HomeUserControl></local:HomeUserControl>
             </Grid>
 
-            <Grid Name="PatientUserControl" Visibility="Visible">
+            <Grid Name="PatientUserControl" Visibility="Hidden">
                 <local:PatientUserControl></local:PatientUserControl>
             </Grid>
 

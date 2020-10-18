@@ -21,7 +21,7 @@ namespace DocterApplication
         {
             InitializeComponent();
             WelcomeDocter.Text = "Welcome Doctor " + Username;
-            HomeUserControl.Visibility = Visibility.Hidden;
+            HomeUserControl.Visibility = Visibility.Visible;
 
         }
 
