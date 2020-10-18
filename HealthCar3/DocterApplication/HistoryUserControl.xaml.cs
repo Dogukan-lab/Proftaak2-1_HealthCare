@@ -22,5 +22,10 @@ namespace DocterApplication
         {
             InitializeComponent();
         }
+
+        private void ClientListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

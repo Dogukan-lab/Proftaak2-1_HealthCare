@@ -7,7 +7,103 @@
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="1020">
     <Grid>
-        <Label Content="History" HorizontalAlignment="Left" Margin="34,175,0,0" VerticalAlignment="Top" Height="185" Width="445" FontSize="55"/>
+        
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="416"/>
+                </Grid.ColumnDefinitions>
 
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="340"/>
+                    <RowDefinition Height="340"/>
+                </Grid.RowDefinitions>
+
+
+                <Grid Grid.Column="0" Grid.Row="0">
+                    <Grid Height="60" Width="400" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <Grid Height="60" Width="100" HorizontalAlignment="Left">
+                        <Label Content="Client: "  FontSize="30" Name="ClientLabel"/>
+                    </Grid>
+                    
+                </Grid>
+
+                    <Grid Height="40" Width="300"  Margin="0,50,00,10" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Label Content="Heartrate Max: "  FontSize="20" HorizontalAlignment="Left"/>
+                        <Grid HorizontalAlignment="Right" Height="40" Width="100" >
+                            <Border BorderBrush="Black" BorderThickness="2" >
+                                <Label Content="20"  FontSize="20" HorizontalAlignment="Center" Name="HeartrateLabel"/>
+                            </Border>
+                        </Grid>
+                    </Grid>
+
+                    <Grid Height="40" Width="300"  Margin="0,100,00,10" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Label Content="Heartrate Average: "  FontSize="20" HorizontalAlignment="Left"/>
+                        <Grid HorizontalAlignment="Right" Height="40" Width="100" >
+                            <Border BorderBrush="Black" BorderThickness="2" >
+                                <Label Content="20"  FontSize="20" HorizontalAlignment="Center" Name="HeartrateAverageLabel"/>
+                            </Border>
+                        </Grid>
+                    </Grid>
+
+                    <Grid Height="40" Width="300"  Margin="0,150,00,10" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Label Content="Speed Max: "  FontSize="20" HorizontalAlignment="Left"/>
+                        <Grid HorizontalAlignment="Right" Height="40" Width="100" >
+                            <Border BorderBrush="Black" BorderThickness="2" >
+                                <Label Content="20"  FontSize="20" HorizontalAlignment="Center" Name="SpeedLabel"/>
+                            </Border>
+                        </Grid>
+                    </Grid>
+
+                    <Grid Height="40" Width="300"  Margin="0,200,00,10" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Label Content="Speed Average: "  FontSize="20" HorizontalAlignment="Left"/>
+                        <Grid HorizontalAlignment="Right" Height="40" Width="100" >
+                            <Border BorderBrush="Black" BorderThickness="2" >
+                                <Label Content="20"  FontSize="20" HorizontalAlignment="Center" Name="SpeedAverageLabel"/>
+                            </Border>
+                        </Grid>
+                    </Grid>
+
+                    <Grid Height="40" Width="350"  Margin="0,250,00,10" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Label Content="Resistance Max: "  FontSize="20" HorizontalAlignment="Left"/>
+                        <Grid Margin="150,0,0,0" Height="40" Width="100" >
+                            <Border BorderBrush="Black" BorderThickness="2" >
+                                <Label Content="40"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel"/>
+                            </Border>
+
+                        </Grid>
+                    </Grid>
+
+                    <Button  Height="40" Width="100" Style="{StaticResource HomeButton}" HorizontalAlignment="Right" Content="Start Session" Background="Red" FontWeight="Heavy" VerticalAlignment="Top" Margin="40"/>
+                    <Button  Height="40" Width="100" Style="{StaticResource HomeButton}" HorizontalAlignment="Right" Content="Stop Session" Background="Red" FontWeight="Heavy" VerticalAlignment="Top" Margin="40,100,40,40"/>
+
+                    <Label Content="Chat" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="33"/>
+
+                    
+
+                </Grid>
+
+                <Grid  Grid.Row="1" Grid.Column="0">
+                    <TextBox VerticalAlignment="Bottom" Height="40" BorderBrush="Black" BorderThickness="2" />
+                    <ScrollViewer Height="300" VerticalAlignment="Top">
+
+                    </ScrollViewer>
+                </Grid>
+
+
+
+            <Grid Grid.Row="0" Grid.Column="1">
+
+                <Grid Height="40" HorizontalAlignment="Left" VerticalAlignment="Top"> 
+                    <Label Content="Clients:" FontSize="20"/>
+                </Grid>
+
+                <Grid>
+                    <ListBox Name="ClientListBox" Height="250" Margin="20" SelectionChanged="ClientListBox_SelectionChanged"/>
+                </Grid>
+        </Grid>
+
+            </Grid>
+        
     </Grid>
 </UserControl>

@@ -151,10 +151,6 @@
             <Grid Name="HistoryUserControl" Visibility="Hidden">
                 <local:HistoryUserControl></local:HistoryUserControl>
             </Grid>
-            
-
-
-
         </Grid>
     </Grid>
 </Window>
