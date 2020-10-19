@@ -134,6 +134,9 @@ namespace DocterApplication
                 case "doctor/newClient":
                     layoutParent.NewClient((string)data.data.clientId, (string)data.data.name);
                     break;
+                case "client/disconnect":
+                    layoutParent.RemoveClient((string)data.data.clientId);
+                    break;
                 case "chat/message/success":
                 case "chat/broadcast/success":
                 case "session/resistance/success":

@@ -57,8 +57,18 @@ namespace Server
         */
         internal static void Disconnect(Client client)
         {
+            if (client == doctorClient)
+            {
+                doctorClient = null;
+            }
+            else if (doctorClient != null)
+            {
+                byte[] bytes = PackageWrapper.SerializeData("client/disconnect", new { clientId = client.GetId() }, doctorClient.GetEncryptor());
+                doctorClient.GetClientStream().Write(bytes, 0, bytes.Length);
+            }
+
             clients.Remove(client);
-            client.GetClientStream().Close();           
+            client.GetClientStream().Close();
             Console.WriteLine($"Client {client.GetId()} disconnected");
         }
 

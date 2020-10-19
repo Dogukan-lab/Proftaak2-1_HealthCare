@@ -27,7 +27,8 @@
                                 Content="Emergency Stop"
                                 Style="{StaticResource HomeButton}"
                                 Background="Red"
-                                FontWeight="Heavy" 
+                                FontWeight="Heavy"
+                                Click="Button_Click"
                                 />
 
             <Grid Grid.Row= "0" >
@@ -59,22 +60,22 @@
                                    Margin="50,155,0,0"
                                    />
 
-                    <Label Content=""
+                    <Label Content="-"
                                    FontSize="22"
                                    Margin="200,50,0,0"
                                Name="ClientBox1" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=""
+                    <Label Content="0 BPM"
                                    FontSize="22"
                                    Margin="200,85,0,0"
                                Name="HeartrateBox1" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=""
+                    <Label Content="0 m/s"
                                    FontSize="22"
                                    Margin="200,120,0,0"
                                Name="SpeedBox1" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=""
+                    <Label Content="0%"
                                    FontSize="22"
                                    Margin="200,155,0,0"
                                Name="ResistanceBox1" Height="35" VerticalAlignment="Top"
@@ -111,22 +112,22 @@
                                    Margin="50,155,0,0"
                                    />
 
-                    <Label Content=" "
+                    <Label Content="-"
                                    FontSize="22"
                                    Margin="200,50,0,0"
                                Name="ClientBox2" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=" "
+                    <Label Content="0 BPM"
                                    FontSize="22"
                                    Margin="200,85,0,0"
                                Name="HeartrateBox2" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=""
+                    <Label Content="0 m/s"
                                    FontSize="22"
                                    Margin="200,120,0,0"
                                Name="SpeedBox2" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=""
+                    <Label Content="0%"
                                    FontSize="22"
                                    Margin="200,155,0,0"
                                Name="ResistanceBox2" Height="35" VerticalAlignment="Top"
@@ -163,22 +164,22 @@
                                    Margin="50,155,0,0"
                                    />
 
-                    <Label Content=" "
+                    <Label Content="-"
                                    FontSize="22"
                                    Margin="200,50,0,0"
                                Name="ClientBox3" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=" "
+                    <Label Content="0 BPM"
                                    FontSize="22"
                                    Margin="200,85,0,0"
                                Name="HeartrateBox3" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=""
+                    <Label Content="0 m/s"
                                    FontSize="22"
                                    Margin="200,120,0,0"
                                Name="SpeedBox3" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=""
+                    <Label Content="0%"
                                    FontSize="22"
                                    Margin="200,155,0,0"
                                Name="ResistanceBox3" Height="35" VerticalAlignment="Top"
@@ -215,22 +216,22 @@
                                    Margin="50,155,0,0"
                                    />
 
-                    <Label Content=" "
+                    <Label Content="-"
                                    FontSize="22"
                                    Margin="200,50,0,0"
                                Name="ClientBox4" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=" "
+                    <Label Content="0 BPM"
                                    FontSize="22"
                                    Margin="200,85,0,0"
                                Name="HeartrateBox4" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=""
+                    <Label Content="0 m/s"
                                    FontSize="22"
                                    Margin="200,120,0,0"
                                Name="SpeedBox4" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=""
+                    <Label Content="0%"
                                    FontSize="22"
                                    Margin="200,155,0,0"
                                Name="ResistanceBox4" Height="35" VerticalAlignment="Top"
@@ -267,22 +268,22 @@
                                    Margin="50,155,0,0"
                                    />
 
-                    <Label Content=" "
+                    <Label Content="-"
                                    FontSize="22"
                                    Margin="200,50,0,0"
                                Name="ClientBox5" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=" "
+                    <Label Content="0 BPM"
                                    FontSize="22"
                                    Margin="200,85,0,0"
                                Name="HeartrateBox5" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=""
+                    <Label Content="0 m/s"
                                    FontSize="22"
                                    Margin="200,120,0,0"
                                Name="SpeedBox5" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=""
+                    <Label Content="0%"
                                    FontSize="22"
                                    Margin="200,155,0,0"
                                Name="ResistanceBox5" Height="35" VerticalAlignment="Top"
@@ -319,22 +320,22 @@
                                    Margin="50,155,0,0"
                                    />
 
-                    <Label Content=" "
+                    <Label Content="-"
                                    FontSize="22"
                                    Margin="200,50,0,0"
                                Name="ClientBox6" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=" "
+                    <Label Content="0 BPM"
                                    FontSize="22"
                                    Margin="200,85,0,0"
                                Name="HeartrateBox6" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=""
+                    <Label Content="0 m/s"
                                    FontSize="22"
                                    Margin="200,120,0,0"
                                Name="SpeedBox6" Height="35" VerticalAlignment="Top"
                                    />
-                    <Label Content=""
+                    <Label Content="0%"
                                    FontSize="22"
                                    Margin="200,155,0,0"
                                Name="ResistanceBox6" Height="35" VerticalAlignment="Top"

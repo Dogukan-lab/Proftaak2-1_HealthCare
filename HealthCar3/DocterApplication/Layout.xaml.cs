@@ -108,6 +108,31 @@ namespace DocterApplication
             SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetPatientAvgSpeedCB)); // Set avg speed to 0
         }
 
+        internal void RemoveClient(string clientId)
+        {
+            foreach(var bike in bikes)
+            {
+                if(bike.ID == clientId)
+                {
+                    // Reset home screen labels
+                    SetNewGuiLabelValue(bikes.Count, "-", new GuiCallBack(SetHomeClientNameCB)); // Remove client name
+                    SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetHomeHeartRateCB)); // Set heart rate to 0
+                    SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetHomeSpeedCB)); // Set speed to 0
+                    SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetHomeResistanceCB)); // Set resistance to 0
+
+                    // Reset patient screen labels
+                    SetNewGuiLabelValue(bikes.Count, "-", new GuiCallBack(SetPatientClientNameCB)); // Remove client name
+                    SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetPatientHeartRateCB)); // Set heart rate to 0
+                    SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetPatientAvgHeartRateCB)); // Set avg heart rate to 0
+                    SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetPatientSpeedCB)); // Set speed to 0
+                    SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetPatientAvgSpeedCB)); // Set avg speed to 0
+
+                    bikes.Remove(bike);
+                    return;
+                }
+            }   
+        }
+
         public void NewHeartRate(string id, int newHeartRate)
         {
             foreach(var bike in bikes)
@@ -200,6 +225,12 @@ namespace DocterApplication
             foreach (var bike in bikes)
                 if (bike.BikeId == bikeId)
                     sc.StopSession(bike.ID);
+        }
+        internal void SendChat(int bikeId, string message)
+        {
+            foreach (var bike in bikes)
+                if (bike.BikeId == bikeId)
+                    sc.Chat(bike.ID, message);
         }
     }
 }

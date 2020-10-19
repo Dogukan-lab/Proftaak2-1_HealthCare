@@ -23,10 +23,6 @@ namespace DocterApplication
             InitializeComponent();
         }
 
-        public void NewClient()
-        {
-            
-        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 

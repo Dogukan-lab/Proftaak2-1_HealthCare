@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MahApps.Metro.Controls;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -39,6 +40,21 @@ namespace DocterApplication
         {
             int bikeId = int.Parse(((Button)sender).Name[((Button)sender).Name.Length - 1].ToString());
             layoutParent.StopSession(bikeId);
+        }
+
+        private void OnKeyDownEvent(object sender, KeyEventArgs e)
+        {
+            TextBox textBox = ((TextBox)sender);
+            int bikeId = int.Parse(textBox.Name[textBox.Name.Length - 1].ToString());
+            if (e.Key == Key.Return)
+            {
+                layoutParent.SendChat(bikeId, textBox.Text);
+                Label newLabel = new Label();
+                newLabel.Content = textBox.Text;
+                ((StackPanel)FindName("ChatView" + bikeId)).Children.Add(newLabel);
+
+                textBox.Text = "";
+            }
         }
     }
 }
