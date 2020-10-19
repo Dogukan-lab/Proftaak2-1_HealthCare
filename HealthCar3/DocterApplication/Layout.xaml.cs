@@ -36,7 +36,7 @@ namespace DocterApplication
             bikes = new List<Bike>();
 
             // Initialise the different pages.
-            homeUserControl = new HomeUserControl();
+            homeUserControl = new HomeUserControl(this);
             GridUserControls.Children.Add(homeUserControl);
             patientUserControl = new PatientUserControl(this);
             GridUserControls.Children.Add(patientUserControl);
@@ -231,6 +231,16 @@ namespace DocterApplication
             foreach (var bike in bikes)
                 if (bike.BikeId == bikeId)
                     sc.Chat(bike.ID, message);
+        }
+
+        internal void BroadCast(string message)
+        {
+            sc.Broadcast(message);
+        }
+
+        internal void EmergencyStop()
+        {
+            sc.EmergencyStopSessions();
         }
     }
 }

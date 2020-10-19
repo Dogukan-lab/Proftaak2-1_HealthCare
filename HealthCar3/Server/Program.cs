@@ -161,14 +161,16 @@ namespace Server
         /*
          * Sends a stop message to all the clients with an active session and saves the data
          */
-        internal static void EmergencyStop(byte[] bytes)
+        internal static void EmergencyStop()
         {
             foreach(var client in clients)
             {
                 if (client.IsSessionActive())
                 {
                     // Send stop message to client
-                    SendMessageToSpecificClient(client.GetId(), bytes);
+                    //SendMessageToSpecificClient(client.GetId(), bytes);
+                    byte[] bytes = PackageWrapper.SerializeData("session/stop", new { }, client.GetEncryptor());
+                    client.GetClientStream().Write(bytes, 0, bytes.Length);
                     // Save the data
                     SaveSession(client);
                     // End session server side

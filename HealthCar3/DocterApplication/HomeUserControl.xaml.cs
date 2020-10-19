@@ -18,14 +18,22 @@ namespace DocterApplication
     /// </summary>
     public partial class HomeUserControl : UserControl
     {
-        public HomeUserControl()
+        private Layout layoutParent;
+        public HomeUserControl(Layout parent)
         {
             InitializeComponent();
+            layoutParent = parent;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Emergency_Click(object sender, RoutedEventArgs e)
         {
+            layoutParent.EmergencyStop();
+        }
 
+        private void Broadcast_Click(object sender, RoutedEventArgs e)
+        {
+            string message = ((TextBox)FindName("BroadcastBox")).Text;
+            layoutParent.BroadCast(message);
         }
     }
 }

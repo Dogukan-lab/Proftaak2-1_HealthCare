@@ -287,8 +287,7 @@ namespace Server
                     tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                     break;
                 case "session/emergencyStop":
-                    bytes = PackageWrapper.SerializeData("session/stop", new { }, null);
-                    Program.EmergencyStop(bytes);
+                    Program.EmergencyStop();
                     break;
             }
         }
