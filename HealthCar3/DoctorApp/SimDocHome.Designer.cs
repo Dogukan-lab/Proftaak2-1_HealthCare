@@ -108,7 +108,7 @@
             this.PatientHistoryButton.BackColor = System.Drawing.Color.LightSteelBlue;
             this.PatientHistoryButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.PatientHistoryButton.FlatAppearance.BorderSize = 0;
-            this.PatientHistoryButton.Font = new System.Drawing.Font("Segoe UI", 16F);
+            this.PatientHistoryButton.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.PatientHistoryButton.Image = ((System.Drawing.Image)(resources.GetObject("PatientHistoryButton.Image")));
             this.PatientHistoryButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.PatientHistoryButton.ImeMode = System.Windows.Forms.ImeMode.NoControl;
@@ -128,7 +128,7 @@
             this.BikePatientButton.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
             this.BikePatientButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.BikePatientButton.FlatAppearance.BorderSize = 0;
-            this.BikePatientButton.Font = new System.Drawing.Font("Segoe UI", 16F);
+            this.BikePatientButton.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.BikePatientButton.Image = ((System.Drawing.Image)(resources.GetObject("BikePatientButton.Image")));
             this.BikePatientButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.BikePatientButton.ImeMode = System.Windows.Forms.ImeMode.NoControl;
@@ -148,7 +148,7 @@
             this.HomeButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(128)))));
             this.HomeButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.HomeButton.FlatAppearance.BorderSize = 0;
-            this.HomeButton.Font = new System.Drawing.Font("Segoe UI", 16F);
+            this.HomeButton.Font = new System.Drawing.Font("Segoe UI", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.HomeButton.Image = ((System.Drawing.Image)(resources.GetObject("HomeButton.Image")));
             this.HomeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.HomeButton.ImeMode = System.Windows.Forms.ImeMode.NoControl;
@@ -167,7 +167,7 @@
             this.NameDocter.Controls.Add(this.button1);
             this.NameDocter.Controls.Add(this.DocterText);
             this.NameDocter.Dock = System.Windows.Forms.DockStyle.Top;
-            this.NameDocter.Font = new System.Drawing.Font("Segoe UI", 18F);
+            this.NameDocter.Font = new System.Drawing.Font("Segoe UI", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.NameDocter.Location = new System.Drawing.Point(0, 0);
             this.NameDocter.Name = "NameDocter";
             this.NameDocter.Size = new System.Drawing.Size(356, 183);
@@ -187,7 +187,7 @@
             // 
             this.DocterText.AutoSize = true;
             this.DocterText.Dock = System.Windows.Forms.DockStyle.Left;
-            this.DocterText.Font = new System.Drawing.Font("Segoe UI", 35F);
+            this.DocterText.Font = new System.Drawing.Font("Segoe UI", 35F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.DocterText.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.DocterText.Location = new System.Drawing.Point(0, 0);
             this.DocterText.Name = "DocterText";
@@ -272,7 +272,7 @@
             this.Resistance3.Cursor = System.Windows.Forms.Cursors.Default;
             this.Resistance3.Location = new System.Drawing.Point(620, 184);
             this.Resistance3.Name = "Resistance3";
-            this.Resistance3.Size = new System.Drawing.Size(100, 31);
+            this.Resistance3.Size = new System.Drawing.Size(100, 39);
             this.Resistance3.TabIndex = 9;
             // 
             // Speed3
@@ -281,7 +281,7 @@
             this.Speed3.Cursor = System.Windows.Forms.Cursors.Default;
             this.Speed3.Location = new System.Drawing.Point(620, 130);
             this.Speed3.Name = "Speed3";
-            this.Speed3.Size = new System.Drawing.Size(103, 31);
+            this.Speed3.Size = new System.Drawing.Size(103, 39);
             this.Speed3.TabIndex = 8;
             // 
             // textBox16
@@ -289,7 +289,7 @@
             this.textBox16.BackColor = System.Drawing.SystemColors.Highlight;
             this.textBox16.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox16.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox16.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox16.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox16.Location = new System.Drawing.Point(318, 130);
             this.textBox16.Name = "textBox16";
             this.textBox16.Size = new System.Drawing.Size(228, 31);
@@ -301,7 +301,7 @@
             this.textBox17.BackColor = System.Drawing.SystemColors.Highlight;
             this.textBox17.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox17.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox17.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox17.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox17.Location = new System.Drawing.Point(318, 181);
             this.textBox17.Name = "textBox17";
             this.textBox17.Size = new System.Drawing.Size(225, 31);
@@ -310,7 +310,7 @@
             // 
             // EmergencyStop3
             // 
-            this.EmergencyStop3.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EmergencyStop3.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.EmergencyStop3.ForeColor = System.Drawing.Color.Red;
             this.EmergencyStop3.Location = new System.Drawing.Point(760, 15);
             this.EmergencyStop3.Name = "EmergencyStop3";
@@ -325,7 +325,7 @@
             this.Heartrate3.Cursor = System.Windows.Forms.Cursors.Default;
             this.Heartrate3.Location = new System.Drawing.Point(620, 77);
             this.Heartrate3.Name = "Heartrate3";
-            this.Heartrate3.Size = new System.Drawing.Size(103, 31);
+            this.Heartrate3.Size = new System.Drawing.Size(103, 39);
             this.Heartrate3.TabIndex = 4;
             // 
             // textBox19
@@ -333,7 +333,7 @@
             this.textBox19.BackColor = System.Drawing.SystemColors.Highlight;
             this.textBox19.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox19.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox19.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox19.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox19.Location = new System.Drawing.Point(318, 77);
             this.textBox19.Name = "textBox19";
             this.textBox19.Size = new System.Drawing.Size(228, 31);
@@ -346,7 +346,7 @@
             this.Client3.Cursor = System.Windows.Forms.Cursors.Default;
             this.Client3.Location = new System.Drawing.Point(620, 15);
             this.Client3.Name = "Client3";
-            this.Client3.Size = new System.Drawing.Size(103, 31);
+            this.Client3.Size = new System.Drawing.Size(103, 39);
             this.Client3.TabIndex = 2;
             // 
             // textBox22
@@ -354,7 +354,7 @@
             this.textBox22.BackColor = System.Drawing.SystemColors.Highlight;
             this.textBox22.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox22.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox22.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox22.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox22.Location = new System.Drawing.Point(318, 15);
             this.textBox22.Name = "textBox22";
             this.textBox22.Size = new System.Drawing.Size(103, 31);
@@ -366,7 +366,7 @@
             this.textBox25.BackColor = System.Drawing.SystemColors.Highlight;
             this.textBox25.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox25.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox25.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox25.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBox25.Location = new System.Drawing.Point(68, 34);
             this.textBox25.Name = "textBox25";
             this.textBox25.Size = new System.Drawing.Size(149, 49);
@@ -399,7 +399,7 @@
             this.Resistance2.Cursor = System.Windows.Forms.Cursors.Default;
             this.Resistance2.Location = new System.Drawing.Point(620, 184);
             this.Resistance2.Name = "Resistance2";
-            this.Resistance2.Size = new System.Drawing.Size(100, 31);
+            this.Resistance2.Size = new System.Drawing.Size(100, 39);
             this.Resistance2.TabIndex = 9;
             // 
             // speed2
@@ -408,7 +408,7 @@
             this.speed2.Cursor = System.Windows.Forms.Cursors.Default;
             this.speed2.Location = new System.Drawing.Point(620, 130);
             this.speed2.Name = "speed2";
-            this.speed2.Size = new System.Drawing.Size(103, 31);
+            this.speed2.Size = new System.Drawing.Size(103, 39);
             this.speed2.TabIndex = 8;
             // 
             // textBox3
@@ -416,7 +416,7 @@
             this.textBox3.BackColor = System.Drawing.SystemColors.Highlight;
             this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox3.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox3.Location = new System.Drawing.Point(318, 130);
             this.textBox3.Name = "textBox3";
             this.textBox3.Size = new System.Drawing.Size(228, 31);
@@ -428,7 +428,7 @@
             this.textBox4.BackColor = System.Drawing.SystemColors.Highlight;
             this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox4.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox4.Location = new System.Drawing.Point(318, 181);
             this.textBox4.Name = "textBox4";
             this.textBox4.Size = new System.Drawing.Size(225, 31);
@@ -437,7 +437,7 @@
             // 
             // EmergencyStop2
             // 
-            this.EmergencyStop2.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EmergencyStop2.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.EmergencyStop2.ForeColor = System.Drawing.Color.Red;
             this.EmergencyStop2.Location = new System.Drawing.Point(760, 18);
             this.EmergencyStop2.Name = "EmergencyStop2";
@@ -452,7 +452,7 @@
             this.Heartrate2.Cursor = System.Windows.Forms.Cursors.Default;
             this.Heartrate2.Location = new System.Drawing.Point(620, 77);
             this.Heartrate2.Name = "Heartrate2";
-            this.Heartrate2.Size = new System.Drawing.Size(103, 31);
+            this.Heartrate2.Size = new System.Drawing.Size(103, 39);
             this.Heartrate2.TabIndex = 4;
             // 
             // textBox6
@@ -460,7 +460,7 @@
             this.textBox6.BackColor = System.Drawing.SystemColors.Highlight;
             this.textBox6.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox6.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox6.Location = new System.Drawing.Point(318, 77);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(228, 31);
@@ -473,7 +473,7 @@
             this.Client2.Cursor = System.Windows.Forms.Cursors.Default;
             this.Client2.Location = new System.Drawing.Point(620, 15);
             this.Client2.Name = "Client2";
-            this.Client2.Size = new System.Drawing.Size(103, 31);
+            this.Client2.Size = new System.Drawing.Size(103, 39);
             this.Client2.TabIndex = 2;
             // 
             // textBox11
@@ -481,7 +481,7 @@
             this.textBox11.BackColor = System.Drawing.SystemColors.Highlight;
             this.textBox11.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox11.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox11.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox11.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox11.Location = new System.Drawing.Point(318, 15);
             this.textBox11.Name = "textBox11";
             this.textBox11.Size = new System.Drawing.Size(103, 31);
@@ -493,7 +493,7 @@
             this.textBox12.BackColor = System.Drawing.SystemColors.Highlight;
             this.textBox12.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox12.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBox12.Location = new System.Drawing.Point(68, 34);
             this.textBox12.Name = "textBox12";
             this.textBox12.Size = new System.Drawing.Size(149, 49);
@@ -525,7 +525,7 @@
             this.Resistance1.Cursor = System.Windows.Forms.Cursors.Default;
             this.Resistance1.Location = new System.Drawing.Point(620, 184);
             this.Resistance1.Name = "Resistance1";
-            this.Resistance1.Size = new System.Drawing.Size(100, 31);
+            this.Resistance1.Size = new System.Drawing.Size(100, 39);
             this.Resistance1.TabIndex = 9;
             // 
             // Speed1
@@ -534,7 +534,7 @@
             this.Speed1.Cursor = System.Windows.Forms.Cursors.Default;
             this.Speed1.Location = new System.Drawing.Point(620, 130);
             this.Speed1.Name = "Speed1";
-            this.Speed1.Size = new System.Drawing.Size(103, 31);
+            this.Speed1.Size = new System.Drawing.Size(103, 39);
             this.Speed1.TabIndex = 8;
             // 
             // textBox7
@@ -542,7 +542,7 @@
             this.textBox7.BackColor = System.Drawing.SystemColors.Highlight;
             this.textBox7.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox7.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox7.Location = new System.Drawing.Point(318, 130);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(228, 31);
@@ -554,7 +554,7 @@
             this.textBox8.BackColor = System.Drawing.SystemColors.Highlight;
             this.textBox8.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox8.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox8.Location = new System.Drawing.Point(318, 181);
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(225, 31);
@@ -563,7 +563,7 @@
             // 
             // EmergencyStop1
             // 
-            this.EmergencyStop1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.EmergencyStop1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.EmergencyStop1.ForeColor = System.Drawing.Color.Red;
             this.EmergencyStop1.Location = new System.Drawing.Point(760, 15);
             this.EmergencyStop1.Name = "EmergencyStop1";
@@ -578,7 +578,7 @@
             this.Heartrate1.Cursor = System.Windows.Forms.Cursors.Default;
             this.Heartrate1.Location = new System.Drawing.Point(620, 77);
             this.Heartrate1.Name = "Heartrate1";
-            this.Heartrate1.Size = new System.Drawing.Size(103, 31);
+            this.Heartrate1.Size = new System.Drawing.Size(103, 39);
             this.Heartrate1.TabIndex = 4;
             // 
             // textBox15
@@ -586,7 +586,7 @@
             this.textBox15.BackColor = System.Drawing.SystemColors.Highlight;
             this.textBox15.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox15.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox15.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox15.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox15.Location = new System.Drawing.Point(318, 77);
             this.textBox15.Name = "textBox15";
             this.textBox15.Size = new System.Drawing.Size(228, 31);
@@ -599,7 +599,7 @@
             this.Client1.Cursor = System.Windows.Forms.Cursors.Default;
             this.Client1.Location = new System.Drawing.Point(620, 15);
             this.Client1.Name = "Client1";
-            this.Client1.Size = new System.Drawing.Size(103, 31);
+            this.Client1.Size = new System.Drawing.Size(103, 39);
             this.Client1.TabIndex = 2;
             // 
             // textBox23
@@ -607,7 +607,7 @@
             this.textBox23.BackColor = System.Drawing.SystemColors.Highlight;
             this.textBox23.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox23.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox23.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox23.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox23.Location = new System.Drawing.Point(318, 15);
             this.textBox23.Name = "textBox23";
             this.textBox23.Size = new System.Drawing.Size(103, 31);
@@ -619,7 +619,7 @@
             this.textBox24.BackColor = System.Drawing.SystemColors.Highlight;
             this.textBox24.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox24.Cursor = System.Windows.Forms.Cursors.Default;
-            this.textBox24.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox24.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBox24.Location = new System.Drawing.Point(68, 34);
             this.textBox24.Name = "textBox24";
             this.textBox24.Size = new System.Drawing.Size(149, 49);
@@ -641,7 +641,7 @@
             this.ExitButton.Dock = System.Windows.Forms.DockStyle.Right;
             this.ExitButton.FlatAppearance.BorderSize = 0;
             this.ExitButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ExitButton.Font = new System.Drawing.Font("Georgia", 22.125F);
+            this.ExitButton.Font = new System.Drawing.Font("Georgia", 22.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.ExitButton.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.ExitButton.Location = new System.Drawing.Point(1263, 0);
             this.ExitButton.Name = "ExitButton";
@@ -658,6 +658,7 @@
             this.ClientSize = new System.Drawing.Size(1798, 946);
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel1);
+            this.Enabled = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "SimDocHome";
             this.Text = " ";
