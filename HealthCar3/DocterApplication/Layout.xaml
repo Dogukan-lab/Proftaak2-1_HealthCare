@@ -139,18 +139,6 @@
         <Grid Grid.Column="1" 
                Grid.Row="1" 
               Name="GridUserControls" Visibility="Visible">
-            
-            <Grid Name="HomeUserControl" Visibility="Hidden">
-                <local:HomeUserControl></local:HomeUserControl>
-            </Grid>
-
-            <Grid Name="PatientUserControl" Visibility="Hidden">
-                <local:PatientUserControl></local:PatientUserControl>
-            </Grid>
-
-            <Grid Name="HistoryUserControl" Visibility="Hidden">
-                <local:HistoryUserControl></local:HistoryUserControl>
-            </Grid>
         </Grid>
     </Grid>
 </Window>

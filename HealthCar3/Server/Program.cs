@@ -16,6 +16,7 @@ namespace Server
         private static List<Client> clients;
         public static Dictionary<(string name, string password), string> registeredClients; //<(name, password), id>
         private static List<SessionData> savedSession;
+        public static Client doctorClient;
 
         private static void Main(string[] args)
         {
@@ -187,6 +188,15 @@ namespace Server
                 }
             }
             return null;
+        }
+
+        internal static void NotifyDoctor(string id, string name)
+        {
+            if (doctorClient != null)
+            {
+                byte[] bytes = PackageWrapper.SerializeData("doctor/newClient", new { clientId = id, name = name }, doctorClient.GetEncryptor());
+                doctorClient.GetClientStream().Write(bytes, 0, bytes.Length);
+            }
         }
     }
 }

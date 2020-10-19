@@ -170,6 +170,7 @@ namespace Server
                         Console.WriteLine($"New Client registered with id: {id}");
                         bytes = PackageWrapper.SerializeData("client/register/success", new { clientId = id, clientName, message = "Login successful." }, encryptor);
                         loggedIn = true;
+                        Program.NotifyDoctor(id, name);
                     }
                     else
                         bytes = PackageWrapper.SerializeData("client/register/error", new { message = "The username could not be set on the server." }, encryptor);
@@ -183,6 +184,7 @@ namespace Server
                         Console.WriteLine($"New Client logged in with id: {id}");
                         bytes = PackageWrapper.SerializeData("client/login/success", new { message = "Login successful." }, encryptor);
                         loggedIn = true;
+                        Program.NotifyDoctor(id, name);
                     }
                     else
                         bytes = PackageWrapper.SerializeData("client/login/error", new { message = "The username or password is not correct." }, encryptor);
@@ -201,6 +203,7 @@ namespace Server
                     else
                         bytes = PackageWrapper.SerializeData("doctor/login/error", new { message = "The username or password is incorrect." }, encryptor);
 
+                    Program.doctorClient = this;
                     tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                     break;
                 case "client/update/heartRate":

@@ -18,9 +18,27 @@ namespace DocterApplication
     /// </summary>
     public partial class PatientUserControl : UserControl
     {
-        public PatientUserControl()
+        private Layout layoutParent = null;
+        public PatientUserControl(Layout parent)
         {
+            layoutParent = parent;
             InitializeComponent();
+        }
+
+        private void UpdateResistance(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void StartSession(object sender, RoutedEventArgs e)
+        {
+            int bikeId = int.Parse(((Button)sender).Name[((Button)sender).Name.Length - 1].ToString());
+            layoutParent.StartSession(bikeId);
+        }
+
+        private void StopSession(object sender, RoutedEventArgs e)
+        {
+            int bikeId = int.Parse(((Button)sender).Name[((Button)sender).Name.Length - 1].ToString());
+            layoutParent.StopSession(bikeId);
         }
     }
 }

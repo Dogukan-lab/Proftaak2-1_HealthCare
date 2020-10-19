@@ -80,9 +80,6 @@
                         </Grid>
                     </Grid>
 
-                    <Button  Name="StartButton" Height="40" Width="100" Style="{StaticResource HomeButton}" HorizontalAlignment="Right" Content="Start Session" Background="Red" FontWeight="Heavy" VerticalAlignment="Top" Margin="40" Click="StartButton_Click"/>
-                    <Button  Name="StopButton" Height="40" Width="100" Style="{StaticResource HomeButton}" HorizontalAlignment="Right" Content="Stop Session" Background="Red" FontWeight="Heavy" VerticalAlignment="Top" Margin="40,100,40,40" Click="StopButton_Click"/>
-
 
                 <Grid Height="40" Width="225"  Margin="375,175,00,00" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <Label Content="Start Time: "  FontSize="20" HorizontalAlignment="Left"/>
