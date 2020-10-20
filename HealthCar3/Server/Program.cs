@@ -2,6 +2,7 @@
 using PackageUtils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
@@ -17,6 +18,7 @@ namespace Server
         public static Dictionary<(string name, string password), string> registeredClients; //<(name, password), id>
         private static List<SessionData> savedSession;
         public static Client doctorClient;
+        private static List<dynamic> tempRecords;
 
         private static void Main(string[] args)
         {
@@ -208,6 +210,31 @@ namespace Server
             {
                 byte[] bytes = PackageWrapper.SerializeData("doctor/newClient", new { clientId = id, name = name }, doctorClient.GetEncryptor());
                 doctorClient.GetClientStream().Write(bytes, 0, bytes.Length);
+            }
+        }
+
+        internal static void RetrieveAllRecords()
+        {
+            tempRecords = savedSession.OfType<dynamic>().ToList();
+            SendNextFragment();
+        }
+
+        internal static void SendNextFragment()
+        {
+            byte[] bytes;
+            if (tempRecords.Count > 2)
+            {
+                dynamic[] nextRecords = { tempRecords[0], tempRecords[1] };
+                bytes = PackageWrapper.SerializeData("doctor/getSessions/fragment", new { records = nextRecords }, doctorClient.GetEncryptor());
+                doctorClient.GetClientStream().Write(bytes, 0, bytes.Length);
+                tempRecords.RemoveAt(0);
+                tempRecords.RemoveAt(1);
+            }
+            else
+            {
+                bytes = PackageWrapper.SerializeData("doctor/getSessions/success", new { records = tempRecords }, doctorClient.GetEncryptor());
+                doctorClient.GetClientStream().Write(bytes, 0, bytes.Length);
+                tempRecords.Clear();
             }
         }
     }

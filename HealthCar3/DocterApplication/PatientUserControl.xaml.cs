@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -28,6 +29,18 @@ namespace DocterApplication
 
         private void UpdateResistance(object sender, RoutedEventArgs e)
         {
+            int bikeId = int.Parse(((Button)sender).Name[((Button)sender).Name.Length - 1].ToString());
+            string resistance = ((TextBox)FindName("ResistanceLabel" + bikeId)).Text;
+
+            var validCharacters = new Regex(@"^[0-9]+$");
+            if (validCharacters.IsMatch(resistance))
+                layoutParent.UpdateResistance(bikeId, resistance);
+        }
+
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
 
         private void StartSession(object sender, RoutedEventArgs e)

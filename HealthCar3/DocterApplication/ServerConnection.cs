@@ -26,11 +26,14 @@ namespace DocterApplication
         private readonly Encryptor encryptor;
         private readonly Decryptor decryptor;
         private Layout layoutParent = null;
+        private List<dynamic> records = new List<dynamic>();
+        private bool retreivedRecords = false;
 
         public bool IsConnected() { return connected; }
         public bool IsLoggedIn() { return loggedIn; }
         public bool HasReceivedLoginFeedback() { return receivedLoginFeedback; }
         public void SetLayoutParent(Layout parent) { layoutParent = parent; }
+        public bool HasRetreivedRecords() { return retreivedRecords; }
 
         public ServerConnection()
         {
@@ -137,6 +140,14 @@ namespace DocterApplication
                 case "client/disconnect":
                     layoutParent.RemoveClient((string)data.data.clientId);
                     break;
+                case "doctor/getSessions/fragment":
+                    records.AddRange(data.data.records);
+                    GetNextFragment();
+                    break;
+                case "doctor/getSessions/success":
+                    records.AddRange(data.data.records);
+                    retreivedRecords = true;
+                    break;
                 case "chat/message/success":
                 case "chat/broadcast/success":
                 case "session/resistance/success":
@@ -216,18 +227,37 @@ namespace DocterApplication
         /*
          * Retrieves the data from a previous session
          */
-        public void GetSession(string id)
-        {
-            var bytes = PackageWrapper.SerializeData("doctor/clientHistory", new { clientId = id }, encryptor);
-
-            stream.Write(bytes, 0, bytes.Length);
-        }
+        //public void GetSession(string id)
+        //{
+        //    var bytes = PackageWrapper.SerializeData("doctor/clientHistory", new { clientId = id }, encryptor);
+        //
+        //    stream.Write(bytes, 0, bytes.Length);
+        //}
         /*
          * Stops all the active clients
          */
         public void EmergencyStopSessions()
         {
             var bytes = PackageWrapper.SerializeData("session/emergencyStop", new { }, encryptor);
+
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        /*
+         * Retrieves all the records from sessions of the past.
+         */
+        public void GetSessions()
+        {
+            retreivedRecords = false;
+            records.Clear();
+            var bytes = PackageWrapper.SerializeData("doctor/getSessions", new { }, encryptor);
+
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        public void GetNextFragment()
+        {
+            var bytes = PackageWrapper.SerializeData("doctor/getSessions/nextFragment", new { }, encryptor);
 
             stream.Write(bytes, 0, bytes.Length);
         }

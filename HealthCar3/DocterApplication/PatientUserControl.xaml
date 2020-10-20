@@ -66,12 +66,12 @@
                             </Grid>
                         </Grid>
 
-                        <Grid Height="40" Width="350"  Margin="0,250,00,10" HorizontalAlignment="Left" VerticalAlignment="Top">
-                            <Label Content="Resistance: "  FontSize="20" HorizontalAlignment="Left"/>
-                            <Grid Margin="150,0,0,0" Height="40" Width="100" >
-                                <Border BorderBrush="Black" BorderThickness="2" >
-                                    <TextBox Text="0"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel1" Opacity="0" Width="100"/>
-                                </Border>
+                            <Grid Height="40" Width="350"  Margin="0,250,00,10" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                <Label Content="Resistance: "  FontSize="20" HorizontalAlignment="Left"/>
+                                <Grid Margin="150,0,0,0" Height="40" Width="100" >
+                                    <Border BorderBrush="Black" BorderThickness="2" >
+                                        <TextBox Text="0"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel1" PreviewTextInput="NumberValidationTextBox"/>
+                                    </Border>
 
                             </Grid>
                             <Button Content="Update" Height="40" Width="50" HorizontalAlignment="Right" BorderBrush="Black" BorderThickness="2" Click="UpdateResistance" Name="ResButton1"/>

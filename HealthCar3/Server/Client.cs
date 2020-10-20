@@ -286,6 +286,12 @@ namespace Server
                     bytes = session != null ? (byte[])PackageWrapper.SerializeData("doctor/clientHistory/success", session, encryptor) : PackageWrapper.SerializeData("doctor/clientHistory/error", new { message = "No session found with the given ID." }, encryptor);
                     tcpClient.GetStream().Write(bytes, 0, bytes.Length);
                     break;
+                case "doctor/getSessions":
+                    Program.RetrieveAllRecords();
+                    break;
+                case "doctor/getSessions/nextFragment":
+                    Program.SendNextFragment();
+                    break;
                 case "session/emergencyStop":
                     Program.EmergencyStop();
                     break;

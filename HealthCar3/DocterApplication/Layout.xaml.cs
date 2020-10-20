@@ -1,6 +1,10 @@
-﻿using System;
+﻿using LiveCharts;
+using LiveCharts.Wpf;
+using LiveCharts.Wpf.Charts.Base;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -40,7 +44,7 @@ namespace DocterApplication
             GridUserControls.Children.Add(homeUserControl);
             patientUserControl = new PatientUserControl(this);
             GridUserControls.Children.Add(patientUserControl);
-            historyUserControl = new HistoryUserControl();
+            historyUserControl = new HistoryUserControl(this);
             GridUserControls.Children.Add(historyUserControl);
 
             homeUserControl.Visibility = Visibility.Visible;
@@ -80,6 +84,8 @@ namespace DocterApplication
 
             historyUserControl.Visibility = Visibility.Visible;
 
+            sc.GetSessions();
+
         }
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)
@@ -106,6 +112,10 @@ namespace DocterApplication
             SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetPatientAvgHeartRateCB)); // Set avg heart rate to 0
             SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetPatientSpeedCB)); // Set speed to 0
             SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetPatientAvgSpeedCB)); // Set avg speed to 0
+
+            // Link the charts with the data (DOES NOT WORK)
+            //SetNewGuiChartLink(bikes.Count, new GuiChartCallBack(LinkHeartRateChartCB));
+            //SetNewGuiChartLink(bikes.Count, new GuiChartCallBack(LinkSpeedChartCB));
         }
 
         internal void RemoveClient(string clientId)
@@ -115,17 +125,17 @@ namespace DocterApplication
                 if(bike.ID == clientId)
                 {
                     // Reset home screen labels
-                    SetNewGuiLabelValue(bikes.Count, "-", new GuiCallBack(SetHomeClientNameCB)); // Remove client name
-                    SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetHomeHeartRateCB)); // Set heart rate to 0
-                    SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetHomeSpeedCB)); // Set speed to 0
-                    SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetHomeResistanceCB)); // Set resistance to 0
+                    SetNewGuiLabelValue(bike.BikeId, "-", new GuiCallBack(SetHomeClientNameCB)); // Remove client name
+                    SetNewGuiLabelValue(bike.BikeId, "0", new GuiCallBack(SetHomeHeartRateCB)); // Set heart rate to 0
+                    SetNewGuiLabelValue(bike.BikeId, "0", new GuiCallBack(SetHomeSpeedCB)); // Set speed to 0
+                    SetNewGuiLabelValue(bike.BikeId, "0", new GuiCallBack(SetHomeResistanceCB)); // Set resistance to 0
 
                     // Reset patient screen labels
-                    SetNewGuiLabelValue(bikes.Count, "-", new GuiCallBack(SetPatientClientNameCB)); // Remove client name
-                    SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetPatientHeartRateCB)); // Set heart rate to 0
-                    SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetPatientAvgHeartRateCB)); // Set avg heart rate to 0
-                    SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetPatientSpeedCB)); // Set speed to 0
-                    SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetPatientAvgSpeedCB)); // Set avg speed to 0
+                    SetNewGuiLabelValue(bike.BikeId, "-", new GuiCallBack(SetPatientClientNameCB)); // Remove client name
+                    SetNewGuiLabelValue(bike.BikeId, "0", new GuiCallBack(SetPatientHeartRateCB)); // Set heart rate to 0
+                    SetNewGuiLabelValue(bike.BikeId, "0", new GuiCallBack(SetPatientAvgHeartRateCB)); // Set avg heart rate to 0
+                    SetNewGuiLabelValue(bike.BikeId, "0", new GuiCallBack(SetPatientSpeedCB)); // Set speed to 0
+                    SetNewGuiLabelValue(bike.BikeId, "0", new GuiCallBack(SetPatientAvgSpeedCB)); // Set avg speed to 0
 
                     bikes.Remove(bike);
                     return;
@@ -212,6 +222,59 @@ namespace DocterApplication
         {
             ((Label)patientUserControl.FindName("SpeedAverageLabel" + bikeId)).Content = avgSpeed + " m/s";
         }
+
+        // Chart Callbacks
+        // DOES NOT WORK
+        /*public delegate void GuiChartCallBack(int bikeId);
+
+        public void SetNewGuiChartLink(int bikeId, GuiChartCallBack callback)
+        {
+            Application.Current.Dispatcher.Invoke(callback, new Object[] { bikeId });
+        }
+        private void LinkHeartRateChartCB(int bikeId)
+        {
+            foreach (var bike in bikes)
+                if (bike.BikeId == bikeId)
+                {
+                    Application.Current.Dispatcher.Invoke((Action)delegate {
+                        bike.HeartRateCollection = new SeriesCollection(new LineSeries { Values = new ChartValues<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } });
+                        });
+
+                    Binding newBinding = new Binding();
+                    newBinding.Source = bike.HeartRateCollection;
+                    ((Chart)patientUserControl.FindName("HeartRateChart" + bikeId)).SetBinding(Chart.BindingGroupProperty, newBinding);
+                    Timer timer = new Timer() { Interval = 300};
+                    timer.Elapsed += Timer_Elapsed;
+                    timer.Start();
+                }
+        }
+
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            SetNewGuiChartLink(1, new GuiChartCallBack(ChartTimeElapsedCB));
+        }
+        private void ChartTimeElapsedCB(int bikeId)
+        {
+            ((Chart)patientUserControl.FindName("HeartRateChart1")).Update();
+        }
+
+        private void LinkSpeedChartCB(int bikeId)
+        {
+            foreach (var bike in bikes)
+                if (bike.BikeId == bikeId)
+                {
+                    Application.Current.Dispatcher.Invoke((Action)delegate {
+                        bike.SpeedCollection = new SeriesCollection(new LineSeries { Values = new ChartValues<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } });
+                    });
+
+                    Binding newBinding = new Binding();
+                    newBinding.Source = bike.SpeedCollection;
+                    ((Chart)patientUserControl.FindName("SpeedChart" + bikeId)).SetBinding(Chart.BindingGroupProperty, newBinding);
+                }
+        } */
+
+        // History screen.
+
         #endregion
 
         internal void StartSession(int bikeId)
@@ -241,6 +304,16 @@ namespace DocterApplication
         internal void EmergencyStop()
         {
             sc.EmergencyStopSessions();
+        }
+
+        internal void UpdateResistance(int bikeId, string resistance)
+        {
+            foreach (var bike in bikes)
+                if (bike.BikeId == bikeId)
+                {
+                    SetNewGuiLabelValue(bikeId, resistance, new GuiCallBack(SetHomeResistanceCB));
+                    sc.SetNewResistance(bike.ID, resistance);
+                }
         }
     }
 }

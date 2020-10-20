@@ -18,9 +18,11 @@ namespace DocterApplication
     /// </summary>
     public partial class HistoryUserControl : UserControl
     {
-        public HistoryUserControl()
+        private Layout layoutParent;
+        public HistoryUserControl(Layout parent)
         {
             InitializeComponent();
+            layoutParent = parent;
         }
 
         private void ClientListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
