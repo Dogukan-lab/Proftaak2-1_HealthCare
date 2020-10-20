@@ -10,36 +10,36 @@
         WindowStyle="None" ResizeMode="NoResize" 
         MouseDown="Window_MouseDown" >
 
+
     <Grid>
-        <Grid>
-            
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
 
-            <Border CornerRadius="18" Grid.RowSpan="2"></Border>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Border CornerRadius="18" Grid.RowSpan="2"></Border>
 
 
-            <StackPanel VerticalAlignment="Center">
-                
-                <IconPacks:PackIconMaterial Kind ="Doctor" 
+        <StackPanel VerticalAlignment="Center">
+
+            <IconPacks:PackIconMaterial Kind ="Doctor" 
                                             VerticalAlignment="Center" 
                                             HorizontalAlignment="Center" Width="80" Height="80"
                                             />
-                
-                <TextBlock Text="Login Doctor"
+
+            <TextBlock Text="Login Doctor"
                            FontWeight="Heavy"
                            FontSize="22"
                            Foreground="Red"
                            HorizontalAlignment="Center"
                            Margin="20"/>
-            </StackPanel>
+        </StackPanel>
 
 
-            <StackPanel Grid.Row="1">
-                <StackPanel  Orientation="Horizontal">
-                    <TextBox Text="Username"
+        <StackPanel Grid.Row="1">
+            <StackPanel  Orientation="Horizontal">
+                <TextBox Text="Username"
                              Name="UsernameBox"
                              FontSize="22"
                              HorizontalAlignment="Center" 
@@ -52,18 +52,18 @@
                              Opacity="0.5"
                              Margin="50,0,0,0" 
                              MouseEnter="TextBox_MouseEnter"/>
-                    <IconPacks:PackIconMaterial Kind ="Account" 
+                <IconPacks:PackIconMaterial Kind ="Account" 
                                             VerticalAlignment="Center" 
                                             HorizontalAlignment="Center"
                                             Foreground="Red"/>
-                </StackPanel>
-                <Border Width="250"
+            </StackPanel>
+            <Border Width="250"
                     Height="2"
                     Background="Red"
                     Opacity="0.5"/>
 
-                <StackPanel  Orientation="Horizontal" Margin="0,20,0,0">
-                    <PasswordBox Password="Password"
+            <StackPanel  Orientation="Horizontal" Margin="0,20,0,0">
+                <PasswordBox Password="Password"
                                 FontSize="22"
                                  HorizontalAlignment="Center" 
                                 Foreground="IndianRed"
@@ -76,18 +76,18 @@
                                 Margin="50,0,0,0"
                                  MouseEnter="PasswordBox_MouseEnter"
                                  Name="PasswordBox"/>
-                    <IconPacks:PackIconMaterial Kind ="Typewriter" 
+                <IconPacks:PackIconMaterial Kind ="Typewriter" 
                                             VerticalAlignment="Center" 
                                             HorizontalAlignment="Center"
                                             Foreground="Red"/>
-                </StackPanel>
-                <Border Width="250"
+            </StackPanel>
+            <Border Width="250"
                     Height="2"
                     Background="Red"
                     Opacity="0.5"/>
 
-                <StackPanel Orientation="Horizontal" Margin="0,50,0,0">
-                    <Button Width="110" 
+            <StackPanel Orientation="Horizontal" Margin="0,50,0,0">
+                <Button Width="110" 
                             Height="50"
                             Content="Login"
                             Margin="50,0,50,0"
@@ -95,17 +95,17 @@
                             Style="{StaticResource HomeButton}"
                             />
 
-                    <Button Width="110" 
+                <Button Width="110" 
                             Height="50"
                             Content="Exit"
                             Name="ExitButton" Click="ExitButton_Click"
                             Style="{StaticResource HomeButton}"
                             />
 
-                </StackPanel>
             </StackPanel>
+        </StackPanel>
 
-    
-        </Grid>
+
     </Grid>
+
 </Window>

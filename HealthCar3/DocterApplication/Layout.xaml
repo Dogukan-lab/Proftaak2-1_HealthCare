@@ -3,25 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:DocterApplication" xmlns:IconPacks="clr-namespace:MahApps.Metro.IconPacks;assembly=MahApps.Metro.IconPacks.Material"
         mc:Ignorable="d"
         Title="HomePage" Height="800" Width="1200"
-         AllowsTransparency="True" Background="AliceBlue"
+        AllowsTransparency="True" Background="AliceBlue"
         WindowStyle="None" ResizeMode="NoResize" 
         MouseDown="Window_MouseDown" >
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="29*"/>
             <ColumnDefinition Width="171*"/>
         </Grid.ColumnDefinitions>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
         <Grid Grid.ColumnSpan="2" Background="Red" Name="HighRow">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Width="70"
@@ -34,41 +32,31 @@
                                             Foreground="Black"/>
 
                 </Button>
-
-
             </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <TextBlock Text="Doctername + login"
+            <TextBlock Text="Doctername + login"
                            FontSize="22"
-                           HorizontalAlignment="Center"
+                           TextAlignment="Center"
+                           HorizontalAlignment="Left"
                            Name="WelcomeDocter"
-                           Margin="30,0,0,0"/>
-            </StackPanel>
-
+                           Margin="30,15,10,20"/>
         </Grid>
-
         <Grid Grid.Row="1">
-
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-
             <Grid.Background>
                 <LinearGradientBrush>
                     <GradientStop Color="White" Offset="0.0"/>
                     <GradientStop Color="LightBlue" Offset="1"/>
                 </LinearGradientBrush>
             </Grid.Background>
-
             <Grid Background="#FFFE9168">
                 <IconPacks:PackIconMaterial Kind ="Doctor" 
                                             VerticalAlignment="Center" 
                                             HorizontalAlignment="Center" Width="80" Height="80"
                                             />
-
             </Grid>
-
             <StackPanel Grid.Row="1">
                 <Button 
                     Name="HomeButton"
@@ -88,7 +76,6 @@
                                    Margin="4"/>
                     </Grid>
                 </Button>
-
                 <Button 
                     Name="PatientButton"
                     Background="Red"
@@ -107,8 +94,6 @@
                                    Margin="4"/>
                     </Grid>
                 </Button>
-
-
                 <Button 
                     Name="HistoryButton"
                     Background="Red"
@@ -127,18 +112,9 @@
                                    Margin="4"/>
                     </Grid>
                 </Button>
-
             </StackPanel>
-
-
-
-
-
-
         </Grid>
-        <Grid Grid.Column="1" 
-               Grid.Row="1" 
-              Name="GridUserControls" Visibility="Visible">
+        <Grid Grid.Column="1" Grid.Row="1" Name="GridUserControls">
         </Grid>
     </Grid>
 </Window>
