@@ -70,15 +70,15 @@
                             <Label Content="Resistance: "  FontSize="20" HorizontalAlignment="Left"/>
                             <Grid Margin="150,0,0,0" Height="40" Width="100" >
                                 <Border BorderBrush="Black" BorderThickness="2" >
-                                    <TextBox Text="0"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel1" Opacity="0" Width="100" PreviewTextInput="NumberValidationTextBox"/>
+                                    <TextBox Text="0"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel1" TextAlignment="Center" Width="100" PreviewTextInput="NumberValidationTextBox"/>
                                 </Border>
 
                             </Grid>
                             <Button Content="Update" Height="40" Width="50" HorizontalAlignment="Right" BorderBrush="Black" BorderThickness="2" Click="UpdateResistance" Name="ResButton1"/>
                         </Grid>
 
-                        <Button  Height="40" Width="100" Style="{StaticResource HomeButton}" HorizontalAlignment="Right" Content="Start Session" Background="Red" FontWeight="Heavy" VerticalAlignment="Top" Margin="40" Click="StartSession" Name="StartButton1"/>
-                        <Button  Height="40" Width="100" Style="{StaticResource HomeButton}" HorizontalAlignment="Right" Content="Stop Session" Background="Red" FontWeight="Heavy" VerticalAlignment="Top" Margin="40,100,40,40" Click="StopSession" Name="StopButton1"/>
+                        <Button Height="40" Width="100" Style="{StaticResource HomeButton}" HorizontalAlignment="Right" Content="Start Session" Background="Red" FontWeight="Heavy" VerticalAlignment="Top" Margin="40" Click="StartSession" Name="StartButton1"/>
+                        <Button Height="40" Width="100" Style="{StaticResource HomeButton}" HorizontalAlignment="Right" Content="Stop Session" Background="Red" FontWeight="Heavy" VerticalAlignment="Top" Margin="40,100,40,40" Click="StopSession" Name="StopButton1"/>
 
                         <Label Content="Chat" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="33"/>
 
@@ -110,7 +110,7 @@
             </Grid>
         </TabItem>
 
-        <TabItem Header="Bike 2" >
+        <TabItem Header="Bike 2">
             <Grid>
                 <Grid >
                     <Grid.ColumnDefinitions>
@@ -168,7 +168,7 @@
                             <Label Content="Resistance: "  FontSize="20" HorizontalAlignment="Left"/>
                             <Grid Margin="150,0,0,0" Height="40" Width="100" >
                                 <Border BorderBrush="Black" BorderThickness="2" >
-                                    <TextBox Text="0"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel2" Opacity="0" Width="100" PreviewTextInput="NumberValidationTextBox"/>
+                                    <TextBox Text="0"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel2"  TextAlignment="Center" Width="100"  PreviewTextInput="NumberValidationTextBox"/>
                                 </Border>
 
                             </Grid>
@@ -267,7 +267,7 @@
                             <Label Content="Resistance: "  FontSize="20" HorizontalAlignment="Left"/>
                             <Grid Margin="150,0,0,0" Height="40" Width="100" >
                                 <Border BorderBrush="Black" BorderThickness="2" >
-                                    <TextBox Text="0"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel3" Opacity="0" Width="100" PreviewTextInput="NumberValidationTextBox"/>
+                                    <TextBox Text="0"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel3"  TextAlignment="Center" Width="100"  PreviewTextInput="NumberValidationTextBox"/>
                                 </Border>
 
                             </Grid>
@@ -365,7 +365,7 @@
                             <Label Content="Resistance: "  FontSize="20" HorizontalAlignment="Left"/>
                             <Grid Margin="150,0,0,0" Height="40" Width="100" >
                                 <Border BorderBrush="Black" BorderThickness="2" >
-                                    <TextBox Text="0"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel4" Opacity="0" Width="100" PreviewTextInput="NumberValidationTextBox"/>
+                                    <TextBox Text="0"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel4"  TextAlignment="Center" Width="100"  PreviewTextInput="NumberValidationTextBox"/>
                                 </Border>
 
                             </Grid>
@@ -463,7 +463,7 @@
                             <Label Content="Resistance: "  FontSize="20" HorizontalAlignment="Left"/>
                             <Grid Margin="150,0,0,0" Height="40" Width="100" >
                                 <Border BorderBrush="Black" BorderThickness="2" >
-                                    <TextBox Text="0"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel5" Opacity="0" Width="100" PreviewTextInput="NumberValidationTextBox"/>
+                                    <TextBox Text="0"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel5"  TextAlignment="Center" Width="100"  PreviewTextInput="NumberValidationTextBox"/>
                                 </Border>
 
                             </Grid>
@@ -561,7 +561,7 @@
                             <Label Content="Resistance: "  FontSize="20" HorizontalAlignment="Left"/>
                             <Grid Margin="150,0,0,0" Height="40" Width="100" >
                                 <Border BorderBrush="Black" BorderThickness="2" >
-                                    <TextBox Text="0"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel6" Opacity="0" Width="100" PreviewTextInput="NumberValidationTextBox"/>
+                                    <TextBox Text="0"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel6"  TextAlignment="Center" Width="100"  PreviewTextInput="NumberValidationTextBox"/>
                                 </Border>
 
                             </Grid>
