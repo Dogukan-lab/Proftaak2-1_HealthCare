@@ -26,7 +26,7 @@ namespace DocterApplication
         private readonly Encryptor encryptor;
         private readonly Decryptor decryptor;
         private Layout layoutParent = null;
-        private List<dynamic> records = new List<dynamic>();
+        private List<SessionData> records = new List<SessionData>();
         private bool retreivedRecords = false;
 
         public bool IsConnected() { return connected; }
@@ -141,11 +141,17 @@ namespace DocterApplication
                     layoutParent.RemoveClient((string)data.data.clientId);
                     break;
                 case "doctor/getSessions/fragment":
-                    records.AddRange(data.data.records);
+                    foreach(dynamic r in ((JArray)data.data.records).Children())
+                    {
+                        records.Add(new SessionData(r));
+                    }
                     GetNextFragment();
                     break;
                 case "doctor/getSessions/success":
-                    records.AddRange(data.data.records);
+                    foreach (dynamic r in ((JArray)data.data.records).Children())
+                    {
+                        records.Add(new SessionData(r));
+                    }
                     retreivedRecords = true;
                     break;
                 case "chat/message/success":

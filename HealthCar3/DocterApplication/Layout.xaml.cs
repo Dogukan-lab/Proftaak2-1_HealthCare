@@ -274,7 +274,11 @@ namespace DocterApplication
         } */
 
         // History screen.
-
+        //private void SetHistoryClientBoxCB()
+        //{
+        //
+        //    ((ListBox)historyUserControl.FindName("ClientListBox")).Items
+        //}
         #endregion
 
         internal void StartSession(int bikeId)
