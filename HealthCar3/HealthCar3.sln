@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DoctorApp", "DoctorApp\Doct
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DocterApplication", "DocterApplication\DocterApplication.csproj", "{E20A134F-DCCA-41A8-9FEF-60A6265071C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientApplication", "ClientApplication\ClientApplication.csproj", "{318EC306-B653-4BF4-8488-EAF02B7BE455}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		PackageUtils\PackageUtils.projitems*{126445e1-c754-417f-9757-944e031c13bd}*SharedItemsImports = 13
@@ -48,6 +50,10 @@ Global
 		{E20A134F-DCCA-41A8-9FEF-60A6265071C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E20A134F-DCCA-41A8-9FEF-60A6265071C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E20A134F-DCCA-41A8-9FEF-60A6265071C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{318EC306-B653-4BF4-8488-EAF02B7BE455}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{318EC306-B653-4BF4-8488-EAF02B7BE455}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{318EC306-B653-4BF4-8488-EAF02B7BE455}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{318EC306-B653-4BF4-8488-EAF02B7BE455}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

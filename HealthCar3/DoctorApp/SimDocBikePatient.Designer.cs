@@ -475,8 +475,6 @@
         private System.Windows.Forms.TabPage BikeControl2;
         private System.Windows.Forms.TabPage BikeControl3;
         private System.Windows.Forms.Panel panel8;
-        private LiveCharts.WinForms.CartesianChart cartesianChart2;
-        private LiveCharts.WinForms.CartesianChart cartesianChart1;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.Panel panel9;
         private System.Windows.Forms.Button ResistanceButton;

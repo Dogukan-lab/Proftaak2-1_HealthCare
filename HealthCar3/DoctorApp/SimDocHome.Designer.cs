@@ -191,7 +191,7 @@
             this.DocterText.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.DocterText.Location = new System.Drawing.Point(0, 0);
             this.DocterText.Name = "DocterText";
-            this.DocterText.Size = new System.Drawing.Size(331, 125);
+            this.DocterText.Size = new System.Drawing.Size(247, 93);
             this.DocterText.TabIndex = 0;
             this.DocterText.Text = "Docter";
             this.DocterText.Click += new System.EventHandler(this.Docter_Click);
@@ -272,7 +272,7 @@
             this.Resistance3.Cursor = System.Windows.Forms.Cursors.Default;
             this.Resistance3.Location = new System.Drawing.Point(620, 184);
             this.Resistance3.Name = "Resistance3";
-            this.Resistance3.Size = new System.Drawing.Size(100, 39);
+            this.Resistance3.Size = new System.Drawing.Size(100, 31);
             this.Resistance3.TabIndex = 9;
             // 
             // Speed3
@@ -281,7 +281,7 @@
             this.Speed3.Cursor = System.Windows.Forms.Cursors.Default;
             this.Speed3.Location = new System.Drawing.Point(620, 130);
             this.Speed3.Name = "Speed3";
-            this.Speed3.Size = new System.Drawing.Size(103, 39);
+            this.Speed3.Size = new System.Drawing.Size(103, 31);
             this.Speed3.TabIndex = 8;
             // 
             // textBox16
@@ -292,7 +292,7 @@
             this.textBox16.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox16.Location = new System.Drawing.Point(318, 130);
             this.textBox16.Name = "textBox16";
-            this.textBox16.Size = new System.Drawing.Size(228, 31);
+            this.textBox16.Size = new System.Drawing.Size(228, 23);
             this.textBox16.TabIndex = 7;
             this.textBox16.Text = "Speed";
             // 
@@ -304,7 +304,7 @@
             this.textBox17.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox17.Location = new System.Drawing.Point(318, 181);
             this.textBox17.Name = "textBox17";
-            this.textBox17.Size = new System.Drawing.Size(225, 31);
+            this.textBox17.Size = new System.Drawing.Size(225, 23);
             this.textBox17.TabIndex = 6;
             this.textBox17.Text = "Resistance:";
             // 
@@ -325,7 +325,7 @@
             this.Heartrate3.Cursor = System.Windows.Forms.Cursors.Default;
             this.Heartrate3.Location = new System.Drawing.Point(620, 77);
             this.Heartrate3.Name = "Heartrate3";
-            this.Heartrate3.Size = new System.Drawing.Size(103, 39);
+            this.Heartrate3.Size = new System.Drawing.Size(103, 31);
             this.Heartrate3.TabIndex = 4;
             // 
             // textBox19
@@ -336,7 +336,7 @@
             this.textBox19.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox19.Location = new System.Drawing.Point(318, 77);
             this.textBox19.Name = "textBox19";
-            this.textBox19.Size = new System.Drawing.Size(228, 31);
+            this.textBox19.Size = new System.Drawing.Size(228, 23);
             this.textBox19.TabIndex = 3;
             this.textBox19.Text = "Heartrate (BPM):";
             // 
@@ -346,7 +346,7 @@
             this.Client3.Cursor = System.Windows.Forms.Cursors.Default;
             this.Client3.Location = new System.Drawing.Point(620, 15);
             this.Client3.Name = "Client3";
-            this.Client3.Size = new System.Drawing.Size(103, 39);
+            this.Client3.Size = new System.Drawing.Size(103, 31);
             this.Client3.TabIndex = 2;
             // 
             // textBox22
@@ -357,7 +357,7 @@
             this.textBox22.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox22.Location = new System.Drawing.Point(318, 15);
             this.textBox22.Name = "textBox22";
-            this.textBox22.Size = new System.Drawing.Size(103, 31);
+            this.textBox22.Size = new System.Drawing.Size(103, 23);
             this.textBox22.TabIndex = 1;
             this.textBox22.Text = "Client:";
             // 
@@ -369,7 +369,7 @@
             this.textBox25.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBox25.Location = new System.Drawing.Point(68, 34);
             this.textBox25.Name = "textBox25";
-            this.textBox25.Size = new System.Drawing.Size(149, 49);
+            this.textBox25.Size = new System.Drawing.Size(149, 37);
             this.textBox25.TabIndex = 0;
             this.textBox25.Text = "Bike 3";
             // 
@@ -399,7 +399,7 @@
             this.Resistance2.Cursor = System.Windows.Forms.Cursors.Default;
             this.Resistance2.Location = new System.Drawing.Point(620, 184);
             this.Resistance2.Name = "Resistance2";
-            this.Resistance2.Size = new System.Drawing.Size(100, 39);
+            this.Resistance2.Size = new System.Drawing.Size(100, 31);
             this.Resistance2.TabIndex = 9;
             // 
             // speed2
@@ -408,7 +408,7 @@
             this.speed2.Cursor = System.Windows.Forms.Cursors.Default;
             this.speed2.Location = new System.Drawing.Point(620, 130);
             this.speed2.Name = "speed2";
-            this.speed2.Size = new System.Drawing.Size(103, 39);
+            this.speed2.Size = new System.Drawing.Size(103, 31);
             this.speed2.TabIndex = 8;
             // 
             // textBox3
@@ -419,7 +419,7 @@
             this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox3.Location = new System.Drawing.Point(318, 130);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(228, 31);
+            this.textBox3.Size = new System.Drawing.Size(228, 23);
             this.textBox3.TabIndex = 7;
             this.textBox3.Text = "Speed";
             // 
@@ -431,7 +431,7 @@
             this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox4.Location = new System.Drawing.Point(318, 181);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(225, 31);
+            this.textBox4.Size = new System.Drawing.Size(225, 23);
             this.textBox4.TabIndex = 6;
             this.textBox4.Text = "Resistance:";
             // 
@@ -452,7 +452,7 @@
             this.Heartrate2.Cursor = System.Windows.Forms.Cursors.Default;
             this.Heartrate2.Location = new System.Drawing.Point(620, 77);
             this.Heartrate2.Name = "Heartrate2";
-            this.Heartrate2.Size = new System.Drawing.Size(103, 39);
+            this.Heartrate2.Size = new System.Drawing.Size(103, 31);
             this.Heartrate2.TabIndex = 4;
             // 
             // textBox6
@@ -463,7 +463,7 @@
             this.textBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox6.Location = new System.Drawing.Point(318, 77);
             this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(228, 31);
+            this.textBox6.Size = new System.Drawing.Size(228, 23);
             this.textBox6.TabIndex = 3;
             this.textBox6.Text = "Heartrate (BPM):";
             // 
@@ -473,7 +473,7 @@
             this.Client2.Cursor = System.Windows.Forms.Cursors.Default;
             this.Client2.Location = new System.Drawing.Point(620, 15);
             this.Client2.Name = "Client2";
-            this.Client2.Size = new System.Drawing.Size(103, 39);
+            this.Client2.Size = new System.Drawing.Size(103, 31);
             this.Client2.TabIndex = 2;
             // 
             // textBox11
@@ -484,7 +484,7 @@
             this.textBox11.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox11.Location = new System.Drawing.Point(318, 15);
             this.textBox11.Name = "textBox11";
-            this.textBox11.Size = new System.Drawing.Size(103, 31);
+            this.textBox11.Size = new System.Drawing.Size(103, 23);
             this.textBox11.TabIndex = 1;
             this.textBox11.Text = "Client:";
             // 
@@ -496,7 +496,7 @@
             this.textBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBox12.Location = new System.Drawing.Point(68, 34);
             this.textBox12.Name = "textBox12";
-            this.textBox12.Size = new System.Drawing.Size(149, 49);
+            this.textBox12.Size = new System.Drawing.Size(149, 37);
             this.textBox12.TabIndex = 0;
             this.textBox12.Text = "Bike 2";
             // 
@@ -525,7 +525,7 @@
             this.Resistance1.Cursor = System.Windows.Forms.Cursors.Default;
             this.Resistance1.Location = new System.Drawing.Point(620, 184);
             this.Resistance1.Name = "Resistance1";
-            this.Resistance1.Size = new System.Drawing.Size(100, 39);
+            this.Resistance1.Size = new System.Drawing.Size(100, 31);
             this.Resistance1.TabIndex = 9;
             // 
             // Speed1
@@ -534,7 +534,7 @@
             this.Speed1.Cursor = System.Windows.Forms.Cursors.Default;
             this.Speed1.Location = new System.Drawing.Point(620, 130);
             this.Speed1.Name = "Speed1";
-            this.Speed1.Size = new System.Drawing.Size(103, 39);
+            this.Speed1.Size = new System.Drawing.Size(103, 31);
             this.Speed1.TabIndex = 8;
             // 
             // textBox7
@@ -545,7 +545,7 @@
             this.textBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox7.Location = new System.Drawing.Point(318, 130);
             this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(228, 31);
+            this.textBox7.Size = new System.Drawing.Size(228, 23);
             this.textBox7.TabIndex = 7;
             this.textBox7.Text = "Speed";
             // 
@@ -557,7 +557,7 @@
             this.textBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox8.Location = new System.Drawing.Point(318, 181);
             this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(225, 31);
+            this.textBox8.Size = new System.Drawing.Size(225, 23);
             this.textBox8.TabIndex = 6;
             this.textBox8.Text = "Resistance:";
             // 
@@ -578,7 +578,7 @@
             this.Heartrate1.Cursor = System.Windows.Forms.Cursors.Default;
             this.Heartrate1.Location = new System.Drawing.Point(620, 77);
             this.Heartrate1.Name = "Heartrate1";
-            this.Heartrate1.Size = new System.Drawing.Size(103, 39);
+            this.Heartrate1.Size = new System.Drawing.Size(103, 31);
             this.Heartrate1.TabIndex = 4;
             // 
             // textBox15
@@ -589,7 +589,7 @@
             this.textBox15.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox15.Location = new System.Drawing.Point(318, 77);
             this.textBox15.Name = "textBox15";
-            this.textBox15.Size = new System.Drawing.Size(228, 31);
+            this.textBox15.Size = new System.Drawing.Size(228, 23);
             this.textBox15.TabIndex = 3;
             this.textBox15.Text = "Heartrate (BPM):";
             // 
@@ -599,7 +599,7 @@
             this.Client1.Cursor = System.Windows.Forms.Cursors.Default;
             this.Client1.Location = new System.Drawing.Point(620, 15);
             this.Client1.Name = "Client1";
-            this.Client1.Size = new System.Drawing.Size(103, 39);
+            this.Client1.Size = new System.Drawing.Size(103, 31);
             this.Client1.TabIndex = 2;
             // 
             // textBox23
@@ -610,7 +610,7 @@
             this.textBox23.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.textBox23.Location = new System.Drawing.Point(318, 15);
             this.textBox23.Name = "textBox23";
-            this.textBox23.Size = new System.Drawing.Size(103, 31);
+            this.textBox23.Size = new System.Drawing.Size(103, 23);
             this.textBox23.TabIndex = 1;
             this.textBox23.Text = "Client:";
             // 
@@ -622,7 +622,7 @@
             this.textBox24.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.125F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.textBox24.Location = new System.Drawing.Point(68, 34);
             this.textBox24.Name = "textBox24";
-            this.textBox24.Size = new System.Drawing.Size(149, 49);
+            this.textBox24.Size = new System.Drawing.Size(149, 37);
             this.textBox24.TabIndex = 0;
             this.textBox24.Text = "Bike 1";
             // 
