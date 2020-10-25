@@ -311,49 +311,63 @@ namespace DocterApplication
             List<SessionData> addedClients = new List<SessionData>();
             foreach (var rec in records)
             {
-                if (!addedClients.Contains(rec))
+                bool alreadyAdded = false;
+                foreach (var client in addedClients)
+                {
+                    if (client.clientId == rec.clientId)
+                    {
+                        alreadyAdded = true;
+                        break;
+                    }
+                }
+                if (!alreadyAdded)
                 {
                     addedClients.Add(rec);
-                    ((ListBox)historyUserControl.FindName("ClientListBox")).Items.Add(rec.name + "\t\t" + rec.clientId);
                 }
             }
-        }
-        #endregion
+            List<string> clients = new List<string>();
+            foreach (var client in addedClients)
+                clients.Add(client.name + "\t\t" + client.clientId);
 
-        internal void StartSession(int bikeId)
-        {
-            foreach (var bike in bikes)
-                if (bike.BikeId == bikeId)
-                    sc.StartSession(bike.ID);
+            ((ListBox)historyUserControl.FindName("ClientListBox")).ItemsSource = clients;
+            historyUserControl.Records = records;
         }
-        internal void StopSession(int bikeId)
-        {
-            foreach (var bike in bikes)
-                if (bike.BikeId == bikeId)
-                    sc.StopSession(bike.ID);
-        }
-        internal void SendChat(int bikeId, string message)
-        {
-            foreach (var bike in bikes)
-                if (bike.BikeId == bikeId)
-                    sc.Chat(bike.ID, message);
-        }
-        internal void BroadCast(string message)
-        {
-            sc.Broadcast(message);
-        }
-        internal void EmergencyStop()
-        {
-            sc.EmergencyStopSessions();
-        }
-        internal void UpdateResistance(int bikeId, string resistance)
-        {
-            foreach (var bike in bikes)
-                if (bike.BikeId == bikeId)
-                {
-                    SetNewGuiLabelValue(bikeId, resistance, new GuiCallBack(SetHomeResistanceCB));
-                    sc.SetNewResistance(bike.ID, resistance);
-                }
-        }
+    #endregion
+
+    internal void StartSession(int bikeId)
+    {
+        foreach (var bike in bikes)
+            if (bike.BikeId == bikeId)
+                sc.StartSession(bike.ID);
     }
+    internal void StopSession(int bikeId)
+    {
+        foreach (var bike in bikes)
+            if (bike.BikeId == bikeId)
+                sc.StopSession(bike.ID);
+    }
+    internal void SendChat(int bikeId, string message)
+    {
+        foreach (var bike in bikes)
+            if (bike.BikeId == bikeId)
+                sc.Chat(bike.ID, message);
+    }
+    internal void BroadCast(string message)
+    {
+        sc.Broadcast(message);
+    }
+    internal void EmergencyStop()
+    {
+        sc.EmergencyStopSessions();
+    }
+    internal void UpdateResistance(int bikeId, string resistance)
+    {
+        foreach (var bike in bikes)
+            if (bike.BikeId == bikeId)
+            {
+                SetNewGuiLabelValue(bikeId, resistance, new GuiCallBack(SetHomeResistanceCB));
+                sc.SetNewResistance(bike.ID, resistance);
+            }
+    }
+}
 }

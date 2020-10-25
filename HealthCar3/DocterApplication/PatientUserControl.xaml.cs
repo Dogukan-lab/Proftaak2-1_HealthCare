@@ -1,4 +1,5 @@
 ﻿using LiveCharts;
+using LiveCharts.Wpf.Charts.Base;
 using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
@@ -52,6 +53,7 @@ namespace DocterApplication
         {
             int bikeId = int.Parse(((Button)sender).Name[((Button)sender).Name.Length - 1].ToString());
             layoutParent.StopSession(bikeId);
+            ResetGuiValues(bikeId);
         }
 
         private void OnKeyDownEvent(object sender, KeyEventArgs e)
@@ -67,6 +69,20 @@ namespace DocterApplication
 
                 textBox.Text = "";
             }
+        }
+
+        private void ResetGuiValues(int bikeId)
+        {
+            Dispatcher.Invoke(delegate
+            {
+                ((Label)FindName("HeartrateLabel" + bikeId)).Content = "0 BPM";
+                ((Label)FindName("HeartrateAverageLabel" + bikeId)).Content = "0 BPM";
+                ((Label)FindName("SpeedLabel" + bikeId)).Content = "0 m/s";
+                ((Label)FindName("SpeedAverageLabel" + bikeId)).Content = "0 m/s";
+                ((TextBox)FindName("ResistanceLabel" + bikeId)).Text = "0";
+                ((Chart)FindName("HeartRateChart" + bikeId)).Series[0].Values.Clear();
+                ((Chart)FindName("SpeedChart" + bikeId)).Series[0].Values.Clear();
+            });
         }
     }
 }

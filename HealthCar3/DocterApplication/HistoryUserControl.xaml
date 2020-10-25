@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DocterApplication"
              mc:Ignorable="d" 
-             d:DesignHeight="700" d:DesignWidth="1020">
+             d:DesignHeight="700" d:DesignWidth="1020" d:Background="White">
     
     <Grid >
         <Grid.ColumnDefinitions>
@@ -28,8 +28,9 @@
                 </Grid>
 
                 <Grid Height="35" Width="140" Margin="100,0,0,10">
-                    <ListBox>
-                    </ListBox>
+                    <ComboBox Name="ClientRecordsComboBox" SelectionChanged="ClientRecordsComboBox_OnRecordSelect">
+                        
+                    </ComboBox>
                 </Grid>
 
             </Grid>
@@ -95,7 +96,7 @@
                 <Label Content="Start Time: "  FontSize="20" HorizontalAlignment="Left"/>
                 <Grid HorizontalAlignment="Right" Height="40" Width="100" >
                     <Border BorderBrush="Black" BorderThickness="2" >
-                        <Label Content="0"  FontSize="20" HorizontalAlignment="Center" Name="DatumLabel"/>
+                        <Label Content="0"  FontSize="20" HorizontalAlignment="Center" Name="StartDateLabel"/>
                     </Border>
                 </Grid>
 
@@ -106,21 +107,12 @@
                 <Label Content="Stop Time: "  FontSize="20" HorizontalAlignment="Left"/>
                 <Grid HorizontalAlignment="Right" Height="40" Width="100" >
                     <Border BorderBrush="Black" BorderThickness="2" >
-                        <Label Content="0"  FontSize="20" HorizontalAlignment="Center" Name="StopLabel"/>
+                        <Label Content="0"  FontSize="20" HorizontalAlignment="Center" Name="StopDateLabel"/>
                     </Border>
                 </Grid>
 
             </Grid>
 
-            <Label Content="Chat" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="33" Height="55" Width="80"/>
-
-        </Grid>
-
-        <Grid  Grid.Row="1" Grid.Column="0">
-
-            <TextBox VerticalAlignment="Bottom" Height="40" BorderBrush="Black" BorderThickness="2" />
-            <ScrollViewer Height="300" VerticalAlignment="Top"></ScrollViewer>
-        
         </Grid>
 
         <Grid Grid.Row="0" Grid.Column="1">
@@ -131,7 +123,12 @@
 
             <Grid>
                 <ScrollViewer Margin="20,40,20,20">
-                    <ListBox Name="ClientListBox"  SelectionChanged="ClientListBox_SelectionChanged">
+                    <ListBox Name="ClientListBox">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListBoxItem_PreviewMouseLeftButtonDown" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
                     </ListBox>
                 </ScrollViewer>
             </Grid>

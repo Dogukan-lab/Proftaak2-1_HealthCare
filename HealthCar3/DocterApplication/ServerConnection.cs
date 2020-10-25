@@ -151,8 +151,8 @@ namespace DocterApplication
                     foreach (dynamic r in ((JArray)data.data.records).Children())
                     {
                         records.Add(new SessionData(r));
-                        layoutParent.RefreshHistoryPage(records);
                     }
+                    layoutParent.RefreshHistoryPage(records);
                     retreivedRecords = true;
                     break;
                 case "chat/message/success":

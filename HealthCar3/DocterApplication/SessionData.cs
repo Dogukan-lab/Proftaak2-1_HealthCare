@@ -12,11 +12,11 @@ namespace DocterApplication
         public DateTime sessionStart { get; set; }
         public DateTime sessionEnd { get; set; }
         public int maxHeartRate { get; set; }
-        public float maxSpeed { get; set; }
-        public float averageSpeed { get; set; }
-        public float averageHeartRate { get; set; }
-        public float maxResistance { get; set; }
-        public float lastResistance { get; set; }
+        public int maxSpeed { get; set; }
+        public int averageSpeed { get; set; }
+        public int averageHeartRate { get; set; }
+        public int maxResistance { get; set; }
+        public int lastResistance { get; set; }
 
         public SessionData(dynamic data)
         {
@@ -31,8 +31,6 @@ namespace DocterApplication
             this.maxResistance = data.maxResistance;
             this.lastResistance = data.lastResistance;
         }
-
-
 
         /*
          * Puts all the data of the session into a dynamic and returns it.

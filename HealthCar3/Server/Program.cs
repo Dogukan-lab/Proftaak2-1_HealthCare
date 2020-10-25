@@ -228,7 +228,7 @@ namespace Server
                 bytes = PackageWrapper.SerializeData("doctor/getSessions/fragment", new { records = nextRecords }, doctorClient.GetEncryptor());
                 doctorClient.GetClientStream().Write(bytes, 0, bytes.Length);
                 tempRecords.RemoveAt(0);
-                tempRecords.RemoveAt(1);
+                tempRecords.RemoveAt(0);
             }
             else
             {
