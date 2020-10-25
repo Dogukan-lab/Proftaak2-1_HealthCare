@@ -120,7 +120,7 @@
                                 <lvc:Axis IsMerged="True"/>
                             </lvc:CartesianChart.AxisY>
                         </lvc:CartesianChart>
-                        
+
                     </Grid>
                 </Grid>
             </Grid>
@@ -211,14 +211,30 @@
                     <Grid Grid.Column="1" Grid.Row="0">
                         <Label Content="HeartRate" FontSize="20"/>
 
-                        <lvc:CartesianChart Margin="30" Name="HeartRateChart2" Series="{Binding SeriesCollection}"/>
+                        <lvc:CartesianChart Margin="30" Name="HeartRateChart2" >
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries StrokeThickness="4" 
+                            Stroke="#FF0000" Fill="Transparent" LineSmoothness="1" PointGeometry="{x:Null}"/>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis IsMerged="True"/>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
 
                     </Grid>
 
                     <Grid Grid.Column="1" Grid.Row="1">
                         <Label Content="Speed" FontSize="20"/>
 
-                        <lvc:CartesianChart Margin="30" Name="SpeedChart2"/>
+                        <lvc:CartesianChart Margin="30" Name="SpeedChart2" >
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries StrokeThickness="4" 
+                            Stroke="#FF0000" Fill="Transparent" LineSmoothness="1" PointGeometry="{x:Null}"/>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis IsMerged="True"/>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
 
                     </Grid>
                 </Grid>
@@ -309,14 +325,30 @@
                     <Grid Grid.Column="1" Grid.Row="0">
                         <Label Content="HeartRate" FontSize="20"/>
 
-                        <lvc:CartesianChart Margin="30" Name="HeartRateChart3"/>
+                        <lvc:CartesianChart Margin="30" Name="HeartRateChart3" >
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries StrokeThickness="4" 
+                            Stroke="#FF0000" Fill="Transparent" LineSmoothness="1" PointGeometry="{x:Null}"/>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis IsMerged="True"/>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
 
                     </Grid>
 
                     <Grid Grid.Column="1" Grid.Row="1">
                         <Label Content="Speed" FontSize="20"/>
 
-                        <lvc:CartesianChart Margin="30" Name="SpeedChart3"/>
+                        <lvc:CartesianChart Margin="30" Name="SpeedChart3" >
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries StrokeThickness="4" 
+                            Stroke="#FF0000" Fill="Transparent" LineSmoothness="1" PointGeometry="{x:Null}"/>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis IsMerged="True"/>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
 
                     </Grid>
                 </Grid>
@@ -407,14 +439,30 @@
                     <Grid Grid.Column="1" Grid.Row="0">
                         <Label Content="HeartRate" FontSize="20"/>
 
-                        <lvc:CartesianChart Margin="30" Name="HeartRateChart4"/>
+                        <lvc:CartesianChart Margin="30" Name="HeartRateChart4" >
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries StrokeThickness="4" 
+                            Stroke="#FF0000" Fill="Transparent" LineSmoothness="1" PointGeometry="{x:Null}"/>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis IsMerged="True"/>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
 
                     </Grid>
 
                     <Grid Grid.Column="1" Grid.Row="1">
                         <Label Content="Speed" FontSize="20"/>
 
-                        <lvc:CartesianChart Margin="30" Name="SpeedChart4"/>
+                        <lvc:CartesianChart Margin="30" Name="SpeedChart4" >
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries StrokeThickness="4" 
+                            Stroke="#FF0000" Fill="Transparent" LineSmoothness="1" PointGeometry="{x:Null}"/>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis IsMerged="True"/>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
 
                     </Grid>
                 </Grid>
@@ -505,14 +553,30 @@
                     <Grid Grid.Column="1" Grid.Row="0">
                         <Label Content="HeartRate" FontSize="20"/>
 
-                        <lvc:CartesianChart Margin="30" Name="HeartRateChart5"/>
+                        <lvc:CartesianChart Margin="30" Name="HeartRateChart5" >
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries StrokeThickness="4" 
+                            Stroke="#FF0000" Fill="Transparent" LineSmoothness="1" PointGeometry="{x:Null}"/>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis IsMerged="True"/>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
 
                     </Grid>
 
                     <Grid Grid.Column="1" Grid.Row="1">
                         <Label Content="Speed" FontSize="20"/>
 
-                        <lvc:CartesianChart Margin="30" Name="SpeedChart5"/>
+                        <lvc:CartesianChart Margin="30" Name="SpeedChart5" >
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries StrokeThickness="4" 
+                            Stroke="#FF0000" Fill="Transparent" LineSmoothness="1" PointGeometry="{x:Null}"/>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis IsMerged="True"/>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
 
                     </Grid>
                 </Grid>
@@ -603,14 +667,30 @@
                     <Grid Grid.Column="1" Grid.Row="0">
                         <Label Content="HeartRate" FontSize="20"/>
 
-                        <lvc:CartesianChart Margin="30" Name="HeartRateChart6"/>
+                        <lvc:CartesianChart Margin="30" Name="HeartRateChart6" >
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries StrokeThickness="4" 
+                            Stroke="#FF0000" Fill="Transparent" LineSmoothness="1" PointGeometry="{x:Null}"/>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis IsMerged="True"/>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
 
                     </Grid>
 
                     <Grid Grid.Column="1" Grid.Row="1">
                         <Label Content="Speed" FontSize="20"/>
 
-                        <lvc:CartesianChart Margin="30" Name="SpeedChart6"/>
+                        <lvc:CartesianChart Margin="30" Name="SpeedChart6" >
+                            <lvc:CartesianChart.Series>
+                                <lvc:LineSeries StrokeThickness="4" 
+                            Stroke="#FF0000" Fill="Transparent" LineSmoothness="1" PointGeometry="{x:Null}"/>
+                            </lvc:CartesianChart.Series>
+                            <lvc:CartesianChart.AxisY>
+                                <lvc:Axis IsMerged="True"/>
+                            </lvc:CartesianChart.AxisY>
+                        </lvc:CartesianChart>
 
                     </Grid>
                 </Grid>

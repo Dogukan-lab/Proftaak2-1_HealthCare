@@ -272,20 +272,8 @@ namespace DocterApplication
                 {
                     ((Chart)patientUserControl.FindName("HeartRateChart" + bikeId)).Series[0].Values = bike.HeartRateValues;
                     ((Chart)patientUserControl.FindName("HeartRateChart" + bikeId)).DataContext = bike;
-                    //Timer timer = new Timer() { Interval = 300 };
-                    //timer.Elapsed += Timer_Elapsed;
-                    //timer.Start();
                 }
         }
-
-        //private void Timer_Elapsed(object sender, ElapsedEventArgs e)
-        //{
-        //    SetNewGuiChartLink(1, new GuiChartCallBack(ChartTimeElapsedCB));
-        //}
-        //private void ChartTimeElapsedCB(int bikeId)
-        //{
-        //    
-        //}
 
         private void LinkSpeedChartCB(int bikeId)
         {
@@ -332,42 +320,50 @@ namespace DocterApplication
             ((ListBox)historyUserControl.FindName("ClientListBox")).ItemsSource = clients;
             historyUserControl.Records = records;
         }
-    #endregion
+        #endregion
 
-    internal void StartSession(int bikeId)
-    {
-        foreach (var bike in bikes)
-            if (bike.BikeId == bikeId)
-                sc.StartSession(bike.ID);
-    }
-    internal void StopSession(int bikeId)
-    {
-        foreach (var bike in bikes)
-            if (bike.BikeId == bikeId)
-                sc.StopSession(bike.ID);
-    }
-    internal void SendChat(int bikeId, string message)
-    {
-        foreach (var bike in bikes)
-            if (bike.BikeId == bikeId)
-                sc.Chat(bike.ID, message);
-    }
-    internal void BroadCast(string message)
-    {
-        sc.Broadcast(message);
-    }
-    internal void EmergencyStop()
-    {
-        sc.EmergencyStopSessions();
-    }
-    internal void UpdateResistance(int bikeId, string resistance)
-    {
-        foreach (var bike in bikes)
-            if (bike.BikeId == bikeId)
+        internal void StartSession(int bikeId)
+        {
+            foreach (var bike in bikes)
+                if (bike.BikeId == bikeId)
+                    sc.StartSession(bike.ID);
+        }
+        internal void StopSession(int bikeId)
+        {
+            foreach (var bike in bikes)
+                if (bike.BikeId == bikeId)
+                    sc.StopSession(bike.ID);
+        }
+        internal void SendChat(int bikeId, string message)
+        {
+            foreach (var bike in bikes)
+                if (bike.BikeId == bikeId)
+                    sc.Chat(bike.ID, message);
+        }
+        internal void BroadCast(string message)
+        {
+            sc.Broadcast(message);
+
+            // Add message to all active clients.
+            foreach (var bike in bikes)
             {
-                SetNewGuiLabelValue(bikeId, resistance, new GuiCallBack(SetHomeResistanceCB));
-                sc.SetNewResistance(bike.ID, resistance);
+                Label newLabel = new Label();
+                newLabel.Content = message;
+                ((StackPanel)patientUserControl.FindName("ChatView" + bike.BikeId)).Children.Add(newLabel);
             }
+        }
+        internal void EmergencyStop()
+        {
+            sc.EmergencyStopSessions();
+        }
+        internal void UpdateResistance(int bikeId, string resistance)
+        {
+            foreach (var bike in bikes)
+                if (bike.BikeId == bikeId)
+                {
+                    SetNewGuiLabelValue(bikeId, resistance, new GuiCallBack(SetHomeResistanceCB));
+                    sc.SetNewResistance(bike.ID, resistance);
+                }
+        }
     }
-}
 }

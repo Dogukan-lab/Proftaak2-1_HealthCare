@@ -33,6 +33,7 @@ namespace DocterApplication
         private void Broadcast_Click(object sender, RoutedEventArgs e)
         {
             string message = ((TextBox)FindName("BroadcastBox")).Text;
+            ((TextBox)FindName("BroadcastBox")).Text = "";
             layoutParent.BroadCast(message);
         }
     }
