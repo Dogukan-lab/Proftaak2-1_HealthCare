@@ -113,9 +113,9 @@ namespace DocterApplication
             SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetPatientSpeedCB)); // Set speed to 0
             SetNewGuiLabelValue(bikes.Count, "0", new GuiCallBack(SetPatientAvgSpeedCB)); // Set avg speed to 0
 
-            // Link the charts with the data (DOES NOT WORK)
-            //SetNewGuiChartLink(bikes.Count, new GuiChartCallBack(LinkHeartRateChartCB));
-            //SetNewGuiChartLink(bikes.Count, new GuiChartCallBack(LinkSpeedChartCB));
+            // Link the charts with the data
+            SetNewGuiChartLink(bikes.Count, new GuiChartCallBack(LinkHeartRateChartCB));
+            SetNewGuiChartLink(bikes.Count, new GuiChartCallBack(LinkSpeedChartCB));
         }
 
         internal void RemoveClient(string clientId)
@@ -229,8 +229,7 @@ namespace DocterApplication
         }
 
         // Chart Callbacks
-        // DOES NOT WORK
-        /*public delegate void GuiChartCallBack(int bikeId);
+        public delegate void GuiChartCallBack(int bikeId);
 
         public void SetNewGuiChartLink(int bikeId, GuiChartCallBack callback)
         {
@@ -241,42 +240,32 @@ namespace DocterApplication
             foreach (var bike in bikes)
                 if (bike.BikeId == bikeId)
                 {
-                    Application.Current.Dispatcher.Invoke((Action)delegate {
-                        bike.HeartRateCollection = new SeriesCollection(new LineSeries { Values = new ChartValues<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } });
-                        });
-
-                    Binding newBinding = new Binding();
-                    newBinding.Source = bike.HeartRateCollection;
-                    ((Chart)patientUserControl.FindName("HeartRateChart" + bikeId)).SetBinding(Chart.BindingGroupProperty, newBinding);
-                    Timer timer = new Timer() { Interval = 300};
-                    timer.Elapsed += Timer_Elapsed;
-                    timer.Start();
+                    ((Chart)patientUserControl.FindName("HeartRateChart" + bikeId)).Series[0].Values = bike.HeartRateValues;
+                    ((Chart)patientUserControl.FindName("HeartRateChart" + bikeId)).DataContext = bike;
+                    //Timer timer = new Timer() { Interval = 300 };
+                    //timer.Elapsed += Timer_Elapsed;
+                    //timer.Start();
                 }
         }
 
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            SetNewGuiChartLink(1, new GuiChartCallBack(ChartTimeElapsedCB));
-        }
-        private void ChartTimeElapsedCB(int bikeId)
-        {
-            ((Chart)patientUserControl.FindName("HeartRateChart1")).Update();
-        }
+        //private void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        //{
+        //    SetNewGuiChartLink(1, new GuiChartCallBack(ChartTimeElapsedCB));
+        //}
+        //private void ChartTimeElapsedCB(int bikeId)
+        //{
+        //    
+        //}
 
         private void LinkSpeedChartCB(int bikeId)
         {
             foreach (var bike in bikes)
                 if (bike.BikeId == bikeId)
                 {
-                    Application.Current.Dispatcher.Invoke((Action)delegate {
-                        bike.SpeedCollection = new SeriesCollection(new LineSeries { Values = new ChartValues<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } });
-                    });
-
-                    Binding newBinding = new Binding();
-                    newBinding.Source = bike.SpeedCollection;
-                    ((Chart)patientUserControl.FindName("SpeedChart" + bikeId)).SetBinding(Chart.BindingGroupProperty, newBinding);
+                    ((Chart)patientUserControl.FindName("SpeedChart" + bikeId)).Series[0].Values = bike.SpeedValues;
+                    ((Chart)patientUserControl.FindName("SpeedChart" + bikeId)).DataContext = bike;
                 }
-        } */
+        } 
 
         // History screen.
         public delegate void GuiListCallBack(List<SessionData> records);
