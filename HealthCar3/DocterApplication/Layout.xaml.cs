@@ -175,6 +175,11 @@ namespace DocterApplication
             }
         }
 
+        internal void RefreshHistoryPage(List<SessionData> records)
+        {
+            SetNewGuiListValue(records, new GuiListCallBack(SetHistoryClientBoxCB));
+        }
+
         public delegate void GuiCallBack(int bikeId, string newValue);
 
         public void SetNewGuiLabelValue(int bikeId, string newValue, GuiCallBack callback)
@@ -274,11 +279,26 @@ namespace DocterApplication
         } */
 
         // History screen.
-        //private void SetHistoryClientBoxCB()
-        //{
-        //
-        //    ((ListBox)historyUserControl.FindName("ClientListBox")).Items
-        //}
+        public delegate void GuiListCallBack(List<SessionData> records);
+        public void SetNewGuiListValue(List<SessionData> records, GuiListCallBack callback)
+        {
+            Application.Current.Dispatcher.Invoke(callback, new Object[] { records });
+        }
+        /*
+         * Fills the client box with clients from all the previous sessions.
+         */
+        private void SetHistoryClientBoxCB(List<SessionData> records)
+        {
+            List<SessionData> addedClients = new List<SessionData>();
+            foreach (var rec in records)
+            {
+                if (!addedClients.Contains(rec))
+                {
+                    addedClients.Add(rec);
+                    ((ListBox)historyUserControl.FindName("ClientListBox")).Items.Add(rec.name + "\t\t" + rec.clientId);
+                }
+            }
+        }
         #endregion
 
         internal void StartSession(int bikeId)
@@ -299,17 +319,14 @@ namespace DocterApplication
                 if (bike.BikeId == bikeId)
                     sc.Chat(bike.ID, message);
         }
-
         internal void BroadCast(string message)
         {
             sc.Broadcast(message);
         }
-
         internal void EmergencyStop()
         {
             sc.EmergencyStopSessions();
         }
-
         internal void UpdateResistance(int bikeId, string resistance)
         {
             foreach (var bike in bikes)

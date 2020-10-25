@@ -5,7 +5,7 @@ namespace DocterApplication
     /*
      * Dataclass that holds the data of a session
      */
-    class SessionData
+    public class SessionData
     {
         public string clientId { get; set; }
         public string name { get; set; }
