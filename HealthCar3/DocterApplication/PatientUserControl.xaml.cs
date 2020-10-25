@@ -68,49 +68,5 @@ namespace DocterApplication
                 textBox.Text = "";
             }
         }
-
-        //public void UpdateHeartRateChart1(int newValue)
-        //{
-        //    Dispatcher.Invoke(delegate
-        //    {
-        //        HeartRateValues1.Add(newValue);
-
-        //        if (newValue > 125)
-        //        {
-        //            HeartRateChart1.AxisY[0].MinValue = 100;
-        //            HeartRateChart1.AxisY[0].MaxValue = 225;
-        //        }
-        //        else
-        //        {
-        //            HeartRateChart1.AxisY[0].MinValue = 50;
-        //            HeartRateChart1.AxisY[0].MaxValue = 175;
-        //        }
-
-        //        if (HeartRateValues1.Count > 30)
-        //            HeartRateValues1.RemoveAt(0);
-        //    });
-        //}
-
-        //public void UpdateSpeedChart1(int newValue)
-        //{
-        //    Dispatcher.Invoke(delegate
-        //    {
-        //        SpeedValues1.Add(newValue);
-
-        //        if (newValue > 25)
-        //        {
-        //            SpeedChart1.AxisY[0].MinValue = 25;
-        //            SpeedChart1.AxisY[0].MaxValue = 50;
-        //        }
-        //        else
-        //        {
-        //            SpeedChart1.AxisY[0].MinValue = 0;
-        //            SpeedChart1.AxisY[0].MaxValue = 25;
-        //        }
-
-        //        if (SpeedValues1.Count > 30)
-        //            SpeedValues1.RemoveAt(0);
-        //    });
-        //}
     }
 }

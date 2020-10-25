@@ -69,12 +69,12 @@ namespace DocterApplication
 
         private void PatientButton_Click(object sender, RoutedEventArgs e)
         {
-            
+
             homeUserControl.Visibility = Visibility.Hidden;
             historyUserControl.Visibility = Visibility.Hidden;
 
             patientUserControl.Visibility = Visibility.Visible;
-           
+
         }
 
         private void HistoryButton_Click(object sender, RoutedEventArgs e)
@@ -120,9 +120,9 @@ namespace DocterApplication
 
         internal void RemoveClient(string clientId)
         {
-            foreach(var bike in bikes)
+            foreach (var bike in bikes)
             {
-                if(bike.ID == clientId)
+                if (bike.ID == clientId)
                 {
                     // Reset home screen labels
                     SetNewGuiLabelValue(bike.BikeId, "-", new GuiCallBack(SetHomeClientNameCB)); // Remove client name
@@ -140,16 +140,31 @@ namespace DocterApplication
                     bikes.Remove(bike);
                     return;
                 }
-            }   
+            }
         }
 
         public void NewHeartRate(string id, int newHeartRate)
         {
-            foreach(var bike in bikes)
+            foreach (var bike in bikes)
             {
-                if(bike.ID == id)
+                if (bike.ID == id)
                 {
                     bike.NewHeartRate(newHeartRate);
+
+                    // Check if y axis need to adjust to the new value.
+                    Dispatcher.Invoke(delegate
+                    {
+                        if (newHeartRate > 125)
+                        {
+                            ((Chart)patientUserControl.FindName("HeartRateChart" + bike.BikeId)).AxisY[0].MinValue = 100;
+                            ((Chart)patientUserControl.FindName("HeartRateChart" + bike.BikeId)).AxisY[0].MaxValue = 225;
+                        }
+                        else
+                        {
+                            ((Chart)patientUserControl.FindName("HeartRateChart" + bike.BikeId)).AxisY[0].MinValue = 50;
+                            ((Chart)patientUserControl.FindName("HeartRateChart" + bike.BikeId)).AxisY[0].MaxValue = 175;
+                        }
+                    });
 
                     // Update the GUI with the new values.
                     SetNewGuiLabelValue(bike.BikeId, newHeartRate.ToString(), new GuiCallBack(SetHomeHeartRateCB));
@@ -166,6 +181,21 @@ namespace DocterApplication
                 if (bike.ID == id)
                 {
                     bike.NewSpeed(newSpeed);
+
+                    // Check if y axis need to adjust to the new value.
+                    Dispatcher.Invoke(delegate
+                    {
+                        if (newSpeed > 25)
+                        {
+                            ((Chart)patientUserControl.FindName("SpeedChart" + bike.BikeId)).AxisY[0].MinValue = 25;
+                            ((Chart)patientUserControl.FindName("SpeedChart" + bike.BikeId)).AxisY[0].MaxValue = 50;
+                        }
+                        else
+                        {
+                            ((Chart)patientUserControl.FindName("SpeedChart" + bike.BikeId)).AxisY[0].MinValue = 0;
+                            ((Chart)patientUserControl.FindName("SpeedChart" + bike.BikeId)).AxisY[0].MaxValue = 25;
+                        }
+                    });
 
                     // Update the GUI with the new values.
                     SetNewGuiLabelValue(bike.BikeId, newSpeed.ToString(), new GuiCallBack(SetHomeSpeedCB));
@@ -191,7 +221,7 @@ namespace DocterApplication
         // Home screen
         private void SetHomeClientNameCB(int bikeId, string name)
         {
-            ((Label)homeUserControl.FindName("ClientBox"+ bikeId)).Content = name;
+            ((Label)homeUserControl.FindName("ClientBox" + bikeId)).Content = name;
         }
         private void SetHomeHeartRateCB(int bikeId, string heartrate)
         {
@@ -265,7 +295,7 @@ namespace DocterApplication
                     ((Chart)patientUserControl.FindName("SpeedChart" + bikeId)).Series[0].Values = bike.SpeedValues;
                     ((Chart)patientUserControl.FindName("SpeedChart" + bikeId)).DataContext = bike;
                 }
-        } 
+        }
 
         // History screen.
         public delegate void GuiListCallBack(List<SessionData> records);
@@ -292,7 +322,7 @@ namespace DocterApplication
 
         internal void StartSession(int bikeId)
         {
-            foreach(var bike in bikes)
+            foreach (var bike in bikes)
                 if (bike.BikeId == bikeId)
                     sc.StartSession(bike.ID);
         }
