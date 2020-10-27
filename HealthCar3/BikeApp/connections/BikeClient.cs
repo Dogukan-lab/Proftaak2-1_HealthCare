@@ -4,81 +4,66 @@ using System.Windows.Forms;
 using BikeApp.connections.bluetooth;
 using BikeApp.vr_environment;
 using SimulatorGui;
+using ClientApplication;
+
 
 namespace BikeApp.connections
 {
     public static class Client
     {
+        public static MainWindow mainWindow;
+
         public static void Initialize()
         {
             var serverCon = new ServerConnection();
             SimForm simForm = null;
+            mainWindow = new MainWindow();
+            ConnectorOption connector = null;
 
-            string cInput;
+
             while (!serverCon.IsLoggedIn())
             {
-                Console.WriteLine(@"Select: " + "\n-login\n" + "- register\n");
-                cInput = Console.ReadLine();
-                string pInput;
-                switch (cInput)
+
+                Application.Run(mainWindow);
+                mainWindow.Show();
+                
+
+                if (mainWindow.BluetoothEnabled())
                 {
-                    case "login":
-                        Console.WriteLine(@"Name: ");
-                        cInput = Console.ReadLine();
-                        Console.WriteLine(@"Password: ");
-                        pInput = Console.ReadLine();
-                        serverCon.LoginToServer(cInput, pInput);
-                        break;
-                    case "register":
-                        Console.WriteLine(@"Name: ");
-                        cInput = Console.ReadLine();
-                        Console.WriteLine(@"Password: ");
-                        pInput = Console.ReadLine();
-                        serverCon.RegisterToServer(cInput, pInput);
-                        break;
+                    mainWindow.Hide();
+                    connector = new Bluetooth("Avans Bike AC74", "Avans Bike AC74", serverCon);
+                    
                 }
-                Thread.Sleep(2000);
-            }
-
-            cInput = "";
-            // Select connector option
-            ConnectorOption connector = null;
-            while (cInput == string.Empty)
-            {
-                Console.WriteLine(@"Select bluetooth or simulator: |B|S|");
-                cInput = Console.ReadLine();
-                switch (cInput?.ToUpper())
+                else if (mainWindow.SimulatorEnabled())
                 {
-                    case "B":
-                        connector = new Bluetooth("Avans Bike AC74", "Avans Bike AC74", serverCon);
-                        break;
-                    case "S":
-                        // Do the gui setup
-                        Application.SetHighDpiMode(HighDpiMode.SystemAware);
-                        Application.EnableVisualStyles();
-                        Application.SetCompatibleTextRenderingDefault(false);
-                        simForm = new SimForm();
-                        connector = new Simulator(serverCon, simForm);
-                        break;
-                    default:
-                        cInput = "";
-                        break;
+                    mainWindow.Hide();
+                    Application.SetHighDpiMode(HighDpiMode.SystemAware);
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    simForm = new SimForm();
+                    connector = new Simulator(serverCon, simForm);
                 }
-            }
-            serverCon.SetConnectorOption(connector);
 
-            if (connector is Simulator simulator)
-            {
-                // Start the update thread
-                simulator.UpdateThread.Start();
+                serverCon.SetConnectorOption(connector);
 
-                // Start the gui
-                Application.Run(simForm);
-            }
-            else
-            {
-                Thread.Sleep(4000);
+                if (connector is Simulator simulator)
+                {
+                    //Start the update thread
+                    simulator.UpdateThread.Start();
+
+                    // Start the gui
+                    Application.Run(simForm);
+                }
+                else
+                {
+                    Thread.Sleep(4000);
+                }
+
             }
         }
+       
+
     }
-}
+        }
+    
+

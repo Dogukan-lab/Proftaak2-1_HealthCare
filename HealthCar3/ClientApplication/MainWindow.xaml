@@ -46,7 +46,7 @@
                              HorizontalContentAlignment="Left"
                              Height="25"
                              Opacity="0.5"
-                             Margin="50,0,0,0" />
+                             />
                 <IconPacks:PackIconMaterial Kind ="Account" 
                                             VerticalAlignment="Center" 
                                             HorizontalAlignment="Center"
@@ -82,18 +82,18 @@
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,50,0,0">
 
-                <CheckBox Content="Bluetooth"
+                <CheckBox x:Name="BluetoothCheckbox" Content="Bluetooth"
                           Width="110"
                           Height="50"
                           FontSize="15"
                           Margin="55,0,0,0"
-                          VerticalAlignment="Center"/>
-                
-                <CheckBox Content="Simulator"
+                          VerticalAlignment="Center"  />
+
+                <CheckBox x:Name="SimulatorCheckbox" Content="Simulator"
                           Width="110"
                           Height="50"
                           FontSize="15"
-                          Margin="55,0,0,0"/>
+                          Margin="55,0,0,0" />
 
             </StackPanel>
 
@@ -103,14 +103,14 @@
                             Content="Login"
                             Margin="50,0,50,0"
                             Name="LoginButton" 
-                            Style="{StaticResource HomeButton}"
+                            Click="LoginButton_Click"
                             />
 
                     <Button Width="110" 
                             Height="50"
                             Content="Exit"
                             Name="ExitButton"
-                            Style="{StaticResource HomeButton}"
+                            
                             />
 
                 </StackPanel>

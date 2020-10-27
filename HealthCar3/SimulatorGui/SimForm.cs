@@ -73,5 +73,7 @@ namespace SimulatorGui
                 resistanceBox.Text = resistance.ToString();
             }
         }
+
+        
     }
 }

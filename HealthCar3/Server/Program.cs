@@ -20,6 +20,7 @@ namespace Server
         public static Client doctorClient;
         private static List<dynamic> tempRecords;
 
+       
         private static void Main(string[] args)
         {
             Console.WriteLine("Hello Server!");

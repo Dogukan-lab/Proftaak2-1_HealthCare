@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ClientApplication\ClientApplication.csproj" />
     <ProjectReference Include="..\SimulatorGui\SimulatorGui.csproj" />
   </ItemGroup>
 
