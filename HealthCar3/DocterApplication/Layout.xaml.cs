@@ -118,6 +118,13 @@ namespace DocterApplication
             SetNewGuiChartLink(bikes.Count, new GuiChartCallBack(LinkSpeedChartCB));
         }
 
+        internal void ResetGui(int bikeId)
+        {
+            ((Label)homeUserControl.FindName("HeartrateBox" + bikeId)).Content = "0 BPM";
+            ((Label)homeUserControl.FindName("SpeedBox" + bikeId)).Content = "0 m/s";
+            ((Label)homeUserControl.FindName("ResistanceBox" + bikeId)).Content = "0%";
+        }
+
         internal void RemoveClient(string clientId)
         {
             foreach (var bike in bikes)

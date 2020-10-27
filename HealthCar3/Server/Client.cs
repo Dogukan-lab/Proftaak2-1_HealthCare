@@ -16,7 +16,7 @@ namespace Server
     {
         private readonly TcpClient tcpClient;
         private readonly NetworkStream stream;
-        private readonly byte[] buffer = new byte[1024];
+        private readonly byte[] buffer = new byte[4];
         private string id;
         private string name;
         private bool sessionActive;
@@ -42,6 +42,18 @@ namespace Server
             stream.BeginRead(buffer, 0, buffer.Length, OnRead, null);
         }
 
+        /**
+         * Read count amount of bytes
+         */
+        private byte[] ReadTotalBytes(int count)
+        {
+            var buffer = new byte[count];
+            var received = 0;
+            while (received < count)
+                received += stream.Read(buffer, received, count - received);
+            return buffer;
+        }
+
         /*
          * Method that deserializes the JsonData
          */
@@ -49,21 +61,22 @@ namespace Server
         {
             try
             {
-                var receivedBytes = stream.EndRead(ar);
+                int lengthPreFix = BitConverter.ToInt32(buffer);
+                var receivedBytes = ReadTotalBytes(lengthPreFix);
                 dynamic receivedData;
 
                 if (keyExchanged)
                 {
-                    receivedData = JsonConvert.DeserializeObject(decryptor.DecryptAes(buffer, 0, receivedBytes));
+                    receivedData = JsonConvert.DeserializeObject(decryptor.DecryptAes(receivedBytes, 0, lengthPreFix));
                 }
                 else
                 {
-                    var receivedText = Encoding.ASCII.GetString(buffer, 0, receivedBytes);
+                    var receivedText = Encoding.ASCII.GetString(receivedBytes, 0, lengthPreFix);
                     receivedData = JsonConvert.DeserializeObject(receivedText);
                 }
                 HandleData(receivedData);
             }
-            catch (IOException)
+            catch (Exception)
             {
                 Program.Disconnect(this);
                 return;
@@ -195,7 +208,7 @@ namespace Server
                     string username = data.data.username;
                     string password = data.data.password;
 
-                    if (username == "kees" && password == "banaan")
+                    if (username == "admin" && password == "admin")
                     {
                         bytes = PackageWrapper.SerializeData("doctor/login/success", new { message = "Login successful" }, encryptor);
                         id = "0000"; // standard doctor ID
@@ -209,7 +222,7 @@ namespace Server
                 case "client/update/heartRate":
                     targetEncryptor = Program.GetTargetClientEncryptor("0000");
                     if (!sessionActive) { return; } // if we are not currently in a session do not save the data.
-                    //Console.WriteLine($"{id}: {data.data.heartRate} BPM");
+                    if(Program.doctorClient == null) { return; }
                     // Update the session with the new received heart rate.
                     sessionData.NewHeartRate((int)data.data.heartRate);
                     // Send data to doctor client
@@ -218,7 +231,7 @@ namespace Server
                 case "client/update/speed":
                     targetEncryptor = Program.GetTargetClientEncryptor("0000");
                     if (!sessionActive) { return; } // if we are not currently in a session do not save the data.
-                    //Console.WriteLine($"{id}: {data.data.speed} m/s");
+                    if (Program.doctorClient == null) { return; }
                     // Update the session with the new received speed.
                     sessionData.newSpeed((float)data.data.speed);
                     // Send data to doctor client

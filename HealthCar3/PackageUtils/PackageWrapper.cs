@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System.Text;
 using Encryption.Shared;
+using System.Linq;
+using System;
 
 namespace PackageUtils
 {
@@ -20,7 +22,10 @@ namespace PackageUtils
          */
         public static byte[] SerializeData(string tag, dynamic data)
         {
-            return Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(WrapWithTag(tag, data)));
+            byte[] message = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(WrapWithTag(tag, data)));
+            byte[] lengthPrefix = BitConverter.GetBytes(message.Length);
+            message = lengthPrefix.Concat(message).ToArray();
+            return message;
         }
 
         /**
@@ -28,7 +33,10 @@ namespace PackageUtils
          */
         public static byte[] SerializeData(string tag, dynamic data, Encryptor encryptor)
         {
-            return encryptor.EncryptAes(JsonConvert.SerializeObject(WrapWithTag(tag, data)));
+            byte[] message = encryptor.EncryptAes(JsonConvert.SerializeObject(WrapWithTag(tag, data)));
+            byte[] lengthPrefix = BitConverter.GetBytes(message.Length);
+            message = lengthPrefix.Concat(message).ToArray();
+            return message;
         }
     }
 }

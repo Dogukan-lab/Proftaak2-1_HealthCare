@@ -82,6 +82,7 @@ namespace DocterApplication
                 ((TextBox)FindName("ResistanceLabel" + bikeId)).Text = "0";
                 ((Chart)FindName("HeartRateChart" + bikeId)).Series[0].Values.Clear();
                 ((Chart)FindName("SpeedChart" + bikeId)).Series[0].Values.Clear();
+                layoutParent.ResetGui(bikeId);
             });
         }
     }

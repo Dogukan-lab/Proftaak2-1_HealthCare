@@ -18,7 +18,7 @@ namespace DocterApplication
         private const int Port = 1330;
         private int totalTries;
         private const int MaxReconTries = 3;
-        private readonly byte[] buffer = new byte[1024];
+        private readonly byte[] buffer = new byte[4];
         private bool connected;
         private bool loggedIn = false;
         private bool receivedLoginFeedback = false;
@@ -73,20 +73,33 @@ namespace DocterApplication
             }
         }
 
+        /**
+         * Read count amount of bytes
+         */
+        private byte[] ReadTotalBytes(int count)
+        {
+            var buffer = new byte[count];
+            var received = 0;
+            while (received < count)
+                received += stream.Read(buffer, received, count - received);
+            return buffer;
+        }
+
         private void OnRead(IAsyncResult ar)
         {
             try
             {
-                var receivedBytes = stream.EndRead(ar);
+                int lengthPreFix = BitConverter.ToInt32(buffer);
+                var receivedBytes = ReadTotalBytes(lengthPreFix);
                 dynamic receivedData;
                 
                 if (keyExchanged)
                 {
-                    receivedData = JsonConvert.DeserializeObject(decryptor.DecryptAes(buffer, 0, receivedBytes));
+                    receivedData = JsonConvert.DeserializeObject(decryptor.DecryptAes(receivedBytes, 0, lengthPreFix));
                 }
                 else
                 {
-                    var receivedText = Encoding.ASCII.GetString(buffer, 0, receivedBytes);
+                    var receivedText = Encoding.ASCII.GetString(receivedBytes, 0, lengthPreFix);
                     receivedData = JsonConvert.DeserializeObject(receivedText);
                 }
                 HandleData(receivedData);
