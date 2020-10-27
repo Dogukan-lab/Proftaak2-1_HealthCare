@@ -36,7 +36,7 @@ namespace ClientApplication
         {
             string username = UsernameBox.Text;
             string password = PasswordBox.Password;
-            sc.LoginToServer(username, password);
+            
             
         }
 
