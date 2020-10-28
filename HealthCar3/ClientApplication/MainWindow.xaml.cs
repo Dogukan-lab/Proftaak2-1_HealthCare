@@ -22,22 +22,18 @@ namespace ClientApplication
     
     public partial class MainWindow : Window
     {
-        private ServerConnection sc;
-
-
+        public string Username { get; set; }
+        public string Password { get; set; }
         public MainWindow()
         {
             InitializeComponent();
-            sc = new ServerConnection();
-            
         }
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            string username = UsernameBox.Text;
-            string password = PasswordBox.Password;
+            Username = UsernameBox.Text;
+            Password = PasswordBox.Password;
             this.Close();
-            
         }
 
         public bool BluetoothEnabled()

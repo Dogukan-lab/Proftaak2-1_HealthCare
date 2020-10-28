@@ -13,14 +13,12 @@ namespace BikeApp.connections
     {
         public static MainWindow mainWindow;
         
-
         public static void Initialize()
         {
             var serverCon = new ServerConnection();
             SimForm simForm = null;
-            mainWindow = new MainWindow();
             ConnectorOption connector = null;
-
+            mainWindow = new MainWindow();
 
             if (!serverCon.IsLoggedIn())
             {
@@ -28,12 +26,14 @@ namespace BikeApp.connections
 
                 if (mainWindow.BluetoothEnabled())
                 {
+                    serverCon.RegisterToServer(mainWindow.Username, mainWindow.Password);
                     mainWindow.Hide();
                     connector = new Bluetooth("Avans Bike AC74", "Avans Bike AC74", serverCon);
                     
                 }
                 else if (mainWindow.SimulatorEnabled())
                 {
+                    serverCon.RegisterToServer(mainWindow.Username, mainWindow.Password);
                     //SimulatorGui setup
                     mainWindow.Hide();
                     Application.SetHighDpiMode(HighDpiMode.SystemAware);
