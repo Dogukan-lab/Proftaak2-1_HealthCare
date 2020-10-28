@@ -13,10 +13,10 @@ namespace BikeApp.connections
         private string id;
         private string destination;
 
-        public MessageParser(VpnConnector connector)
+        public MessageParser(VpnConnector connector, CommandCenter commandCenter)
         {
             vpnConnector = connector;
-            command = new CommandCenter(vpnConnector);
+            command = commandCenter;
         }
 
         public string GetDestination() { return destination; }

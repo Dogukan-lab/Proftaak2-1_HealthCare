@@ -4,6 +4,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using BikeApp.command;
+using BikeApp.connections.bluetooth;
+using BikeApp.vr_environment;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -15,6 +17,9 @@ namespace BikeApp.connections
     internal class VpnConnector
     {
         private dynamic jsonData;
+        private bool isAttached;
+        private CameraEnum cameraEnum;
+        public CommandCenter CommandCenter { get; set; }
         private readonly JsonSerializerSettings serializerSettings;
         private TcpClient client;
         private readonly MessageParser parser;
@@ -24,27 +29,37 @@ namespace BikeApp.connections
         private string responseId;
         private int timeoutCounter;
         private const int TimeoutMax = 3;
+        private bool running;
+        private Thread listenThread;
         public VpnConnector(JsonSerializerSettings jsonSerializerSettings)
         {
             serializerSettings = jsonSerializerSettings;
             serializerSettings.NullValueHandling = NullValueHandling.Ignore;
-            parser = new MessageParser(this);
             timeoutCounter = 0;
-            Connect();
+            CommandCenter = new CommandCenter(this);
+            parser = new MessageParser(this, CommandCenter);
+            isAttached = true;
+            cameraEnum = CameraEnum.Detached;
+        }
+        
+        public void SetConnectorOptions(ConnectorOption co)
+        {
+            CommandCenter.SetConnectorOption(co);
         }
 
-        /**
+        /*
          * Connects the client to the server and prints an error on failure.
          */
-        private void Connect()
+        public void Connect()
         {
-            var listenThread = new Thread(Listen);
+            listenThread = new Thread(Listen);
             try
             {
                 client = new TcpClient();
                 client.Connect(Address, Port); //attempts to connect to the VPN server.
                 if (!client.Connected) return;
                 Send(new { id = "session/list" });
+                running = true;
                 listenThread.Start();
             }
             catch (Exception ex)
@@ -113,7 +128,7 @@ namespace BikeApp.connections
          */
         private void Listen()
         {
-            while (true)
+            while (running)
             {
                 var lengthBuffer = ReadTotalBytes(4); //first four bytes indicate length.
                 var byteSize = BitConverter.ToInt32(lengthBuffer); //converts the length to a readable number.
@@ -141,8 +156,11 @@ namespace BikeApp.connections
         /**
          * Disconnects the client from the server.
          */
-        private void Disconnect()
+        public async void Disconnect()
         {
+            running = false;
+            listenThread.Join();
+            await CommandCenter.UpdateThread;
             client.Dispose();
             stream?.Close();
         }
@@ -178,7 +196,7 @@ namespace BikeApp.connections
 
             if (packetData?["data"]?.ToObject<JObject>()?["data"]?.ToObject<JObject>()?["id"]?.ToObject<string>() == "callback")
             {
-                return;
+                CommandCenter.AttachCamera();
             }
 
             // Find the matching serial number 

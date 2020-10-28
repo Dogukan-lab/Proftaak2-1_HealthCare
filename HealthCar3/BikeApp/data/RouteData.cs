@@ -6,12 +6,12 @@
     internal class RouteData
     {
         public int[] pos;
-        public int[] dir;
+        public double[] dir;
 
         /*
          * Initializes the data.
          */
-        public RouteData(int[] position, int[] direction)
+        public RouteData(int[] position, double[] direction)
         {
             pos = position;
             dir = direction;

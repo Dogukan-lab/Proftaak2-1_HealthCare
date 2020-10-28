@@ -22,16 +22,22 @@ namespace BikeApp.connections
         private bool loggedIn;
         private bool keyExchanged;
         private ConnectorOption co;
+        private VpnConnector vpnConnector;
         private readonly Encryptor encryptor;
         private readonly Decryptor decryptor;
 
-        public void SetConnectorOption(ConnectorOption connector) { co = connector; }
+        public void SetConnectorOption(ConnectorOption connector) 
+        {   co = connector;
+            vpnConnector.SetConnectorOptions(co);
+        }
+
         public bool IsLoggedIn() { return loggedIn; }
         public ServerConnection()
         {
             clientConnection = new TcpClient();
             encryptor = new Encryptor();
             decryptor = new Decryptor();
+            vpnConnector = new VpnConnector(new JsonSerializerSettings());
             Connect(IpAddress, Port);
         }
 
@@ -134,9 +140,14 @@ namespace BikeApp.connections
                     break;
                 case "session/start":
                     Console.WriteLine(@"Start session");
+                    vpnConnector.Connect();
+                    vpnConnector.CommandCenter.Running = true;
                     break;
                 case "session/stop":
                     Console.WriteLine(@"Stop session");
+                    vpnConnector.CommandCenter.ResetScene();
+                    vpnConnector.CommandCenter.Running = false;
+                    vpnConnector.Disconnect();
                     break;
                 case "chat/message":
                 case "chat/broadcast":

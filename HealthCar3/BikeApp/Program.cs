@@ -13,9 +13,7 @@ namespace BikeApp
         [STAThread]
         private static void Main()
         {
-           
             Client.Initialize();            
-            // var vpnConnector = new VpnConnector(new JsonSerializerSettings());
         }
     }
 }
