@@ -2,6 +2,7 @@
 using PackageUtils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
@@ -16,6 +17,8 @@ namespace Server
         private static List<Client> clients;
         public static Dictionary<(string name, string password), string> registeredClients; //<(name, password), id>
         private static List<SessionData> savedSession;
+        public static Client doctorClient;
+        private static List<dynamic> tempRecords;
 
         private static void Main(string[] args)
         {
@@ -56,8 +59,18 @@ namespace Server
         */
         internal static void Disconnect(Client client)
         {
+            if (client == doctorClient)
+            {
+                doctorClient = null;
+            }
+            else if (doctorClient != null)
+            {
+                byte[] bytes = PackageWrapper.SerializeData("client/disconnect", new { clientId = client.GetId() }, doctorClient.GetEncryptor());
+                doctorClient.GetClientStream().Write(bytes, 0, bytes.Length);
+            }
+
             clients.Remove(client);
-            client.GetClientStream().Close();           
+            client.GetClientStream().Close();
             Console.WriteLine($"Client {client.GetId()} disconnected");
         }
 
@@ -150,14 +163,16 @@ namespace Server
         /*
          * Sends a stop message to all the clients with an active session and saves the data
          */
-        internal static void EmergencyStop(byte[] bytes)
+        internal static void EmergencyStop()
         {
             foreach(var client in clients)
             {
                 if (client.IsSessionActive())
                 {
                     // Send stop message to client
-                    SendMessageToSpecificClient(client.GetId(), bytes);
+                    //SendMessageToSpecificClient(client.GetId(), bytes);
+                    byte[] bytes = PackageWrapper.SerializeData("session/stop", new { }, client.GetEncryptor());
+                    client.GetClientStream().Write(bytes, 0, bytes.Length);
                     // Save the data
                     SaveSession(client);
                     // End session server side
@@ -187,6 +202,40 @@ namespace Server
                 }
             }
             return null;
+        }
+
+        internal static void NotifyDoctor(string id, string name)
+        {
+            if (doctorClient != null)
+            {
+                byte[] bytes = PackageWrapper.SerializeData("doctor/newClient", new { clientId = id, name = name }, doctorClient.GetEncryptor());
+                doctorClient.GetClientStream().Write(bytes, 0, bytes.Length);
+            }
+        }
+
+        internal static void RetrieveAllRecords()
+        {
+            tempRecords = savedSession.OfType<dynamic>().ToList();
+            SendNextFragment();
+        }
+
+        internal static void SendNextFragment()
+        {
+            byte[] bytes;
+            if (tempRecords.Count > 2)
+            {
+                dynamic[] nextRecords = { tempRecords[0], tempRecords[1] };
+                bytes = PackageWrapper.SerializeData("doctor/getSessions/fragment", new { records = nextRecords }, doctorClient.GetEncryptor());
+                doctorClient.GetClientStream().Write(bytes, 0, bytes.Length);
+                tempRecords.RemoveAt(0);
+                tempRecords.RemoveAt(0);
+            }
+            else
+            {
+                bytes = PackageWrapper.SerializeData("doctor/getSessions/success", new { records = tempRecords }, doctorClient.GetEncryptor());
+                doctorClient.GetClientStream().Write(bytes, 0, bytes.Length);
+                tempRecords.Clear();
+            }
         }
     }
 }
