@@ -2,14 +2,18 @@
 using Newtonsoft.Json;
 using System;
 using System.Threading;
+using ClientApplication;
+
 
 namespace BikeApp
 {
     internal static class Program
     {
-       [STAThread]
+        
+        [STAThread]
         private static void Main()
         {
+           
             Client.Initialize();            
             // var vpnConnector = new VpnConnector(new JsonSerializerSettings());
         }

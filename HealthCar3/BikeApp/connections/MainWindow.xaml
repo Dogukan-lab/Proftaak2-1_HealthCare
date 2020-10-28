@@ -34,7 +34,7 @@
 
 
             <StackPanel Grid.Row="1">
-            <StackPanel  Orientation="Horizontal" Margin="0,20,0,0">
+                <StackPanel  Orientation="Horizontal">
                 <TextBox Text="Username"
                              Name="UsernameBox"
                              FontSize="22"
@@ -45,13 +45,12 @@
                              BorderThickness="0"
                              HorizontalContentAlignment="Left"
                              Height="25"
-                             Margin="50,0,0,0"
                              Opacity="0.5"
                              />
                 <IconPacks:PackIconMaterial Kind ="Account" 
                                             VerticalAlignment="Center" 
                                             HorizontalAlignment="Center"
-                                            Foreground="Red" RenderTransformOrigin="3.812,0.531"/>
+                                            Foreground="Red"/>
                     </StackPanel>
                 <Border Width="250"
                     Height="2"
@@ -110,7 +109,8 @@
                     <Button Width="110" 
                             Height="50"
                             Content="Exit"
-                            Name="ExitButton"                           
+                            Name="ExitButton"
+                            
                             />
 
                 </StackPanel>

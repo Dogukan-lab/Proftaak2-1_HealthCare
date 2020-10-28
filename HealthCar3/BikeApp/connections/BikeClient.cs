@@ -5,13 +5,14 @@ using BikeApp.connections.bluetooth;
 using BikeApp.vr_environment;
 using SimulatorGui;
 using ClientApplication;
-
+using System.Diagnostics;
 
 namespace BikeApp.connections
 {
     public static class Client
     {
         public static MainWindow mainWindow;
+        
 
         public static void Initialize()
         {
@@ -21,12 +22,10 @@ namespace BikeApp.connections
             ConnectorOption connector = null;
 
 
-            while (!serverCon.IsLoggedIn())
+            if (!serverCon.IsLoggedIn())
             {
 
-                Application.Run(mainWindow);
-                mainWindow.Show();
-                
+                mainWindow.ShowDialog();
 
                 if (mainWindow.BluetoothEnabled())
                 {

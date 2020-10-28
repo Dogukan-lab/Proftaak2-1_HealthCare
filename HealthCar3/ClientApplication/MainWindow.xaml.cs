@@ -36,7 +36,7 @@ namespace ClientApplication
         {
             string username = UsernameBox.Text;
             string password = PasswordBox.Password;
-            
+            this.Close();
             
         }
 
@@ -49,8 +49,10 @@ namespace ClientApplication
             return (bool)SimulatorCheckbox.IsChecked;
         }
 
-        
-
-        
+        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(0);
+            
+        }
     }
 }
