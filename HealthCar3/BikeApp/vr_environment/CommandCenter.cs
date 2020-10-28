@@ -363,7 +363,7 @@ namespace BikeApp.vr_environment
         private void DrawValues(string uuid, double speed, double heartRate, double resistance)
         {
             connector.SendPacket(Panel.DrawText(uuid,
-                    $"Current speed: {speed}m/s", new[] {100, 100}, 32, new[] {0, 0, 0, 1}, "Arial"),
+                    $"Current speed: {String.Format("{0:0.00}", speed)}m/s", new[] {100, 100}, 32, new[] {0, 0, 0, 1}, "Arial"),
                 new Action<JObject>(data =>
                 {
                     connector.SendPacket(Panel.DrawText(uuid, $"Heart rate: {heartRate}bpm",
