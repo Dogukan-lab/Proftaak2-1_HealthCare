@@ -17,7 +17,18 @@ namespace Server
         }
 
         /**
-         * Loads data from a file.
+         * Saves the clientData to a file.
+         */
+        public static void SaveClientData(List<ClientData> data)
+        {
+            using var file = File.CreateText(@"..\data\saved-clientdata.json");
+            var serializer = new JsonSerializer();
+            serializer.Serialize(file, data);
+        }
+
+
+        /**
+         * Loads the sessionData from a file.
          */
         public static List<SessionData> Load()
         {
@@ -32,6 +43,24 @@ namespace Server
             Directory.CreateDirectory(@"..\data"); //creates the directory to prevent errors.
             File.CreateText(@"..\data\saved-records.json");
             return new List<SessionData>();
+        }
+
+        /**
+         * Loads the clientData from a file.
+         */
+        public static List<ClientData> LoadClientData()
+        {
+            if (File.Exists(@"..\data\saved-clientdata.json"))
+            {
+                var serializer = new JsonSerializer();
+                using var file = new StreamReader(@"..\data\saved-clientdata.json");
+                using var jsonTextReader = new JsonTextReader(file);
+                var clientData = serializer.Deserialize<List<ClientData>>(jsonTextReader) ?? new List<ClientData>();
+                return clientData;
+            }
+            Directory.CreateDirectory(@"..\data"); //creates the directory to prevent errors.
+            File.CreateText(@"..\data\saved-clientdata.json");
+            return new List<ClientData>();
         }
     }
 }

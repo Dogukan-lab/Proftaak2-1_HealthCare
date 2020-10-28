@@ -1,0 +1,140 @@
+﻿<UserControl x:Class="DocterApplication.HistoryUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DocterApplication"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1020" d:Background="White">
+    
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="416"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="340"/>
+            <RowDefinition Height="340"/>
+        </Grid.RowDefinitions>
+
+
+        <Grid Grid.Column="0" Grid.Row="0">
+
+            <Grid Height="60" Width="400" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+                <Grid Height="60" Width="120" HorizontalAlignment="Left">
+                    <Label Content="Session: "  FontSize="30" Name="ClientLabel"/>
+                </Grid>
+
+                <Grid Height="35" Width="140" Margin="100,0,0,10">
+                    <ComboBox Name="ClientRecordsComboBox" SelectionChanged="ClientRecordsComboBox_OnRecordSelect">
+                        
+                    </ComboBox>
+                </Grid>
+
+            </Grid>
+
+            <Grid Height="40" Width="300"  Margin="0,50,00,10" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+                <Label Content="Heartrate Max: "  FontSize="20" HorizontalAlignment="Left"/>
+                <Grid HorizontalAlignment="Right" Height="40" Width="100" >
+                    <Border BorderBrush="Black" BorderThickness="2" >
+                        <Label Content="0"  FontSize="20" HorizontalAlignment="Center" Name="HeartrateLabel"/>
+                    </Border>
+                </Grid>
+
+            </Grid>
+
+            <Grid Height="40" Width="300"  Margin="0,100,00,10" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+                <Label Content="Heartrate Average: "  FontSize="20" HorizontalAlignment="Left"/>
+                <Grid HorizontalAlignment="Right" Height="40" Width="100" >
+                    <Border BorderBrush="Black" BorderThickness="2" >
+                        <Label Content="0"  FontSize="20" HorizontalAlignment="Center" Name="HeartrateAverageLabel"/>
+                    </Border>
+                </Grid>
+
+            </Grid>
+
+            <Grid Height="40" Width="300"  Margin="0,150,00,10" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+                <Label Content="Speed Max: "  FontSize="20" HorizontalAlignment="Left"/>
+                <Grid HorizontalAlignment="Right" Height="40" Width="100" >
+                    <Border BorderBrush="Black" BorderThickness="2" >
+                        <Label Content="0"  FontSize="20" HorizontalAlignment="Center" Name="SpeedLabel"/>
+                    </Border>
+                </Grid>
+
+            </Grid>
+
+            <Grid Height="40" Width="300"  Margin="0,200,00,10" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+                <Label Content="Speed Average: "  FontSize="20" HorizontalAlignment="Left"/>
+                <Grid HorizontalAlignment="Right" Height="40" Width="100" >
+                    <Border BorderBrush="Black" BorderThickness="2" >
+                        <Label Content="0"  FontSize="20" HorizontalAlignment="Center" Name="SpeedAverageLabel"/>
+                    </Border>
+                </Grid>
+
+            </Grid>
+
+            <Grid Height="40" Width="350"  Margin="0,250,00,10" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+                <Label Content="Resistance Max: "  FontSize="20" HorizontalAlignment="Left"/>
+                <Grid Margin="150,0,0,0" Height="40" Width="100" >
+                    <Border BorderBrush="Black" BorderThickness="2" >
+                        <Label Content="0"  FontSize="20" HorizontalAlignment="Center" Name="ResistanceLabel"/>
+                    </Border>
+
+                </Grid>
+
+            </Grid>
+
+            <Grid Height="40" Width="225"  Margin="375,175,00,00" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+                <Label Content="Start Time: "  FontSize="20" HorizontalAlignment="Left"/>
+                <Grid HorizontalAlignment="Right" Height="40" Width="100" >
+                    <Border BorderBrush="Black" BorderThickness="2" >
+                        <Label Content="0"  FontSize="20" HorizontalAlignment="Center" Name="StartDateLabel"/>
+                    </Border>
+                </Grid>
+
+            </Grid>
+
+            <Grid Height="40" Width="225"  Margin="375,250,00,00" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+                <Label Content="Stop Time: "  FontSize="20" HorizontalAlignment="Left"/>
+                <Grid HorizontalAlignment="Right" Height="40" Width="100" >
+                    <Border BorderBrush="Black" BorderThickness="2" >
+                        <Label Content="0"  FontSize="20" HorizontalAlignment="Center" Name="StopDateLabel"/>
+                    </Border>
+                </Grid>
+
+            </Grid>
+
+        </Grid>
+
+        <Grid Grid.Row="0" Grid.Column="1">
+
+            <Grid Height="40" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Label Content="Clients:" FontSize="20"/>
+            </Grid>
+
+            <Grid>
+                <ScrollViewer Margin="20,40,20,20">
+                    <ListBox Name="ClientListBox">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListBoxItem_PreviewMouseLeftButtonDown" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </ScrollViewer>
+            </Grid>
+
+        </Grid>
+
+    </Grid>
+
+</UserControl>

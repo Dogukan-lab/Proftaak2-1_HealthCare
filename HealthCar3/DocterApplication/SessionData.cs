@@ -1,0 +1,55 @@
+﻿using System;
+
+namespace DocterApplication
+{
+    /*
+     * Dataclass that holds the data of a session
+     */
+    public class SessionData
+    {
+        public string clientId { get; set; }
+        public string name { get; set; }
+        public DateTime sessionStart { get; set; }
+        public DateTime sessionEnd { get; set; }
+        public int maxHeartRate { get; set; }
+        public int maxSpeed { get; set; }
+        public int averageSpeed { get; set; }
+        public int averageHeartRate { get; set; }
+        public int maxResistance { get; set; }
+        public int lastResistance { get; set; }
+
+        public SessionData(dynamic data)
+        {
+            this.clientId = data.clientId;
+            this.name = data.name;
+            this.sessionStart = data.sessionStart;
+            this.sessionEnd = data.sessionEnd;
+            this.maxHeartRate = data.maxHeartRate;
+            this.maxSpeed = data.maxSpeed;
+            this.averageSpeed = data.averageSpeed;
+            this.averageHeartRate = data.averageHeartRate;
+            this.maxResistance = data.maxResistance;
+            this.lastResistance = data.lastResistance;
+        }
+
+        /*
+         * Puts all the data of the session into a dynamic and returns it.
+         */
+        public dynamic GetData()
+        {
+            return new
+            {
+                clientId = clientId,
+                name = name,
+                sessionStart = sessionStart,
+                sessionEnd = sessionEnd,
+                maxHeartRate = maxHeartRate,
+                maxSpeed = maxSpeed,
+                averageHeartRate = averageHeartRate,
+                averageSpeed = averageSpeed,
+                maxResistance = maxResistance,
+                lastResistance = lastResistance
+            };
+        }
+    }
+}
