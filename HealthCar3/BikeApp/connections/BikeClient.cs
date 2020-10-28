@@ -24,7 +24,6 @@ namespace BikeApp.connections
 
             if (!serverCon.IsLoggedIn())
             {
-
                 mainWindow.ShowDialog();
 
                 if (mainWindow.BluetoothEnabled())
@@ -35,6 +34,7 @@ namespace BikeApp.connections
                 }
                 else if (mainWindow.SimulatorEnabled())
                 {
+                    //SimulatorGui setup
                     mainWindow.Hide();
                     Application.SetHighDpiMode(HighDpiMode.SystemAware);
                     Application.EnableVisualStyles();
@@ -50,19 +50,16 @@ namespace BikeApp.connections
                     //Start the update thread
                     simulator.UpdateThread.Start();
 
-                    // Start the gui
+                    //Start the simulatorGui
                     Application.Run(simForm);
                 }
                 else
                 {
                     Thread.Sleep(4000);
                 }
-
             }
         }
-       
-
     }
-        }
+}
     
 
