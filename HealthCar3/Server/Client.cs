@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Sockets;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Text;
@@ -21,7 +22,7 @@ namespace Server
         private string name;
         private bool sessionActive;
         private SessionData sessionData;
-        private ClientData clientData;
+        private ClientCredentials clientCredentials;
         private bool loggedIn;
         private bool keyExchanged;
         private readonly Encryptor encryptor;
@@ -31,7 +32,7 @@ namespace Server
         public bool IsSessionActive() { return sessionActive; }
         public void SetSession(bool active) { sessionActive = active; }
         public SessionData GetSessionData() { return sessionData; }
-        public ClientData GetClientData() { return clientData; }
+        public ClientCredentials GetClientCredentials() { return clientCredentials; }
         public bool IsLoggedIn() { return loggedIn; }
         public Encryptor GetEncryptor() { return encryptor; }
 
@@ -41,6 +42,7 @@ namespace Server
             encryptor = new Encryptor();
             decryptor = new Decryptor();
             stream = this.tcpClient.GetStream();
+            clientCredentials = new ClientCredentials();
             stream.BeginRead(buffer, 0, buffer.Length, OnRead, null);
         }
 
@@ -177,6 +179,7 @@ namespace Server
                     break;
                 case "client/register":
                     string clientName = data.data.name;
+                    string clientPassword = data.data.password;
                     if (VerifyUsername(clientName))
                     {
                         id = Program.GenerateId(clientName);
@@ -185,6 +188,7 @@ namespace Server
                         Console.WriteLine($"New Client registered with id: {id}");
                         bytes = PackageWrapper.SerializeData("client/register/success", new { clientId = id, clientName, message = "Login successful." }, encryptor);
                         loggedIn = true;
+                        clientCredentials.SetCredentials(clientName, clientPassword);
                         Program.NotifyDoctor(id, name);
                     }
                     else

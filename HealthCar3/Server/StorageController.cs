@@ -19,7 +19,7 @@ namespace Server
         /**
          * Saves the clientData to a file.
          */
-        public static void SaveClientData(List<ClientData> data)
+        public static void SaveClientCredentials(List<ClientCredentials> data)
         {
             using var file = File.CreateText(@"..\data\saved-clientdata.json");
             var serializer = new JsonSerializer();
@@ -48,19 +48,19 @@ namespace Server
         /**
          * Loads the clientData from a file.
          */
-        public static List<ClientData> LoadClientData()
+        public static List<ClientCredentials> LoadClientData()
         {
             if (File.Exists(@"..\data\saved-clientdata.json"))
             {
                 var serializer = new JsonSerializer();
                 using var file = new StreamReader(@"..\data\saved-clientdata.json");
                 using var jsonTextReader = new JsonTextReader(file);
-                var clientData = serializer.Deserialize<List<ClientData>>(jsonTextReader) ?? new List<ClientData>();
+                var clientData = serializer.Deserialize<List<ClientCredentials>>(jsonTextReader) ?? new List<ClientCredentials>();
                 return clientData;
             }
             Directory.CreateDirectory(@"..\data"); //creates the directory to prevent errors.
             File.CreateText(@"..\data\saved-clientdata.json");
-            return new List<ClientData>();
+            return new List<ClientCredentials>();
         }
     }
 }
