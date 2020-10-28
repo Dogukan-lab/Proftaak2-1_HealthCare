@@ -89,7 +89,7 @@
                             <ScrollViewer Height="300" >
                                 <StackPanel Name="ChatView1"></StackPanel>
                             </ScrollViewer>
-                            <TextBox Height="40" BorderBrush="Black" BorderThickness="2" Name="ChatBox1" KeyDown="OnKeyDownEvent"/>
+                            <TextBox Height="40" BorderBrush="Black" BorderThickness="2" Name="ChatBox1" MaxLength="15" KeyDown="OnKeyDownEvent"/>
                         </StackPanel>
                     </Grid>
 
@@ -204,7 +204,7 @@
                             <ScrollViewer Height="300" >
                                 <StackPanel Name="ChatView2"></StackPanel>
                             </ScrollViewer>
-                            <TextBox Height="40" BorderBrush="Black" BorderThickness="2" Name="ChatBox2" KeyDown="OnKeyDownEvent"/>
+                            <TextBox Height="40" BorderBrush="Black" BorderThickness="2" Name="ChatBox2" MaxLength="15" KeyDown="OnKeyDownEvent"/>
                         </StackPanel>
                     </Grid>
 
@@ -318,7 +318,7 @@
                             <ScrollViewer Height="300" >
                                 <StackPanel Name="ChatView3"></StackPanel>
                             </ScrollViewer>
-                            <TextBox Height="40" BorderBrush="Black" BorderThickness="2" Name="ChatBox3" KeyDown="OnKeyDownEvent"/>
+                            <TextBox Height="40" BorderBrush="Black" BorderThickness="2" Name="ChatBox3" MaxLength="15" KeyDown="OnKeyDownEvent"/>
                         </StackPanel>
                     </Grid>
 
@@ -432,7 +432,7 @@
                             <ScrollViewer Height="300" >
                                 <StackPanel Name="ChatView4"></StackPanel>
                             </ScrollViewer>
-                            <TextBox Height="40" BorderBrush="Black" BorderThickness="2" Name="ChatBox4" KeyDown="OnKeyDownEvent"/>
+                            <TextBox Height="40" BorderBrush="Black" BorderThickness="2" Name="ChatBox4" MaxLength="15" KeyDown="OnKeyDownEvent"/>
                         </StackPanel>
                     </Grid>
 
@@ -546,7 +546,7 @@
                             <ScrollViewer Height="300" >
                                 <StackPanel Name="ChatView5"></StackPanel>
                             </ScrollViewer>
-                            <TextBox Height="40" BorderBrush="Black" BorderThickness="2" Name="ChatBox5" KeyDown="OnKeyDownEvent"/>
+                            <TextBox Height="40" BorderBrush="Black" BorderThickness="2" Name="ChatBox5" MaxLength="15" KeyDown="OnKeyDownEvent"/>
                         </StackPanel>
                     </Grid>
 
@@ -660,7 +660,7 @@
                             <ScrollViewer Height="300" >
                                 <StackPanel Name="ChatView6"></StackPanel>
                             </ScrollViewer>
-                            <TextBox Height="40" BorderBrush="Black" BorderThickness="2" Name="ChatBox6" KeyDown="OnKeyDownEvent"/>
+                            <TextBox Height="40" BorderBrush="Black" BorderThickness="2" Name="ChatBox6" MaxLength="15" KeyDown="OnKeyDownEvent"/>
                         </StackPanel>
                     </Grid>
 

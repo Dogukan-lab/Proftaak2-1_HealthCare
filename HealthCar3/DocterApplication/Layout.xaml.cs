@@ -144,6 +144,9 @@ namespace DocterApplication
                     SetNewGuiLabelValue(bike.BikeId, "0", new GuiCallBack(SetPatientSpeedCB)); // Set speed to 0
                     SetNewGuiLabelValue(bike.BikeId, "0", new GuiCallBack(SetPatientAvgSpeedCB)); // Set avg speed to 0
 
+                    //Resets the chatbox inside of the patient control view
+                    SetNewGuiLabelValue(bike.BikeId, "", new GuiCallBack(ClearChatBox));
+
                     bikes.Remove(bike);
                     return;
                 }
@@ -259,6 +262,10 @@ namespace DocterApplication
         private void SetPatientSpeedCB(int bikeId, string speed)
         {
             ((Label)patientUserControl.FindName("SpeedLabel" + bikeId)).Content = speed + " m/s";
+        }
+        private void ClearChatBox(int bikeId, string msg)
+        {
+            ((StackPanel)patientUserControl.FindName("ChatView" + bikeId)).Children.Clear();
         }
         private void SetPatientAvgSpeedCB(int bikeId, string avgSpeed)
         {
