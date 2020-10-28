@@ -153,6 +153,7 @@ namespace BikeApp.connections
                 case "chat/broadcast":
                     string message = data.data.message.ToObject<string>();
                     Console.WriteLine($@"Received Message: {message}");
+                    vpnConnector.CommandCenter.ChatMsg = message;
                     break;
             }
         }

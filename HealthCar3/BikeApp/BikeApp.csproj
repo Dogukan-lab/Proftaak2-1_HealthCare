@@ -32,12 +32,6 @@
     <Folder Include="Properties\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Page Include="connections\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-  </ItemGroup>
-
   <Import Project="..\PackageUtils\PackageUtils.projitems" Label="Shared" />
 
 </Project>

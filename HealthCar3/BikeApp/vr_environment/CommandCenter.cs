@@ -20,6 +20,7 @@ namespace BikeApp.vr_environment
         private ConnectorOption updateValues;
         public bool Running { get; set; }
         public Task UpdateThread { get; set; }
+        public string ChatMsg { get; set; } = "";
 
 
         /**
@@ -99,7 +100,7 @@ namespace BikeApp.vr_environment
             while (Running)
             {
                 Thread.Sleep(4000);
-                UpdatePanel(panelUuid, updateValues.Speed, updateValues.HeartRate, updateValues.Resistance);
+                UpdatePanel(panelUuid, updateValues.Speed, updateValues.HeartRate, updateValues.Resistance, ChatMsg);
                 UpdateBike(bikeUuid, updateValues.Speed);
             }
         }
@@ -345,10 +346,10 @@ namespace BikeApp.vr_environment
          * This method updates the panel through a panel.swap,
          * and then draws the current values onto the panel.
          */
-        public void UpdatePanel(string uuid, float speed, int heartRate, float resistance)
+        public void UpdatePanel(string uuid, float speed, int heartRate, float resistance, string chatMsg)
         {
             ClearPanel(uuid);
-            DrawValues(uuid, speed, heartRate, resistance);
+            DrawValues(uuid, speed, heartRate, resistance, chatMsg);
         }
 
         /*
@@ -360,23 +361,28 @@ namespace BikeApp.vr_environment
                 new Action<JObject>(data => { }));
         }
 
-        private void DrawValues(string uuid, double speed, double heartRate, double resistance)
+        private void DrawValues(string uuid, double speed, double heartRate, double resistance, string chatMsg)
         {
             connector.SendPacket(Panel.DrawText(uuid,
-                    $"Current speed: {String.Format("{0:0.00}", speed)}m/s", new[] {100, 100}, 32, new[] {0, 0, 0, 1}, "Arial"),
+                    $"Current speed: {String.Format("{0:0.00}", speed)}m/s", new[] {0, 100}, 32, new[] {0, 0, 0, 1}, "Arial"),
                 new Action<JObject>(data =>
                 {
                     connector.SendPacket(Panel.DrawText(uuid, $"Heart rate: {heartRate}bpm",
-                        new[] {100, 200}, 32, new[] {0, 0, 0, 1}, "Arial"), new Action<JObject>(d =>
+                        new[] {0, 200}, 32, new[] {0, 0, 0, 1}, "Arial"), new Action<JObject>(d =>
                     {
                         connector.SendPacket(Panel.DrawText(uuid,
                                 $"Current resistance: {resistance}%",
-                                new[] {100, 300}, 32, new[] {0, 0, 0, 1}, "Arial"),
+                                new[] {0, 300}, 32, new[] {0, 0, 0, 1}, "Arial"),
                             new Action<JObject>(e =>
                             {
-                                connector.SendPacket(Panel.Swap(uuid),
-                                    new Action<JObject>(
-                                        o => { }));
+                                connector.SendPacket(Panel.DrawText(uuid, $"MSG from Doctor: {ChatMsg}",new[] {0, 400}, 32, new[] {0, 0, 0, 1}, "Arial"),
+                                    new Action<JObject>( chatData =>
+                                    {
+                                        connector.SendPacket(Panel.Swap(uuid),
+                                            new Action<JObject>(
+                                                o => 
+                                                { }));
+                                    }));
                             }));
                     }));
                 }));

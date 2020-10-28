@@ -189,6 +189,7 @@ namespace Server
                         bytes = PackageWrapper.SerializeData("client/register/success", new { clientId = id, clientName, message = "Login successful." }, encryptor);
                         loggedIn = true;
                         clientCredentials.SetCredentials(clientName, clientPassword);
+                        Program.SaveClientData(this);
                         Program.NotifyDoctor(id, name);
                     }
                     else
