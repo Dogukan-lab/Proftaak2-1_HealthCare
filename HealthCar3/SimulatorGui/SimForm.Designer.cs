@@ -78,6 +78,7 @@
             this.speedSwayCheck.TabIndex = 3;
             this.speedSwayCheck.Text = "sway";
             this.speedSwayCheck.UseVisualStyleBackColor = true;
+            //this.speedSwayCheck.CheckedChanged += new System.EventHandler(this.speedSwayCheck_CheckedChanged);
             // 
             // speedSwayBox
             // 
@@ -134,11 +135,11 @@
             // 
             this.resistanceBox.Location = new System.Drawing.Point(8, 374);
             this.resistanceBox.Name = "resistanceBox";
+            this.resistanceBox.ReadOnly = true;
             this.resistanceBox.Size = new System.Drawing.Size(100, 23);
             this.resistanceBox.TabIndex = 2;
-            this.resistanceBox.ReadOnly = true;
             // 
-            // Form1
+            // SimForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -154,7 +155,7 @@
             this.Controls.Add(this.speedBox);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Name = "Form1";
+            this.Name = "SimForm";
             this.Text = "Form1";
             this.ResumeLayout(false);
             this.PerformLayout();

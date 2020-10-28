@@ -21,6 +21,7 @@ namespace Server
         private string name;
         private bool sessionActive;
         private SessionData sessionData;
+        private ClientData clientData;
         private bool loggedIn;
         private bool keyExchanged;
         private readonly Encryptor encryptor;
@@ -30,6 +31,7 @@ namespace Server
         public bool IsSessionActive() { return sessionActive; }
         public void SetSession(bool active) { sessionActive = active; }
         public SessionData GetSessionData() { return sessionData; }
+        public ClientData GetClientData() { return clientData; }
         public bool IsLoggedIn() { return loggedIn; }
         public Encryptor GetEncryptor() { return encryptor; }
 

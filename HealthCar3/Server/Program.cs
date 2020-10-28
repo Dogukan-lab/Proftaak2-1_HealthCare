@@ -17,13 +17,16 @@ namespace Server
         private static List<Client> clients;
         public static Dictionary<(string name, string password), string> registeredClients; //<(name, password), id>
         private static List<SessionData> savedSession;
+        private static List<ClientData> savedClientData;
         public static Client doctorClient;
         private static List<dynamic> tempRecords;
 
+       
         private static void Main(string[] args)
         {
             Console.WriteLine("Hello Server!");
             savedSession = StorageController.Load();
+            savedClientData = StorageController.LoadClientData();
             new Program().Listen();     
         }
         /*
@@ -49,6 +52,7 @@ namespace Server
         {
             TcpClient tcpClient = listener.EndAcceptTcpClient(ar);
             SessionData cd = new SessionData();
+            ClientData data = new ClientData();
             Console.WriteLine($"Client connected from {tcpClient.Client.RemoteEndPoint}");
             clients.Add(new Client(tcpClient));
             listener.BeginAcceptTcpClient(new AsyncCallback(Connect), null);
@@ -115,6 +119,15 @@ namespace Server
             
             //No client found with the given id.
             return false; 
+        }
+
+        /*
+        * Saves the clientData for later viewing.
+        */
+        internal static void SaveClientData(Client client)
+        {
+            savedClientData.Add(client.GetClientData());
+            StorageController.SaveClientData(savedClientData);
         }
 
         internal static bool ActiveSession(string id, out Client targetClient)
