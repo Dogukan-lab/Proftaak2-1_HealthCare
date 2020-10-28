@@ -8,9 +8,9 @@ namespace SimulatorGui
         {
             InitializeComponent();
             // Set some base values
-            speedBox.Text = "7,5";
+            speedBox.Text = "7.5";
             speedSwayCheck.Checked = true;
-            speedSwayBox.Text = "0,5";
+            speedSwayBox.Text = "0.5";
             heartRateBox.Text = "85";
             heartRateSwayCheck.Checked = true;
             heartRateSway.Text = "2";

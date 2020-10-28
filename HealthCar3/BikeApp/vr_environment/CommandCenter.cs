@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using BikeApp.command.scene;
 using BikeApp.connections;
+using BikeApp.connections.bluetooth;
 using BikeApp.data;
 using BikeApp.data.components;
 using Newtonsoft.Json.Linq;
@@ -11,9 +14,13 @@ namespace BikeApp.vr_environment
 {
     internal class CommandCenter
     {
-        public string panelUuid;
+        private string panelUuid;
+        private string bikeUuid;
         private VpnConnector connector;
-        public TransformComponent BikeTransform { get; private set; }
+        private ConnectorOption updateValues;
+        public bool Running { get; set; }
+        public Task UpdateThread { get; set; }
+
 
         /**
          * Controller for managing construction and management of commands.
@@ -24,11 +31,44 @@ namespace BikeApp.vr_environment
         {
             connector = vpnConnector;
             panelUuid = "";
+            bikeUuid = "";
+        }
+
+        public void SetConnectorOption(ConnectorOption connectorOption)
+        {
+            updateValues = connectorOption;
+        }
+
+        public void SetSpeed(float speed)
+        {
+            updateValues.Speed = speed;
+        }
+
+        public void AttachCamera()
+        {
+            connector.SendPacket(Node.Find("Camera"),
+                new Action<JObject>(cameraData =>
+                {
+                    connector.SendPacket(Node.Find("Bike"),
+                        new Action<JObject>(bikeData =>
+                        {
+                            var component = new TransformComponent(
+                                new double[] {5, 0, 0},
+                                1, new double[] {0, 90, 0});
+
+                            connector.SendPacket(Node.Update(
+                                    cameraData["data"]?["data"]?[0]?["uuid"]?.ToString(),
+                                    bikeData["data"]?["data"]?[0]?["uuid"]?.ToString(),
+                                    component),
+                                new Action<JObject>(data => { }));
+                        }));
+                }));
         }
 
         /*
          * This method creates a preset VR environment
          */
+
         public void PresetOne()
         {
             ResetScene();
@@ -36,53 +76,41 @@ namespace BikeApp.vr_environment
 
             var routeData = new RouteData[7];
             // Defining route
-            routeData[0] = new RouteData(new[] {0, 0, 0}, new[] {1, 0, 0});
-            routeData[1] = new RouteData(new[] {20, 0, 0}, new[] {0, 0, 1});
-            routeData[2] = new RouteData(new[] {20, 0, 50}, new[] {-1, 0, 0});
-            routeData[3] = new RouteData(new[] {-10, 0, 30}, new[] {-1, 0, 0});
-            routeData[4] = new RouteData(new[] {-30, 0, 10}, new[] {0, 0, 0});
-            routeData[5] = new RouteData(new[] {-20, 0, 0}, new[] {0, 0, 0});
-            routeData[6] = new RouteData(new[] {-10, 0, -10}, new[] {1, 0, 0});
+            routeData[0] = new RouteData(new[] {0, 0, 0}, new double[] {30, 0, -20});
+            routeData[1] = new RouteData(new[] {20, 0, 0}, new double[] {0, 0, 20});
+            routeData[2] = new RouteData(new[] {20, 0, 50}, new double[] {0, 0, 20});
+            routeData[3] = new RouteData(new[] {-10, 0, 30}, new double[] {50, 0, -20});
+            routeData[4] = new RouteData(new[] {-30, 0, 10}, new double[] {9, 0, -15});
+            routeData[5] = new RouteData(new[] {-20, 0, 0}, new double[] {0, 0, -20});
+            routeData[6] = new RouteData(new[] {-10, 0, -10}, new double[] {9, 0, -20});
 
-            CreateRoute(routeData, 3);
-
-            // CreateObject("Bike", "bike/bike.fbx");
-
+            CreateRoute(routeData);
             SetTime(SkyBoxTime.Morning);
+
+            Running = true;
+            UpdateThread = new Task(Update);
+            UpdateThread.Start();
         }
 
-        public void AttachCamera(bool isAttached)
+        #region Updatables
+
+        private void Update()
         {
-            if (isAttached)
-                connector.SendPacket(Node.Find("Camera"),
-                    new Action<JObject>(cameraData =>
-                    {
-                        connector.SendPacket(Node.Find("Bike"),
-                            new Action<JObject>(bikeData =>
-                            {
-                                var component = new TransformComponent(
-                                    new[] {-10, -1.5, -2.47},
-                                    1, new double[] {0, 90, 0});
-
-                                connector.SendPacket(Node.Update(
-                                        cameraData["data"]?["data"]?[0]?["uuid"]?.ToString(),
-                                        bikeData["data"]?["data"]?[0]?["uuid"]?.ToString(),
-                                        component),
-                                    new Action<JObject>(data => {}));
-                            }));
-                    }));
-            else
-                Console.WriteLine("Make a detach function!");
-            connector.SendPacket(Node.Find("Camera"),
-                new Action<JObject>(cameraData =>
-                {
-                    connector.SendPacket(Node.Update(
-                            cameraData["data"]?["data"]?[0]?["uuid"]?.ToString(),
-                            null,
-                            null),
-                        new Action<JObject>(data => {}));
-                }));
+            while (Running)
+            {
+                Thread.Sleep(4000);
+                UpdatePanel(panelUuid, updateValues.Speed, updateValues.HeartRate, updateValues.Resistance);
+                UpdateBike(bikeUuid, updateValues.Speed);
+            }
         }
+
+        private void UpdateBike(string uuid, float speed)
+        {
+            connector.SendPacket(Route.Speed(uuid, speed),
+                new Action<JObject>(data => { Console.WriteLine("Bike speed has been updated!"); }));
+        }
+
+        #endregion
 
         #region Scene Code
 
@@ -95,7 +123,7 @@ namespace BikeApp.vr_environment
         /*
          * This method deletes the original groundplane and resets the entire scene. 
          */
-        private void ResetScene()
+        public void ResetScene()
         {
             connector.SendPacket(Scene.Reset(), new Action<JObject>(data =>
             {
@@ -259,24 +287,25 @@ namespace BikeApp.vr_environment
         /*
          * This method creates the route that the bike in the VR will follow.
          */
-        public void CreateRoute(RouteData[] routeData, int speed)
+        public void CreateRoute(RouteData[] routeData)
         {
             connector.SendPacket(Route.Add(routeData), new Action<JObject>(data =>
             {
                 Console.WriteLine($"Response add: {data}");
-                connector.SendPacket(Route.ShowRoute(true),
+                connector.SendPacket(Route.ShowRoute(false),
                     new Action<JObject>(dataRoute => { Console.WriteLine("Route skeleton had been made"); }));
                 var roadId = data["data"]?["data"]?["uuid"]?.ToString();
                 AddRoad(roadId);
 
                 connector.SendPacket(Node.AddModel("Bike", null,
-                        new TransformComponent(1, -1, 1, 1, 0, 0, 0),
+                        new TransformComponent(1, -1, 1, 1, 0, 45, 0),
                         new ModelComponent(GetModelObjects("bike/bike.fbx"), true, false, "")),
                     new Action<JObject>(bikeData =>
                     {
-                        var parent = bikeData["data"]?["data"]?["uuid"]?.ToString();
-                        CreatePanel(parent);
-                        connector.SendPacket(Route.Follow(roadId, bikeData["data"]?["data"]?["uuid"]?.ToString(), speed,
+                        bikeUuid = bikeData["data"]?["data"]?["uuid"]?.ToString();
+                        CreatePanel(bikeUuid);
+                        connector.SendPacket(Route.Follow(roadId, bikeData["data"]?["data"]?["uuid"]?.ToString(),
+                                updateValues.Speed / 3,
                                 -1,
                                 "XZ", 1, false,
                                 new[] {0, 0, 0}, new[] {0, 0, 0}),
@@ -308,22 +337,18 @@ namespace BikeApp.vr_environment
         {
             connector.SendPacket(Node.AddPanel("Panel", nodeUuid,
                     new PanelComponent(0.5, 0.5, 512, 512, 1, 1, 1, 1, false),
-                    new TransformComponent(-0.4, 1.3, 0.01, 1, -20, 90, 0)),
-                new Action<JObject>(data =>
-                {
-                    var uuid = data["data"]?["data"]?["uuid"]?.ToString();
-                    UpdatePanel(uuid);
-                }));
+                    new TransformComponent(-0.3, 1.2, 0.01, 0.45, -20, 90, 0)),
+                new Action<JObject>(data => { panelUuid = data["data"]?["data"]?["uuid"]?.ToString(); }));
         }
 
         /*
          * This method updates the panel through a panel.swap,
          * and then draws the current values onto the panel.
          */
-        public void UpdatePanel(string uuid)
+        public void UpdatePanel(string uuid, float speed, int heartRate, float resistance)
         {
             ClearPanel(uuid);
-            DrawValues(uuid, 0, 100, 20);
+            DrawValues(uuid, speed, heartRate, resistance);
         }
 
         /*

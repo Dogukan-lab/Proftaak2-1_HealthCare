@@ -3,6 +3,7 @@ using System.Threading;
 using System.Windows.Forms;
 using BikeApp.connections.bluetooth;
 using BikeApp.vr_environment;
+using Newtonsoft.Json;
 using SimulatorGui;
 
 namespace BikeApp.connections
@@ -17,7 +18,7 @@ namespace BikeApp.connections
             string cInput;
             while (!serverCon.IsLoggedIn())
             {
-                Console.WriteLine(@"Select: " + "\n-login\n" + "- register\n");
+                Console.WriteLine(@"Select: " + "\n-login\n" + "-register\n");
                 cInput = Console.ReadLine();
                 string pInput;
                 switch (cInput)
