@@ -1,18 +1,11 @@
-﻿using DocterApplication;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Server;
+using System.Diagnostics;
+using System.IO;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace ClientApplication
 {
@@ -24,6 +17,10 @@ namespace ClientApplication
     {
         public string Username { get; set; }
         public string Password { get; set; }
+        public LoginEnum LoginKind { get; set; }
+
+        public List<ClientCredentials> _clientCredentials = File.Exists(@"..\..\..\..\Server\bin\Debug\data\saved-clientdata.json") ? StorageController.LoadClientData() : null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -31,9 +28,16 @@ namespace ClientApplication
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            Username = UsernameBox.Text;
-            Password = PasswordBox.Password;
-            this.Close();
+            LoginKind = LoginEnum.Login;
+            foreach (var item in _clientCredentials)
+            {
+                if((UsernameBox.Text == item._username) && (PasswordBox.Password == item._password))
+                {
+                    Username = item._username;
+                    Password = item._password;
+                    Close();
+                }
+            }
         }
 
         public bool BluetoothEnabled()
@@ -45,10 +49,12 @@ namespace ClientApplication
             return (bool)SimulatorCheckbox.IsChecked;
         }
 
-        private void ExitButton_Click(object sender, RoutedEventArgs e)
+        private void Register_Click(object sender, RoutedEventArgs e)
         {
-            Environment.Exit(0);
-            
+            LoginKind = LoginEnum.Register;
+            Username = UsernameBox.Text;
+            Password = PasswordBox.Password;
+            Close();
         }
     }
 }

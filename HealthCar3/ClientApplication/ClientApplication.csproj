@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DocterApplication\DocterApplication.csproj" />
+    <ProjectReference Include="..\Server\Server.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using Newtonsoft.Json;
 
 namespace Server
 {
-    internal static class StorageController
+    public static class StorageController
     {
         /**
          * Saves the sessionData to a file.
@@ -50,10 +51,12 @@ namespace Server
          */
         public static List<ClientCredentials> LoadClientData()
         {
-            if (File.Exists(@"..\data\saved-clientdata.json"))
+
+            if (File.Exists(@"..\..\..\..\Server\bin\Debug\data\saved-clientdata.json"))
             {
+                Debug.WriteLine("[STORAGE] file does exist!");
                 var serializer = new JsonSerializer();
-                using var file = new StreamReader(@"..\data\saved-clientdata.json");
+                using var file = new StreamReader(@"..\..\..\..\Server\bin\Debug\data\saved-clientdata.json");
                 using var jsonTextReader = new JsonTextReader(file);
                 var clientData = serializer.Deserialize<List<ClientCredentials>>(jsonTextReader) ?? new List<ClientCredentials>();
                 return clientData;

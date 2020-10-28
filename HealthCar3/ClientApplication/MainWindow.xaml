@@ -109,8 +109,8 @@
 
                     <Button Width="110" 
                             Height="50"
-                            Content="Exit"
-                            Name="ExitButton"                           
+                            Content="Register"
+                            Name="RegisterButton" Click="Register_Click"                           
                             />
 
                 </StackPanel>

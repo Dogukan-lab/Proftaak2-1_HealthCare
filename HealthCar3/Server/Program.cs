@@ -11,13 +11,13 @@ namespace Server
     /*
      * Class that allows the client to connect to the server
      */
-    internal class Program
+    public class Program
     {
         private TcpListener listener;
         private static List<Client> clients;
         public static Dictionary<(string name, string password), string> registeredClients; //<(name, password), id>
         private static List<SessionData> savedSession;
-        private static List<ClientCredentials> savedClientData;
+        public static List<ClientCredentials> savedClientData;
         public static Client doctorClient;
         private static List<dynamic> tempRecords;
         
@@ -26,15 +26,33 @@ namespace Server
             Console.WriteLine("Hello Server!");
             savedSession = StorageController.Load();
             savedClientData = StorageController.LoadClientData();
+            registeredClients = SetRegisteredClients();
             new Program().Listen();     
         }
+
+        /*
+         * Inits the registered clients dictionary to check for log in attempts
+         */
+        private static Dictionary<(string name, string password), string> SetRegisteredClients()
+        {
+            Dictionary<(string name, string password), string> registeredClients = new Dictionary<(string name, string password), string>();
+            if ((savedClientData != null) || savedClientData.Any())
+            {
+                foreach (var item in savedClientData)
+                {
+                    registeredClients.Add((item._username, item._password), item._id);
+                }
+            }
+
+            return registeredClients;
+        }
+
         /*
         * Method that accepts the connection to the server
         */
         public void Listen()
         {
             clients = new List<Client>();
-            registeredClients = new Dictionary<(string, string), string>();
             
             //TODO don't know which ip address and port
             listener = new TcpListener(IPAddress.Any, 1330);

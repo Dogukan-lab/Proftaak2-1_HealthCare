@@ -13,7 +13,7 @@ using PackageUtils;
 namespace Server
 {
 
-    internal class Client
+    public class Client
     {
         private readonly TcpClient tcpClient;
         private readonly NetworkStream stream;
@@ -188,7 +188,7 @@ namespace Server
                         Console.WriteLine($"New Client registered with id: {id}");
                         bytes = PackageWrapper.SerializeData("client/register/success", new { clientId = id, clientName, message = "Login successful." }, encryptor);
                         loggedIn = true;
-                        clientCredentials.SetCredentials(clientName, clientPassword);
+                        clientCredentials.SetCredentials(clientName, clientPassword, id);
                         Program.SaveClientData(this);
                         Program.NotifyDoctor(id, name);
                     }
@@ -198,10 +198,11 @@ namespace Server
                     break;
                 case "client/login":
                     if (Program.ClientLogin((string)data.data.name, (string)data.data.password))
-                    {
+                    { 
                         this.name = data.data.name;
                         id = Program.registeredClients.GetValueOrDefault((this.name, (string)data.data.password), "Error: Logged in without known id!");
-                        Console.WriteLine($"New Client logged in with id: {id}");
+
+                        Console.WriteLine($"[SERVER] Client logged in with id: {id}");
                         bytes = PackageWrapper.SerializeData("client/login/success", new { message = "Login successful." }, encryptor);
                         loggedIn = true;
                         Program.NotifyDoctor(id, name);
