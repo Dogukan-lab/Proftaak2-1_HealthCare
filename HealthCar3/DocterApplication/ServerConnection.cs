@@ -41,22 +41,18 @@ namespace DocterApplication
         {
             return connected;
         }
-
         public bool IsLoggedIn()
         {
             return loggedIn;
         }
-
         public bool HasReceivedLoginFeedback()
         {
             return receivedLoginFeedback;
         }
-
         public void SetLayoutParent(Layout parent)
         {
             layoutParent = parent;
         }
-
         public bool HasRetreivedRecords()
         {
             return retreivedRecords;
@@ -101,6 +97,9 @@ namespace DocterApplication
             return buffer;
         }
 
+        /**
+         * Async callback that gets called when we have read something from the stream.
+         */
         private void OnRead(IAsyncResult ar)
         {
             try
@@ -128,13 +127,16 @@ namespace DocterApplication
             }
         }
 
+        /**
+         * Decode the message by switching on the tag in the package.
+         */
         private void HandleData(dynamic data)
         {
             var jData = data as JObject;
             var tag = jData?["tag"]?.ToObject<string>();
             switch (tag)
             {
-                case "encrypt/key/success":
+                case "encrypt/key/success": // Initializes the new received encryption keys.
                     byte[] key = decryptor.DecryptRsa(data.data.key.ToObject<byte[]>());
                     byte[] iv = decryptor.DecryptRsa(data.data.iv.ToObject<byte[]>());
 
@@ -146,39 +148,35 @@ namespace DocterApplication
 
                     keyExchanged = true;
                     break;
-                case "doctor/login/success":
+                case "doctor/login/success": // Logs the doctor in
                     receivedLoginFeedback = true;
                     loggedIn = true;
-                    Console.WriteLine(jData["data"]?.ToObject<JObject>()?["message"]?.ToObject<string>());
                     break;
-                case "doctor/login/error":
+                case "doctor/login/error": // Lets the doctor know that the input credentials were incorrect.
                     receivedLoginFeedback = true;
-                    Console.WriteLine(jData["data"]?.ToObject<JObject>()?["message"]?.ToObject<string>());
                     break;
-                case "client/update/heartRate":
-                    layoutParent.NewHeartRate((string) data.data.clientId, (int) data.data.heartRate);
+                case "client/update/heartRate": // Updates the heart rate of a connected client.
+                    layoutParent.NewHeartRate((string)data.data.clientId, (int)data.data.heartRate);
                     break;
-                case "client/update/speed":
-                    layoutParent.NewSpeed((string) data.data.clientId, (int) data.data.speed);
+                case "client/update/speed": // Updates the speed of a connected client.
+                    layoutParent.NewSpeed((string)data.data.clientId, (int)data.data.speed);
                     break;
-                case "doctor/clientHistory/success":
-                    Console.WriteLine($@"{jData["data"]}");
+                case "doctor/newClient": // Lets this application know a new client has connected to the server.
+                    layoutParent.NewClient((string)data.data.clientId, (string)data.data.name);
                     break;
-                case "doctor/newClient":
-                    layoutParent.NewClient((string) data.data.clientId, (string) data.data.name);
+                case "client/disconnect": // Lets this application know a client has disconnected from the server.
+                    layoutParent.RemoveClient((string)data.data.clientId);
                     break;
-                case "client/disconnect":
-                    layoutParent.RemoveClient((string) data.data.clientId);
-                    break;
-                case "doctor/getSessions/fragment":
+                case "doctor/getSessions/fragment": // Received a fragment of the records list from server.
                     foreach (dynamic r in ((JArray) data.data.records).Children()) records.Add(new SessionData(r));
                     GetNextFragment();
                     break;
-                case "doctor/getSessions/success":
+                case "doctor/getSessions/success":// Received the final fragment of the records list from server.
                     foreach (dynamic r in ((JArray) data.data.records).Children()) records.Add(new SessionData(r));
                     layoutParent.RefreshHistoryPage(records);
                     retreivedRecords = true;
                     break;
+                // Unused responses.
                 case "chat/message/success":
                 case "chat/broadcast/success":
                 case "session/resistance/success":
@@ -198,6 +196,9 @@ namespace DocterApplication
             }
         }
 
+        /*
+         * Gets called when the application has succesfully connected to the server.
+         */
         private void OnConnected()
         {
             connected = true;
@@ -242,7 +243,6 @@ namespace DocterApplication
 
             stream.Write(bytes, 0, bytes.Length);
         }
-
         #region // Writer functions
 
         /*
@@ -294,7 +294,6 @@ namespace DocterApplication
 
             stream.Write(bytes, 0, bytes.Length);
         }
-
         /*
          * Stops all the active clients
          */

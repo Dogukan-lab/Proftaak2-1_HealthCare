@@ -40,7 +40,6 @@ namespace BikeApp.connections
             co = connector;
             vpnConnector.SetConnectorOptions(co);
         }
-
         public bool IsLoggedIn()
         {
             return loggedIn;
@@ -85,6 +84,9 @@ namespace BikeApp.connections
             return buffer;
         }
 
+        /**
+         * Async callback that gets called when we have read something from the stream.
+         */
         private void OnRead(IAsyncResult ar)
         {
             try
@@ -112,12 +114,15 @@ namespace BikeApp.connections
             }
         }
 
+        /**
+         * Decode the message by switching on the tag in the package.
+         */
         private void HandleData(dynamic data)
         {
             string tag = data.tag;
             switch (tag)
             {
-                case "encrypt/key/success":
+                case "encrypt/key/success": // Initializes the new received encryption keys.
                     byte[] key = decryptor.DecryptRsa(data.data.key.ToObject<byte[]>());
                     byte[] iv = decryptor.DecryptRsa(data.data.iv.ToObject<byte[]>());
 
@@ -130,31 +135,31 @@ namespace BikeApp.connections
                     keyExchanged = true;
                     break;
                 case "client/register/success":
-                case "client/login/success":
+                case "client/login/success": // Succesfully logged in or registered to the server.
                     Console.WriteLine(data.data.message);
                     loggedIn = true;
                     break;
                 case "client/register/error":
-                case "client/login/error":
+                case "client/login/error": // Lets the client know that the input credentials were incorrect or was unable to register.
                     Console.WriteLine($@"ERROR: {data.data.message}");
                     break;
-                case "session/resistance":
+                case "session/resistance": // Sets the new received resistance from the doctor.
                     float resistance = float.Parse(data.data.resistance.ToObject<string>());
                     co.WriteResistance(resistance);
                     break;
-                case "session/start":
+                case "session/start": // Starts the session, by starting the vr.
                     Console.WriteLine(@"Start session");
                     vpnConnector.Connect();
                     vpnConnector.CommandCenter.Running = true;
                     break;
-                case "session/stop":
+                case "session/stop": // Stops the session, by stopping the vr.
                     Console.WriteLine(@"Stop session");
                     vpnConnector.CommandCenter.ResetScene();
                     vpnConnector.CommandCenter.Running = false;
                     vpnConnector.Disconnect();
                     break;
                 case "chat/message":
-                case "chat/broadcast":
+                case "chat/broadcast": // Displays the new received message to the client.
                     string message = data.data.message.ToObject<string>();
                     Console.WriteLine($@"Received Message: {message}");
                     vpnConnector.CommandCenter.ChatMsg = message;
@@ -162,6 +167,9 @@ namespace BikeApp.connections
             }
         }
 
+        /*
+         * Gets called when the application has succesfully connected to the server.
+         */
         private void OnConnected()
         {
             connected = true;
@@ -195,9 +203,8 @@ namespace BikeApp.connections
             var bytes = PackageWrapper.SerializeData("client/login", new {name, password}, encryptor);
             stream.Write(bytes, 0, bytes.Length);
         }
-
         /*
-         * Method used to send update messages to the server.
+         * Sends the new heart rate value to the server.
          */
         public void UpdateHeartRate(int heartRate)
         {
@@ -206,7 +213,9 @@ namespace BikeApp.connections
             if (connected)
                 stream.Write(bytes, 0, bytes.Length);
         }
-
+        /*
+         * Sends the new speed value to the server.
+         */
         public void UpdateSpeed(float speed)
         {
             var bytes = PackageWrapper.SerializeData("client/update/speed", new {speed}, encryptor);
