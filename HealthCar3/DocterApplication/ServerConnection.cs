@@ -245,15 +245,6 @@ namespace DocterApplication
         }
 
         /*
-         * Retrieves the data from a previous session
-         */
-        //public void GetSession(string id)
-        //{
-        //    var bytes = PackageWrapper.SerializeData("doctor/clientHistory", new { clientId = id }, encryptor);
-        //
-        //    stream.Write(bytes, 0, bytes.Length);
-        //}
-        /*
          * Stops all the active clients
          */
         public void EmergencyStopSessions()
