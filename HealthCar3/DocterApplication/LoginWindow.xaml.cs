@@ -9,8 +9,8 @@ namespace DocterApplication
     /// </summary>
     public partial class LoginWindow : Window
     {
-        private bool MouseEnterPassword;
-        private bool MouseEnterUsername;
+        private bool mouseEnterUsername = false;
+        private bool mouseEnterPassword = false;
 
         private readonly ServerConnection sc;
 
@@ -32,20 +32,20 @@ namespace DocterApplication
         //Clear the username box
         private void TextBox_MouseEnter(object sender, MouseEventArgs e)
         {
-            if (MouseEnterUsername == false)
+            if (this.mouseEnterUsername == false)
             {
                 UsernameBox.Clear();
-                MouseEnterUsername = true;
+                this.mouseEnterUsername = true;
             }
         }
 
         //Clear Password Box
         private void PasswordBox_MouseEnter(object sender, MouseEventArgs e)
         {
-            if (MouseEnterPassword == false)
+            if (this.mouseEnterPassword == false)
             {
                 PasswordBox.Clear();
-                MouseEnterPassword = true;
+                this.mouseEnterPassword = true;
             }
         }
 

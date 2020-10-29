@@ -11,7 +11,7 @@ namespace Encryption.Shared
         private RSAParameters rsaPrivateKey;
 
         /*
-         * setter property for RSA private key.
+         * Setter property for RSA private key.
          */
         public RSAParameters RsaPrivateKey
         {
@@ -19,7 +19,7 @@ namespace Encryption.Shared
         }
 
         /*
-         * setter property for AES key.
+         * Setter property for AES key.
          */
         public byte[] AesKey
         {
@@ -27,7 +27,7 @@ namespace Encryption.Shared
         }
 
         /*
-         * setter property for AES iv.
+         * Setter property for AES iv.
          */
         public byte[] AesIv
         {

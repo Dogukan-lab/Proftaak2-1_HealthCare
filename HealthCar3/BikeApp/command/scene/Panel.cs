@@ -2,7 +2,6 @@
 {
     /*
      * This class is used to create a panel
-     * TODO comeback once you have tried the new structure
      */
     public static class Panel
     {
