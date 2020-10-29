@@ -1,0 +1,292 @@
+﻿<UserControl x:Class="DocterApplication.HomeUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="700" d:DesignWidth="1020" Background="Transparent">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="340" />
+            <ColumnDefinition Width="340" />
+            <ColumnDefinition Width="340" />
+        </Grid.ColumnDefinitions>
+
+        <Button Grid.Row="1" Height="40"
+                Width="140"
+                Margin="20,5,180,5"
+                Content="Emergency Stop"
+                Style="{StaticResource HomeButton}"
+                Background="Red"
+                FontWeight="Heavy"
+                Click="Emergency_Click" />
+
+        <Grid Grid.Row="0">
+            <Rectangle Height="250"
+                       Margin="20,40,20,35"
+                       Fill="#FFFE9168"
+                       RadiusX="10"
+                       RadiusY="10" />
+            <Grid Margin="20,50,20,60">
+                <Label Content="Bike 1"
+                       FontSize="33"
+                       Margin="5" />
+
+                <Label Content="Client: "
+                       FontSize="22"
+                       Margin="50,50,0,0" />
+                <Label Content="Heartrate: "
+                       FontSize="22"
+                       Margin="50,85,0,0" />
+                <Label Content="Speed: "
+                       FontSize="22"
+                       Margin="50,120,0,0" />
+                <Label Content="Resistance: "
+                       FontSize="22"
+                       Margin="50,155,0,0" />
+
+                <Label Content="-"
+                       FontSize="22"
+                       Margin="200,50,0,0"
+                       Name="ClientBox1" Height="35" VerticalAlignment="Top" />
+                <Label Content="0 BPM"
+                       FontSize="22"
+                       Margin="200,85,0,0"
+                       Name="HeartrateBox1" Height="35" VerticalAlignment="Top" />
+                <Label Content="0 m/s"
+                       FontSize="22"
+                       Margin="200,120,0,0"
+                       Name="SpeedBox1" Height="35" VerticalAlignment="Top" />
+                <Label Content="0%"
+                       FontSize="22"
+                       Margin="200,155,0,0"
+                       Name="ResistanceBox1" Height="35" VerticalAlignment="Top" />
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Rectangle Height="250"
+                       Margin="20,35,20,40"
+                       Fill="#FFFE9168"
+                       RadiusX="10"
+                       RadiusY="10" />
+            <Grid Margin="20,50,20,60">
+                <Label Content="Bike 2"
+                       FontSize="33"
+                       Margin="5" />
+
+                <Label Content="Client: "
+                       FontSize="22"
+                       Margin="50,50,0,0" />
+                <Label Content="Heartrate: "
+                       FontSize="22"
+                       Margin="50,85,0,0" />
+                <Label Content="Speed: "
+                       FontSize="22"
+                       Margin="50,120,0,0" />
+                <Label Content="Resistance: "
+                       FontSize="22"
+                       Margin="50,155,0,0" />
+
+                <Label Content="-"
+                       FontSize="22"
+                       Margin="200,50,0,0"
+                       Name="ClientBox2" Height="35" VerticalAlignment="Top" />
+                <Label Content="0 BPM"
+                       FontSize="22"
+                       Margin="200,85,0,0"
+                       Name="HeartrateBox2" Height="35" VerticalAlignment="Top" />
+                <Label Content="0 m/s"
+                       FontSize="22"
+                       Margin="200,120,0,0"
+                       Name="SpeedBox2" Height="35" VerticalAlignment="Top" />
+                <Label Content="0%"
+                       FontSize="22"
+                       Margin="200,155,0,0"
+                       Name="ResistanceBox2" Height="35" VerticalAlignment="Top" />
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Rectangle Height="250"
+                       Margin="20,40,20,35"
+                       Fill="#FFFE9168"
+                       RadiusX="10"
+                       RadiusY="10" />
+            <Grid Margin="20,50,20,60">
+                <Label Content="Bike 3"
+                       FontSize="33"
+                       Margin="5" />
+
+                <Label Content="Client: "
+                       FontSize="22"
+                       Margin="50,50,0,0" />
+                <Label Content="Heartrate: "
+                       FontSize="22"
+                       Margin="50,85,0,0" />
+                <Label Content="Speed: "
+                       FontSize="22"
+                       Margin="50,120,0,0" />
+                <Label Content="Resistance: "
+                       FontSize="22"
+                       Margin="50,155,0,0" />
+
+                <Label Content="-"
+                       FontSize="22"
+                       Margin="200,50,0,0"
+                       Name="ClientBox3" Height="35" VerticalAlignment="Top" />
+                <Label Content="0 BPM"
+                       FontSize="22"
+                       Margin="200,85,0,0"
+                       Name="HeartrateBox3" Height="35" VerticalAlignment="Top" />
+                <Label Content="0 m/s"
+                       FontSize="22"
+                       Margin="200,120,0,0"
+                       Name="SpeedBox3" Height="35" VerticalAlignment="Top" />
+                <Label Content="0%"
+                       FontSize="22"
+                       Margin="200,155,0,0"
+                       Name="ResistanceBox3" Height="35" VerticalAlignment="Top" />
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Rectangle Height="250"
+                       Margin="20,35,20,40"
+                       Fill="#FFFE9168"
+                       RadiusX="10"
+                       RadiusY="10" />
+            <Grid Margin="20,50,20,60">
+                <Label Content="Bike 4"
+                       FontSize="33"
+                       Margin="5" />
+
+                <Label Content="Client: "
+                       FontSize="22"
+                       Margin="50,50,0,0" />
+                <Label Content="Heartrate: "
+                       FontSize="22"
+                       Margin="50,85,0,0" />
+                <Label Content="Speed: "
+                       FontSize="22"
+                       Margin="50,120,0,0" />
+                <Label Content="Resistance: "
+                       FontSize="22"
+                       Margin="50,155,0,0" />
+
+                <Label Content="-"
+                       FontSize="22"
+                       Margin="200,50,0,0"
+                       Name="ClientBox4" Height="35" VerticalAlignment="Top" />
+                <Label Content="0 BPM"
+                       FontSize="22"
+                       Margin="200,85,0,0"
+                       Name="HeartrateBox4" Height="35" VerticalAlignment="Top" />
+                <Label Content="0 m/s"
+                       FontSize="22"
+                       Margin="200,120,0,0"
+                       Name="SpeedBox4" Height="35" VerticalAlignment="Top" />
+                <Label Content="0%"
+                       FontSize="22"
+                       Margin="200,155,0,0"
+                       Name="ResistanceBox4" Height="35" VerticalAlignment="Top" />
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="0" Grid.Column="2">
+            <Rectangle Height="250"
+                       Margin="20,40,20,35"
+                       Fill="#FFFE9168"
+                       RadiusX="10"
+                       RadiusY="10" />
+            <Grid Margin="20,50,20,60">
+                <Label Content="Bike 5"
+                       FontSize="33"
+                       Margin="5" />
+
+                <Label Content="Client: "
+                       FontSize="22"
+                       Margin="50,50,0,0" />
+                <Label Content="Heartrate: "
+                       FontSize="22"
+                       Margin="50,85,0,0" />
+                <Label Content="Speed: "
+                       FontSize="22"
+                       Margin="50,120,0,0" />
+                <Label Content="Resistance: "
+                       FontSize="22"
+                       Margin="50,155,0,0" />
+
+                <Label Content="-"
+                       FontSize="22"
+                       Margin="200,50,0,0"
+                       Name="ClientBox5" Height="35" VerticalAlignment="Top" />
+                <Label Content="0 BPM"
+                       FontSize="22"
+                       Margin="200,85,0,0"
+                       Name="HeartrateBox5" Height="35" VerticalAlignment="Top" />
+                <Label Content="0 m/s"
+                       FontSize="22"
+                       Margin="200,120,0,0"
+                       Name="SpeedBox5" Height="35" VerticalAlignment="Top" />
+                <Label Content="0%"
+                       FontSize="22"
+                       Margin="200,155,0,0"
+                       Name="ResistanceBox5" Height="35" VerticalAlignment="Top" />
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="2" Grid.Column="2">
+            <Rectangle Height="250"
+                       Margin="20,35,20,40"
+                       Fill="#FFFE9168"
+                       RadiusX="10"
+                       RadiusY="10" />
+            <Grid Margin="20,50,20,60">
+                <Label Content="Bike 6"
+                       FontSize="33"
+                       Margin="5" />
+
+                <Label Content="Client: "
+                       FontSize="22"
+                       Margin="50,50,0,0" />
+                <Label Content="Heartrate: "
+                       FontSize="22"
+                       Margin="50,85,0,0" />
+                <Label Content="Speed: "
+                       FontSize="22"
+                       Margin="50,120,0,0" />
+                <Label Content="Resistance: "
+                       FontSize="22"
+                       Margin="50,155,0,0" />
+
+                <Label Content="-"
+                       FontSize="22"
+                       Margin="200,50,0,0"
+                       Name="ClientBox6" Height="35" VerticalAlignment="Top" />
+                <Label Content="0 BPM"
+                       FontSize="22"
+                       Margin="200,85,0,0"
+                       Name="HeartrateBox6" Height="35" VerticalAlignment="Top" />
+                <Label Content="0 m/s"
+                       FontSize="22"
+                       Margin="200,120,0,0"
+                       Name="SpeedBox6" Height="35" VerticalAlignment="Top" />
+                <Label Content="0%"
+                       FontSize="22"
+                       Margin="200,155,0,0"
+                       Name="ResistanceBox6" Height="35" VerticalAlignment="Top" />
+            </Grid>
+        </Grid>
+        <TextBox Height="40" TextAlignment="Center"
+                 TextWrapping="Wrap" Margin="170,5,170,5" Grid.Row="1" Grid.ColumnSpan="3" Name="BroadcastBox" />
+        <Button Width="140" Height="40" Content="Broadcast" Grid.Column="2" Margin="180,5,20,5" Grid.Row="1"
+                Click="Broadcast_Click" />
+    </Grid>
+</UserControl>

@@ -1,0 +1,108 @@
+﻿<Window x:Class="DocterApplication.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:IconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        mc:Ignorable="d"
+        Title="Login" Height="500" Width="350"
+        AllowsTransparency="True" Background="AliceBlue"
+        WindowStyle="None" ResizeMode="NoResize"
+        MouseDown="Window_MouseDown">
+
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Border CornerRadius="18" Grid.RowSpan="2" />
+
+
+        <StackPanel VerticalAlignment="Center">
+
+            <IconPacks:PackIconMaterial Kind="Doctor"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center" Width="80" Height="80" />
+
+            <TextBlock Text="Login Doctor"
+                       FontWeight="Heavy"
+                       FontSize="22"
+                       Foreground="Red"
+                       HorizontalAlignment="Center"
+                       Margin="20" />
+        </StackPanel>
+
+
+        <StackPanel Grid.Row="1">
+            <StackPanel Orientation="Horizontal">
+                <TextBox Text="Username"
+                         Name="UsernameBox"
+                         FontSize="22"
+                         HorizontalAlignment="Center"
+                         Foreground="IndianRed"
+                         Background="Transparent"
+                         Width="240"
+                         BorderThickness="0"
+                         HorizontalContentAlignment="Left"
+                         Height="25"
+                         Opacity="0.5"
+                         Margin="50,0,0,0"
+                         MouseEnter="TextBox_MouseEnter" />
+                <IconPacks:PackIconMaterial Kind="Account"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Foreground="Red" />
+            </StackPanel>
+            <Border Width="250"
+                    Height="2"
+                    Background="Red"
+                    Opacity="0.5" />
+
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                <PasswordBox Password="Password"
+                             FontSize="22"
+                             HorizontalAlignment="Center"
+                             Foreground="IndianRed"
+                             Background="Transparent"
+                             Width="240"
+                             BorderThickness="0"
+                             HorizontalContentAlignment="Left"
+                             Height="25"
+                             Opacity="0.5"
+                             Margin="50,0,0,0"
+                             MouseEnter="PasswordBox_MouseEnter"
+                             Name="PasswordBox" />
+                <IconPacks:PackIconMaterial Kind="Typewriter"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Foreground="Red" />
+            </StackPanel>
+            <Border Width="250"
+                    Height="2"
+                    Background="Red"
+                    Opacity="0.5" />
+
+            <StackPanel Orientation="Horizontal" Margin="0,50,0,0">
+                <Button Width="110"
+                        Height="50"
+                        Content="Login"
+                        Margin="50,0,50,0"
+                        Name="LoginButton" Click="LoginButton_Click"
+                        Style="{StaticResource HomeButton}" />
+
+                <Button Width="110"
+                        Height="50"
+                        Content="Exit"
+                        Name="ExitButton" Click="ExitButton_Click"
+                        Style="{StaticResource HomeButton}" />
+
+            </StackPanel>
+        </StackPanel>
+
+
+    </Grid>
+
+</Window>
