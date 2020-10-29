@@ -26,14 +26,13 @@ namespace ClientApplication
 
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            LoginKind = LoginEnum.Login;
-            foreach (var item in clientCredentials)
-                if (UsernameBox.Text == item.username && PasswordBox.Password == item.password)
-                {
-                    Username = item.username;
-                    Password = item.password;
-                    Close();
-                }
+            if(CheckCredentials(UsernameBox.Text, PasswordBox.Password))
+            {
+                Username = UsernameBox.Text;
+                Password = PasswordBox.Password;
+                LoginKind = LoginEnum.Login;
+                Close();
+            }
         }
 
         public bool BluetoothEnabled()
@@ -48,10 +47,26 @@ namespace ClientApplication
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            LoginKind = LoginEnum.Register;
-            Username = UsernameBox.Text;
-            Password = PasswordBox.Password;
-            Close();
+            if (!CheckCredentials(UsernameBox.Text, PasswordBox.Password))
+            {
+                Username = UsernameBox.Text;
+                Password = PasswordBox.Password;
+                LoginKind = LoginEnum.Register;
+                Close();
+            }
+
+        }
+
+        private bool CheckCredentials(string username, string password)
+        {
+            foreach (var item in clientCredentials)
+            {
+                if (username == item.username && password == item.password)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
