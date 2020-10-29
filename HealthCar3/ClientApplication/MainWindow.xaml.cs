@@ -19,7 +19,7 @@ namespace ClientApplication
         public string Password { get; set; }
         public LoginEnum LoginKind { get; set; }
 
-        public List<ClientCredentials> _clientCredentials = File.Exists(@"..\..\..\..\Server\bin\Debug\data\saved-clientdata.json") ? StorageController.LoadClientData() : null;
+        public List<ClientCredentials> clientCredentials = File.Exists(@"..\..\..\..\Server\bin\Debug\data\saved-clientdata.json") ? StorageController.LoadClientData() : null;
 
         public MainWindow()
         {
@@ -29,12 +29,12 @@ namespace ClientApplication
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             LoginKind = LoginEnum.Login;
-            foreach (var item in _clientCredentials)
+            foreach (var item in clientCredentials)
             {
-                if((UsernameBox.Text == item._username) && (PasswordBox.Password == item._password))
+                if((UsernameBox.Text == item.username) && (PasswordBox.Password == item.password))
                 {
-                    Username = item._username;
-                    Password = item._password;
+                    Username = item.username;
+                    Password = item.password;
                     Close();
                 }
             }

@@ -17,8 +17,6 @@ namespace BikeApp.connections
     internal class VpnConnector
     {
         private dynamic jsonData;
-        private bool isAttached;
-        private CameraEnum cameraEnum;
         public CommandCenter CommandCenter { get; set; }
         private readonly JsonSerializerSettings serializerSettings;
         private TcpClient client;
@@ -38,8 +36,6 @@ namespace BikeApp.connections
             timeoutCounter = 0;
             CommandCenter = new CommandCenter(this);
             parser = new MessageParser(this, CommandCenter);
-            isAttached = true;
-            cameraEnum = CameraEnum.Detached;
         }
         
         public void SetConnectorOptions(ConnectorOption co)

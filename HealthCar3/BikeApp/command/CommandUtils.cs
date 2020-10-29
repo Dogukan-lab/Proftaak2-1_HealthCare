@@ -13,9 +13,9 @@
         {
             dynamic packet = new
             {
-                id = id,
-                serial = serial,
-                data = data
+                id,
+                serial,
+                data
             };
             return packet;
         }

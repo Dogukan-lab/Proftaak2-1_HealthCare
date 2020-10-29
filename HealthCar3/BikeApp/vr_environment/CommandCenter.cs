@@ -8,8 +8,6 @@ using BikeApp.data;
 using BikeApp.data.components;
 using Newtonsoft.Json.Linq;
 
-// ReSharper disable LocalizableElement
-
 namespace BikeApp.vr_environment
 {
     internal class CommandCenter
@@ -23,10 +21,8 @@ namespace BikeApp.vr_environment
         public string ChatMsg { get; set; } = "";
 
 
-        /**
+        /*
          * Controller for managing construction and management of commands.
-         * TODO Trees everywhere!
-         * TODO Mount the camera to the bike or object.
          */
         public CommandCenter(VpnConnector vpnConnector)
         {
@@ -45,6 +41,10 @@ namespace BikeApp.vr_environment
             updateValues.Speed = speed;
         }
 
+        /*
+         * When a button is pressed inside of the vr environment, 
+         * it then attaches the camera to the bike
+         */
         public void AttachCamera()
         {
             connector.SendPacket(Node.Find("Camera"),
@@ -69,7 +69,6 @@ namespace BikeApp.vr_environment
         /*
          * This method creates a preset VR environment
          */
-
         public void PresetOne()
         {
             ResetScene();
@@ -361,6 +360,9 @@ namespace BikeApp.vr_environment
                 new Action<JObject>(data => { }));
         }
 
+        /*
+         * Draws current values of patient to the panel in vr
+         */
         private void DrawValues(string uuid, double speed, double heartRate, double resistance, string chatMsg)
         {
             connector.SendPacket(Panel.DrawText(uuid,

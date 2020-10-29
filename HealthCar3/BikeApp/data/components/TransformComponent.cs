@@ -36,7 +36,7 @@
             return rotation;
         }
 
-        public string ToString()
+        public override string ToString()
         {
             string position = "";
             string rotation = "";

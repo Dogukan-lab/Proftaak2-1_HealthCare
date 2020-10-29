@@ -40,7 +40,8 @@ namespace Server
             {
                 foreach (var item in savedClientData)
                 {
-                    registeredClients.Add((item._username, item._password), item._id);
+                    if(!registeredClients.ContainsKey((item.username, item.password)))
+                    registeredClients.Add((item.username, item.password), item.id);
                 }
             }
 

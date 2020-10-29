@@ -23,13 +23,7 @@ namespace BikeApp.vr_environment
         private float resistance;
         public SimForm SimForm;
 
-        /*
-         * Attributes used to send data.
-         */
-        private readonly string IPAddress = "127.0.0.1";
-        private readonly int portNum = 1330;
-
-        public Thread UpdateThread { get; }
+        public Thread UpdateThread { get; set; }
         public Simulator(ServerConnection sc, SimForm simForm) : base(sc)
         {
             // Set the base values for the speed and the heart rate

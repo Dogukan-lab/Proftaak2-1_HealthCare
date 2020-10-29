@@ -6,9 +6,9 @@ namespace Server
 {
     public class ClientCredentials
     {
-        public string _username;
-        public string _password;
-        public string _id;
+        public string username;
+        public string password;
+        public string id;
 
         /*
         * Puts all the data of the client into a dynamic and returns it.
@@ -17,18 +17,18 @@ namespace Server
         {
             return new
             {
-                username = _username,
-                password = _password,
-                clientId = _id
+                username = username,
+                password = password,
+                clientId = id
             };
         }
 
         
-        public void SetCredentials(string clientUsername, string clientPassword, string id)
+        public void SetCredentials(string clientUsername, string clientPassword, string clientId)
         {
-            _username = clientUsername;
-            _password = clientPassword;
-            _id = id;
+            username = clientUsername;
+            password = clientPassword;
+            id = clientId;
         }
     }
 }
