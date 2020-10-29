@@ -36,7 +36,7 @@ namespace Server
         private static Dictionary<(string name, string password), string> SetRegisteredClients()
         {
             var registeredClients = new Dictionary<(string name, string password), string>();
-            if (savedClientData != null || savedClientData.Any())
+            if (savedClientData != null || savedClientData!.Any())
                 foreach (var item in savedClientData)
                     if (!registeredClients.ContainsKey((item.username, item.password)))
                         registeredClients.Add((item.username, item.password), item.id);
@@ -50,8 +50,6 @@ namespace Server
         public void Listen()
         {
             clients = new List<Client>();
-
-            //TODO don't know which ip address and port
             listener = new TcpListener(IPAddress.Any, 1330);
 
             listener.Start();
@@ -65,8 +63,6 @@ namespace Server
         private void Connect(IAsyncResult ar)
         {
             var tcpClient = listener.EndAcceptTcpClient(ar);
-            var cd = new SessionData();
-            var data = new ClientCredentials();
             Console.WriteLine($"Client connected from {tcpClient.Client.RemoteEndPoint}");
             clients.Add(new Client(tcpClient));
             listener.BeginAcceptTcpClient(Connect, null);
@@ -206,9 +202,10 @@ namespace Server
         {
             return registeredClients.ContainsKey((name, password));
         }
-
+        
         /*
-         * TODO comment hier 
+         * Finds the client encryption of the current client.
+         * Think of it as peer to peer.
          */
         internal static Encryptor GetTargetClientEncryptor(string id)
         {

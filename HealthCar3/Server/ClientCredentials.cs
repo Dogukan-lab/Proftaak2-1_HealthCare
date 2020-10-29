@@ -18,8 +18,7 @@
                 clientId = id
             };
         }
-
-
+        
         public void SetCredentials(string clientUsername, string clientPassword, string clientId)
         {
             username = clientUsername;

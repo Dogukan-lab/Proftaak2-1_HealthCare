@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.speedBox = new System.Windows.Forms.TextBox();
