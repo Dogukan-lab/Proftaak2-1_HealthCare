@@ -126,7 +126,7 @@ namespace Server
         private void StartSession()
         {
             sessionActive = true;
-            sessionData = new SessionData {ClientId = id, sessionStart = DateTime.Now, name = name};
+            sessionData = new SessionData {ClientId = id, SessionStart = DateTime.Now, Name = name};
         }
 
         /*
@@ -135,7 +135,7 @@ namespace Server
         private void EndSession()
         {
             sessionActive = false;
-            sessionData.sessionEnd = DateTime.Now;
+            sessionData.SessionEnd = DateTime.Now;
             Program.SaveSession(this);
         }
 
@@ -299,7 +299,7 @@ namespace Server
                     if (!sessionActive) return;
                     if (Program.doctorClient == null) return;
                     // Update the session with the new received speed.
-                    sessionData.newSpeed((float) data.data.speed);
+                    sessionData.NewSpeed((float) data.data.speed);
                     // Send data to doctor client
                     Program.SendMessageToSpecificClient("0000",
                         PackageWrapper.SerializeData("client/update/speed", new {clientId = id, data.data.speed},

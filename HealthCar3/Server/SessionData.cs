@@ -8,28 +8,37 @@ namespace Server
     public class SessionData
     {
         public string ClientId { get; set; }
-        public string name { get; set; }
-        public DateTime sessionStart { get; set; }
-        public DateTime sessionEnd { get; set; }
-        public int maxHeartRate { get; set; }
-        public float maxSpeed { get; set; }
-        public float averageSpeed { get; set; }
-        public float averageHeartRate { get; set; }
-        public float maxResistance { get; set; }
-        public float lastResistance { get; set; }
+        public string Name { get; set; }
+        public DateTime SessionStart { get; set; }
+        public DateTime SessionEnd { get; set; }
+        public int MaxHeartRate { get; set; }
+        public float MaxSpeed { get; set; }
+        public float AverageSpeed { get; set; }
+        public float AverageHeartRate { get; set; }
+        public float MaxResistance { get; set; }
+        public float LastResistance { get; set; }
 
+        #region Helper variables
+
+        private int sumHeartRate;
+        private float sumSpeed;
+        private int countHeartRate;
+        private int countSpeed;
+
+        #endregion
+        
         /*
          * Calculates new average and checks for new max value for speed.
          */
-        public void newSpeed(float newSpeed)
+        public void NewSpeed(float newSpeed)
         {
             countSpeed++;
             sumSpeed += newSpeed;
 
-            if (newSpeed > maxSpeed)
-                maxSpeed = newSpeed;
+            if (newSpeed > MaxSpeed)
+                MaxSpeed = newSpeed;
 
-            averageSpeed = sumSpeed / countSpeed;
+            AverageSpeed = sumSpeed / countSpeed;
         }
 
         /*
@@ -40,10 +49,10 @@ namespace Server
             countHeartRate++;
             sumHeartRate += newHeartRate;
 
-            if (newHeartRate > maxHeartRate)
-                maxHeartRate = newHeartRate;
+            if (newHeartRate > MaxHeartRate)
+                MaxHeartRate = newHeartRate;
 
-            averageHeartRate = sumHeartRate / countHeartRate;
+            AverageHeartRate = sumHeartRate / countHeartRate;
         }
 
         /*
@@ -51,9 +60,9 @@ namespace Server
          */
         public void NewResistance(float newResistance)
         {
-            lastResistance = newResistance;
-            if (lastResistance > maxResistance)
-                maxResistance = lastResistance;
+            LastResistance = newResistance;
+            if (LastResistance > MaxResistance)
+                MaxResistance = LastResistance;
         }
 
         /*
@@ -64,25 +73,17 @@ namespace Server
             return new
             {
                 clientId = ClientId,
-                name,
-                sessionStart,
-                sessionEnd,
-                maxHeartRate,
-                maxSpeed,
-                averageHeartRate,
-                averageSpeed,
-                maxResistance,
-                lastResistance
+                name = Name,
+                sessionStart = SessionStart,
+                sessionEnd = SessionEnd,
+                maxHeartRate = MaxHeartRate,
+                maxSpeed = MaxSpeed,
+                averageHeartRate = AverageHeartRate,
+                averageSpeed = AverageSpeed,
+                maxResistance = MaxResistance,
+                lastResistance = LastResistance
             };
         }
 
-        #region Helper variables
-
-        private int sumHeartRate;
-        private float sumSpeed;
-        private int countHeartRate;
-        private int countSpeed;
-
-        #endregion
     }
 }
