@@ -285,7 +285,7 @@
             </Grid>
         </Grid>
         <TextBox Height="40" TextAlignment="Center"
-                 TextWrapping="Wrap" Margin="170,5,170,5" Grid.Row="1" Grid.ColumnSpan="3" Name="BroadcastBox" TextChanged="BroadcastBox_TextChanged" />
+                 TextWrapping="Wrap" Margin="170,5,170,5" Grid.Row="1" Grid.ColumnSpan="3" Name="BroadcastBox" />
         <Button Width="140" Height="40" Content="Broadcast" Grid.Column="2" Margin="180,5,20,5" Grid.Row="1"
                 Click="Broadcast_Click" />
     </Grid>
