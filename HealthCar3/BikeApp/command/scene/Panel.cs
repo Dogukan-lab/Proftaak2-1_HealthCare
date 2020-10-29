@@ -3,8 +3,8 @@
     /*
      * This class is used to create a panel
      * TODO comeback once you have tried the new structure
-     */ 
-    internal static class Panel
+     */
+    public static class Panel
     {
         /*
          * A prefix to not repeat the same string over and over.
@@ -16,8 +16,8 @@
          */
         public static dynamic Clear(string panelUuid)
         {
-            dynamic packetData = new { id = panelUuid };
-            return CommandUtils.Wrap(packetData, Prefix + "clear");                          
+            dynamic packetData = new {id = panelUuid};
+            return CommandUtils.Wrap(packetData, Prefix + "clear");
         }
 
         /*
@@ -25,7 +25,7 @@
          */
         public static dynamic Swap(string panelUuid)
         {
-            dynamic packetData = new { id = panelUuid };
+            dynamic packetData = new {id = panelUuid};
             return CommandUtils.Wrap(packetData, Prefix + "swap");
         }
 
@@ -37,8 +37,8 @@
             dynamic packetData = new
             {
                 id = panelUuid,
-                width = width,
-                lines = lines
+                width,
+                lines
             };
             return CommandUtils.Wrap(packetData, Prefix + "drawlines");
         }
@@ -50,8 +50,7 @@
         {
             dynamic packetData = new
             {
-                id = panelUuid,
-                color = color
+                id = panelUuid, color
             };
             return CommandUtils.Wrap(packetData, Prefix + "setclearcolor");
         }
@@ -59,16 +58,17 @@
         /*
          * This method draws a text on the current panel
          */
-        public static dynamic DrawText(string panelUuid, string text, int[] position, double size, int[] color, string font)
+        public static dynamic DrawText(string panelUuid, string text, int[] position, double size, int[] color,
+            string font)
         {
             dynamic packetData = new
             {
                 id = panelUuid,
-                text = text,
-                position = position,
-                size = size,
-                color = color,
-                font = font
+                text,
+                position,
+                size,
+                color,
+                font
             };
             return CommandUtils.Wrap(packetData, Prefix + "drawtext");
         }
@@ -82,8 +82,8 @@
             {
                 id = panelUuid,
                 image = desiredImage,
-                position = position,
-                size = size
+                position,
+                size
             };
             return CommandUtils.Wrap(packetData, Prefix + "image");
         }

@@ -7,7 +7,7 @@ namespace Server
      */
     public class SessionData
     {
-        public string clientId { get; set; }
+        public string ClientId { get; set; }
         public string name { get; set; }
         public DateTime sessionStart { get; set; }
         public DateTime sessionEnd { get; set; }
@@ -17,13 +17,6 @@ namespace Server
         public float averageHeartRate { get; set; }
         public float maxResistance { get; set; }
         public float lastResistance { get; set; }
-
-        #region Helper variables
-        private int sumHeartRate = 0;
-        private float sumSpeed = 0;
-        private int countHeartRate = 0;
-        private int countSpeed = 0;
-        #endregion
 
         /*
          * Calculates new average and checks for new max value for speed.
@@ -70,17 +63,26 @@ namespace Server
         {
             return new
             {
-                clientId = clientId,
-                name = name,
-                sessionStart = sessionStart,
-                sessionEnd = sessionEnd,
-                maxHeartRate = maxHeartRate,
-                maxSpeed = maxSpeed,
-                averageHeartRate = averageHeartRate,
-                averageSpeed = averageSpeed,
-                maxResistance = maxResistance,
-                lastResistance = lastResistance
+                clientId = ClientId,
+                name,
+                sessionStart,
+                sessionEnd,
+                maxHeartRate,
+                maxSpeed,
+                averageHeartRate,
+                averageSpeed,
+                maxResistance,
+                lastResistance
             };
         }
+
+        #region Helper variables
+
+        private int sumHeartRate;
+        private float sumSpeed;
+        private int countHeartRate;
+        private int countSpeed;
+
+        #endregion
     }
 }

@@ -3,12 +3,12 @@
     /*
      * This is a component for models inside of the VR environment.
      */
-    internal class ModelComponent
+    public class ModelComponent
     {
-        public string file;
-        public bool cullbackfaces;
         public bool animated;
         public string animation;
+        public bool cullbackfaces;
+        public string file;
 
         /*
          * Constructor to initialize the values.

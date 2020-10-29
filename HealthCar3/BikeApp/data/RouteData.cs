@@ -3,10 +3,10 @@
     /*
      * Data class that stores a position and direction.
      */
-    internal class RouteData
+    public class RouteData
     {
-        public int[] pos;
         public double[] dir;
+        public int[] pos;
 
         /*
          * Initializes the data.

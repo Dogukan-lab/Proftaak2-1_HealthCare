@@ -1,39 +1,33 @@
 ﻿using System;
-using System.Text;
+using System.Collections.Generic;
+using System.IO;
 using System.Net.Sockets;
+using System.Text;
+using Encryption.Shared;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PackageUtils;
-using System.IO;
-using Encryption.Shared;
-using System.Collections.Generic;
 
 namespace DocterApplication
 {
     public class ServerConnection
     {
-        private readonly TcpClient clientConnection;
-        private NetworkStream stream;
         private const string IpAddress = "127.0.0.1";
         private const int Port = 1330;
-        private int totalTries;
         private const int MaxReconTries = 3;
         private readonly byte[] buffer = new byte[4];
-        private bool connected;
-        private bool loggedIn = false;
-        private bool receivedLoginFeedback = false;
-        private bool keyExchanged;
-        private readonly Encryptor encryptor;
+        private readonly TcpClient clientConnection;
         private readonly Decryptor decryptor;
-        private Layout layoutParent = null;
-        private List<SessionData> records = new List<SessionData>();
-        private bool retreivedRecords = false;
-
-        public bool IsConnected() { return connected; }
-        public bool IsLoggedIn() { return loggedIn; }
-        public bool HasReceivedLoginFeedback() { return receivedLoginFeedback; }
-        public void SetLayoutParent(Layout parent) { layoutParent = parent; }
-        public bool HasRetreivedRecords() { return retreivedRecords; }
+        private readonly Encryptor encryptor;
+        private bool connected;
+        private bool keyExchanged;
+        private Layout layoutParent;
+        private bool loggedIn;
+        private bool receivedLoginFeedback;
+        private readonly List<SessionData> records = new List<SessionData>();
+        private bool retreivedRecords;
+        private NetworkStream stream;
+        private int totalTries;
 
         public ServerConnection()
         {
@@ -41,6 +35,31 @@ namespace DocterApplication
             encryptor = new Encryptor();
             decryptor = new Decryptor();
             Connect(IpAddress, Port);
+        }
+
+        public bool IsConnected()
+        {
+            return connected;
+        }
+
+        public bool IsLoggedIn()
+        {
+            return loggedIn;
+        }
+
+        public bool HasReceivedLoginFeedback()
+        {
+            return receivedLoginFeedback;
+        }
+
+        public void SetLayoutParent(Layout parent)
+        {
+            layoutParent = parent;
+        }
+
+        public bool HasRetreivedRecords()
+        {
+            return retreivedRecords;
         }
 
         /*
@@ -53,10 +72,7 @@ namespace DocterApplication
                 clientConnection.Connect(ipAddress, port);
                 stream = clientConnection.GetStream();
 
-                if (clientConnection.Connected)
-                {
-                    OnConnected();
-                }
+                if (clientConnection.Connected) OnConnected();
             }
             catch (Exception ex)
             {
@@ -89,10 +105,10 @@ namespace DocterApplication
         {
             try
             {
-                int lengthPreFix = BitConverter.ToInt32(buffer);
+                var lengthPreFix = BitConverter.ToInt32(buffer);
                 var receivedBytes = ReadTotalBytes(lengthPreFix);
                 dynamic receivedData;
-                
+
                 if (keyExchanged)
                 {
                     receivedData = JsonConvert.DeserializeObject(decryptor.DecryptAes(receivedBytes, 0, lengthPreFix));
@@ -102,6 +118,7 @@ namespace DocterApplication
                     var receivedText = Encoding.ASCII.GetString(receivedBytes, 0, lengthPreFix);
                     receivedData = JsonConvert.DeserializeObject(receivedText);
                 }
+
                 HandleData(receivedData);
                 stream.BeginRead(buffer, 0, buffer.Length, OnRead, null);
             }
@@ -139,32 +156,26 @@ namespace DocterApplication
                     Console.WriteLine(jData["data"]?.ToObject<JObject>()?["message"]?.ToObject<string>());
                     break;
                 case "client/update/heartRate":
-                    layoutParent.NewHeartRate((string)data.data.clientId, (int)data.data.heartRate);
+                    layoutParent.NewHeartRate((string) data.data.clientId, (int) data.data.heartRate);
                     break;
                 case "client/update/speed":
-                    layoutParent.NewSpeed((string)data.data.clientId, (int)data.data.speed);
+                    layoutParent.NewSpeed((string) data.data.clientId, (int) data.data.speed);
                     break;
                 case "doctor/clientHistory/success":
                     Console.WriteLine($@"{jData["data"]}");
                     break;
                 case "doctor/newClient":
-                    layoutParent.NewClient((string)data.data.clientId, (string)data.data.name);
+                    layoutParent.NewClient((string) data.data.clientId, (string) data.data.name);
                     break;
                 case "client/disconnect":
-                    layoutParent.RemoveClient((string)data.data.clientId);
+                    layoutParent.RemoveClient((string) data.data.clientId);
                     break;
                 case "doctor/getSessions/fragment":
-                    foreach(dynamic r in ((JArray)data.data.records).Children())
-                    {
-                        records.Add(new SessionData(r));
-                    }
+                    foreach (dynamic r in ((JArray) data.data.records).Children()) records.Add(new SessionData(r));
                     GetNextFragment();
                     break;
                 case "doctor/getSessions/success":
-                    foreach (dynamic r in ((JArray)data.data.records).Children())
-                    {
-                        records.Add(new SessionData(r));
-                    }
+                    foreach (dynamic r in ((JArray) data.data.records).Children()) records.Add(new SessionData(r));
                     layoutParent.RefreshHistoryPage(records);
                     retreivedRecords = true;
                     break;
@@ -173,7 +184,8 @@ namespace DocterApplication
                 case "session/resistance/success":
                 case "session/start/success":
                 case "session/stop/success":
-                    Console.WriteLine($@"Success: {jData["data"]?.ToObject<JObject>()?["message"]?.ToObject<string>()}");
+                    Console.WriteLine(
+                        $@"Success: {jData["data"]?.ToObject<JObject>()?["message"]?.ToObject<string>()}");
                     break;
                 case "doctor/clientHistory/error":
                 case "chat/message/error":
@@ -193,13 +205,52 @@ namespace DocterApplication
             stream.BeginRead(buffer, 0, buffer.Length, OnRead, null);
         }
 
+        /*
+         * Method used to disconnect from the server.
+         */
+        private void OnDisconnect()
+        {
+            stream.Dispose();
+            clientConnection.Close();
+        }
+
+        /*
+         * Method used to login to the server
+         */
+        public void LoginToServer(string username, string password)
+        {
+            receivedLoginFeedback = false;
+            var bytes = PackageWrapper.SerializeData("doctor/login", new {username, password}, encryptor);
+
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        private void InitializeRsa()
+        {
+            var (privateKey, pubKey) = encryptor.GenerateRsaKey();
+            decryptor.RsaPrivateKey = privateKey;
+
+            var bytes = PackageWrapper.SerializeData
+            (
+                "encrypt/key",
+                new
+                {
+                    exponent = pubKey.Exponent,
+                    modulus = pubKey.Modulus
+                }
+            );
+
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
         #region // Writer functions
+
         /*
          * Sends a message to a specific client.
          */
         public void Chat(string id, string message)
         {
-            var bytes = PackageWrapper.SerializeData("chat/message", new { clientId = id, message }, encryptor);
+            var bytes = PackageWrapper.SerializeData("chat/message", new {clientId = id, message}, encryptor);
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -209,7 +260,7 @@ namespace DocterApplication
          */
         public void Broadcast(string message)
         {
-            var bytes = PackageWrapper.SerializeData("chat/broadcast", new {message }, encryptor);
+            var bytes = PackageWrapper.SerializeData("chat/broadcast", new {message}, encryptor);
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -219,7 +270,7 @@ namespace DocterApplication
          */
         public void SetNewResistance(string id, string resistance)
         {
-            var bytes = PackageWrapper.SerializeData("session/resistance", new { clientId = id, resistance }, encryptor);
+            var bytes = PackageWrapper.SerializeData("session/resistance", new {clientId = id, resistance}, encryptor);
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -229,7 +280,7 @@ namespace DocterApplication
          */
         public void StartSession(string id)
         {
-            var bytes = PackageWrapper.SerializeData("session/start", new { clientId = id }, encryptor);
+            var bytes = PackageWrapper.SerializeData("session/start", new {clientId = id}, encryptor);
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -239,7 +290,7 @@ namespace DocterApplication
          */
         public void StopSession(string id)
         {
-            var bytes = PackageWrapper.SerializeData("session/stop", new { clientId = id }, encryptor);
+            var bytes = PackageWrapper.SerializeData("session/stop", new {clientId = id}, encryptor);
 
             stream.Write(bytes, 0, bytes.Length);
         }
@@ -281,44 +332,7 @@ namespace DocterApplication
 
             stream.Write(bytes, 0, bytes.Length);
         }
+
         #endregion
-
-        /*
-         * Method used to disconnect from the server.
-         */
-        private void OnDisconnect()
-        {
-            stream.Dispose();
-            clientConnection.Close();
-        }
-
-        /*
-         * Method used to login to the server
-         */
-        public void LoginToServer(string username, string password)
-        {
-            receivedLoginFeedback = false;
-            var bytes = PackageWrapper.SerializeData("doctor/login", new {username, password }, encryptor);
-        
-            stream.Write(bytes, 0, bytes.Length);
-        }
-
-        private void InitializeRsa()
-        {
-            var (privateKey, pubKey) = encryptor.GenerateRsaKey();
-            decryptor.RsaPrivateKey = privateKey;
-
-            var bytes = PackageWrapper.SerializeData
-            (
-                "encrypt/key",
-                new
-                {
-                    exponent = pubKey.Exponent,
-                    modulus = pubKey.Modulus
-                }
-            );
-
-            stream.Write(bytes, 0, bytes.Length);
-        }
     }
 }

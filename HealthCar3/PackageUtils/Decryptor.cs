@@ -6,9 +6,9 @@ namespace Encryption.Shared
 {
     public class Decryptor
     {
-        private RSAParameters rsaPrivateKey;
-        private byte[] aesKey;
         private byte[] aesIv;
+        private byte[] aesKey;
+        private RSAParameters rsaPrivateKey;
 
         /*
          * setter property for RSA private key.
@@ -23,7 +23,7 @@ namespace Encryption.Shared
          */
         public byte[] AesKey
         {
-            set => aesKey = value; 
+            set => aesKey = value;
         }
 
         /*
@@ -31,9 +31,9 @@ namespace Encryption.Shared
          */
         public byte[] AesIv
         {
-            set => aesIv = value; 
+            set => aesIv = value;
         }
-        
+
         /**
          * Decrypts and RSA encrypted key.
          */
@@ -68,16 +68,10 @@ namespace Encryption.Shared
         public string DecryptAes(byte[] data, int index, int count)
         {
             // Check arguments.
-            if (data == null || data.Length <= 0)
-            {
-                throw new ArgumentException("Data does not contain a message!");
-            }
-            
+            if (data == null || data.Length <= 0) throw new ArgumentException("Data does not contain a message!");
+
             var chunk = new byte[count];
-            for (var i = index; i < count; i++)
-            {
-                chunk[i] = data[i];
-            }
+            for (var i = index; i < count; i++) chunk[i] = data[i];
 
             // Declare the string used to hold
             // the decrypted text.
@@ -102,6 +96,5 @@ namespace Encryption.Shared
 
             return decrypted;
         }
-        
     }
 }

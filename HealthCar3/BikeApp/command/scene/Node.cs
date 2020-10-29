@@ -5,7 +5,7 @@ namespace BikeApp.command.scene
     /*
      *  This class creates, finds and deletes nodes.
      */
-    internal static class Node
+    public static class Node
     {
         /*
          * A prefix to not repeat the same string over and over.
@@ -15,7 +15,8 @@ namespace BikeApp.command.scene
         /*
          * This method adds a model such a tree, bike or house.
          */
-        public static dynamic AddModel(string objectName, string parentId, TransformComponent transformComponent, ModelComponent modelComponent)    
+        public static dynamic AddModel(string objectName, string parentId, TransformComponent transformComponent,
+            ModelComponent modelComponent)
         {
             dynamic packetData = new
             {
@@ -33,7 +34,8 @@ namespace BikeApp.command.scene
         /*
          * This method adds a terrain node to be used for texturing.
          */
-        public static dynamic AddTerrain(string terrainName, string parentName, TransformComponent transformComponent, bool smoothnormals)
+        public static dynamic AddTerrain(string terrainName, string parentName, TransformComponent transformComponent,
+            bool smoothnormals)
         {
             dynamic packetData = new
             {
@@ -44,7 +46,7 @@ namespace BikeApp.command.scene
                     transform = transformComponent,
                     terrain = new
                     {
-                        smoothnormals = smoothnormals
+                        smoothnormals
                     }
                 }
             };
@@ -54,7 +56,8 @@ namespace BikeApp.command.scene
         /*
          * This method adds a panel as a node.
          */
-        public static dynamic AddPanel(string panelName, string parentName, PanelComponent panelComponent, TransformComponent transformComponent)
+        public static dynamic AddPanel(string panelName, string parentName, PanelComponent panelComponent,
+            TransformComponent transformComponent)
         {
             dynamic packetData = new
             {
@@ -72,16 +75,17 @@ namespace BikeApp.command.scene
         /*
          * This method can add a layer to the vr system
          */
-        public static dynamic AddLayer(string uuid, string diffusePng, string normalPng, int minHeight, int maxHeight, double fadeDist)
+        public static dynamic AddLayer(string uuid, string diffusePng, string normalPng, int minHeight, int maxHeight,
+            double fadeDist)
         {
             dynamic packetData = new
             {
                 id = uuid,
                 diffuse = diffusePng,
                 normal = normalPng,
-                minHeight = minHeight,
-                maxHeight = maxHeight,
-                fadeDist = fadeDist
+                minHeight,
+                maxHeight,
+                fadeDist
             };
             return CommandUtils.Wrap(packetData, Prefix + "addlayer");
         }
@@ -91,7 +95,7 @@ namespace BikeApp.command.scene
          */
         public static dynamic DelLayer()
         {
-            dynamic packetData = new {};
+            dynamic packetData = new { };
             return CommandUtils.Wrap(packetData, Prefix + "dellayer");
         }
 
@@ -100,23 +104,24 @@ namespace BikeApp.command.scene
          */
         public static dynamic Find(string objectName)
         {
-            dynamic packetData = new { name = objectName };
+            dynamic packetData = new {name = objectName};
             return CommandUtils.Wrap(packetData, Prefix + "find");
         }
 
         /*
          * This method can move a node.
          */
-        public static dynamic MoveTo(string uuid, string stop, int[] currentPosition, string rotation, string interpolation, bool followheight, double setSpeed)
+        public static dynamic MoveTo(string uuid, string stop, int[] currentPosition, string rotation,
+            string interpolation, bool followheight, double setSpeed)
         {
             dynamic packetData = new
             {
                 id = uuid,
-                stop = stop,
+                stop,
                 position = currentPosition,
                 rotate = rotation,
                 interpolate = interpolation,
-                followheight = followheight,
+                followheight,
                 speed = setSpeed
             };
             return CommandUtils.Wrap(packetData, Prefix + "moveto");
@@ -131,7 +136,7 @@ namespace BikeApp.command.scene
             {
                 id = uuid,
                 parent = parentId,
-                transform = transformComponent,
+                transform = transformComponent
             };
             return CommandUtils.Wrap(packetData, Prefix + "update");
         }
@@ -141,7 +146,7 @@ namespace BikeApp.command.scene
          */
         public static dynamic Delete(string guid)
         {
-            dynamic packetData = new { id = guid };
+            dynamic packetData = new {id = guid};
             return CommandUtils.Wrap(packetData, Prefix + "delete");
         }
     }

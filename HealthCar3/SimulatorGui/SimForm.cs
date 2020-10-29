@@ -22,15 +22,17 @@ namespace SimulatorGui
          */
         public float GetSpeed()
         {
-            return speedBox.Text.Length > 0? float.Parse(speedBox.Text) : 0;
+            return speedBox.Text.Length > 0 ? float.Parse(speedBox.Text) : 0;
         }
+
         public bool SpeedSwayEnabled()
         {
             return speedSwayCheck.Checked;
         }
+
         public float GetSpeedSway()
         {
-            return speedSwayBox.Text.Length > 0? float.Parse(speedSwayBox.Text) : 0;
+            return speedSwayBox.Text.Length > 0 ? float.Parse(speedSwayBox.Text) : 0;
         }
 
         /*
@@ -38,22 +40,19 @@ namespace SimulatorGui
          */
         public int GetHeartRate()
         {
-            return heartRateBox.Text.Length > 0? int.Parse(heartRateBox.Text) : 0;
+            return heartRateBox.Text.Length > 0 ? int.Parse(heartRateBox.Text) : 0;
         }
+
         public bool HeartRateSwayEnabled()
         {
             return heartRateSwayCheck.Checked;
         }
+
         public int GetHeartRateSway()
         {
-            return heartRateSway.Text.Length > 0? int.Parse(heartRateSway.Text) : 0;
+            return heartRateSway.Text.Length > 0 ? int.Parse(heartRateSway.Text) : 0;
         }
-        
-        /*
-         * Setting resistance thread safe
-         */
-        private delegate void SetResistanceCallBack(float resistance);
-        
+
         private void SetResistanceCB(float resistance)
         {
             resistanceBox.Text = resistance.ToString();
@@ -64,8 +63,8 @@ namespace SimulatorGui
             // if accessed from a different thread, invoke
             if (resistanceBox.InvokeRequired)
             {
-                SetResistanceCallBack res = new SetResistanceCallBack(SetResistanceCB);
-                Invoke(res, new object[] { resistance });
+                SetResistanceCallBack res = SetResistanceCB;
+                Invoke(res, resistance);
             }
             // if it is one the same thread no need to invoke
             else
@@ -74,6 +73,9 @@ namespace SimulatorGui
             }
         }
 
-        
+        /*
+         * Setting resistance thread safe
+         */
+        private delegate void SetResistanceCallBack(float resistance);
     }
 }

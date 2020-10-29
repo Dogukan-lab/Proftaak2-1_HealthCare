@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Server
+﻿namespace Server
 {
     public class ClientCredentials
     {
-        public string username;
-        public string password;
         public string id;
+        public string password;
+        public string username;
 
         /*
         * Puts all the data of the client into a dynamic and returns it.
@@ -17,13 +13,13 @@ namespace Server
         {
             return new
             {
-                username = username,
-                password = password,
+                username,
+                password,
                 clientId = id
             };
         }
 
-        
+
         public void SetCredentials(string clientUsername, string clientPassword, string clientId)
         {
             username = clientUsername;

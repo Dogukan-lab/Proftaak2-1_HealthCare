@@ -1,13 +1,14 @@
 ﻿namespace BikeApp.command.scene
 {
-    internal static class Road
+    public static class Road
     {
         private const string Prefix = "scene/road/";
 
         /**
          * This method adds a route to the vr system
          */
-        public static dynamic AddRoad(string routeId, string diffusePng, string normalPng, string specularPng, double heightOffset)
+        public static dynamic AddRoad(string routeId, string diffusePng, string normalPng, string specularPng,
+            double heightOffset)
         {
             dynamic packetData = new
             {
@@ -23,7 +24,8 @@
         /**
          * This method updates the route that has been set.
          */
-        public static dynamic Update(string roadId, string routeId, string diffusePng, string normalPng, string specularPng, double heightOffset)
+        public static dynamic Update(string roadId, string routeId, string diffusePng, string normalPng,
+            string specularPng, double heightOffset)
         {
             dynamic packetData = new
             {

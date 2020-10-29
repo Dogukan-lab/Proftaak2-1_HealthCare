@@ -1,21 +1,14 @@
-﻿using BikeApp.connections;
-using Newtonsoft.Json;
-using System;
-using System.Threading;
-using ClientApplication;
-
+﻿using System;
+using BikeApp.connections;
 
 namespace BikeApp
 {
-    internal static class Program
+    public static class Program
     {
-        
         [STAThread]
         private static void Main()
         {
-            Client.Initialize();            
+            Client.Initialize();
         }
     }
 }
-
-

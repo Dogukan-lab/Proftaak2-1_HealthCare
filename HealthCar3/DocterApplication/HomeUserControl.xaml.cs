@@ -1,24 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DocterApplication
 {
     /// <summary>
-    /// Interaction logic for HomeUserControl.xaml
+    ///     Interaction logic for HomeUserControl.xaml
     /// </summary>
     public partial class HomeUserControl : UserControl
     {
-        private Layout layoutParent;
+        private readonly Layout layoutParent;
+
         public HomeUserControl(Layout parent)
         {
             InitializeComponent();
@@ -32,8 +23,8 @@ namespace DocterApplication
 
         private void Broadcast_Click(object sender, RoutedEventArgs e)
         {
-            string message = ((TextBox)FindName("BroadcastBox")).Text;
-            ((TextBox)FindName("BroadcastBox")).Text = "";
+            var message = ((TextBox) FindName("BroadcastBox")).Text;
+            ((TextBox) FindName("BroadcastBox")).Text = "";
             layoutParent.BroadCast(message);
         }
     }

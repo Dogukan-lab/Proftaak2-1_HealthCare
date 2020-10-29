@@ -6,8 +6,8 @@ namespace Encryption.Shared
 {
     public class Encryptor
     {
-        private byte[] aesKey;
         private byte[] aesIv;
+        private byte[] aesKey;
 
         /*
          * setter property for EAS key.
@@ -57,7 +57,7 @@ namespace Encryption.Shared
                 aesKey = rijndael.Key;
                 aesIv = rijndael.IV;
             }
-            
+
             return (aesKey, aesIv);
         }
 
@@ -71,9 +71,8 @@ namespace Encryption.Shared
                 byte[] encryptedKey;
                 byte[] encryptedIv;
                 //Create a new instance of RSACryptoServiceProvider.
-                using (RSACryptoServiceProvider rsa = new RSACryptoServiceProvider())
+                using (var rsa = new RSACryptoServiceProvider())
                 {
-
                     //Import the RSA Key information. This only needs
                     //to include the public key information.
                     rsa.ImportParameters(pubKey);
@@ -84,6 +83,7 @@ namespace Encryption.Shared
                     encryptedKey = rsa.Encrypt(key, false);
                     encryptedIv = rsa.Encrypt(iv, false);
                 }
+
                 return (encryptedKey, encryptedIv);
             }
             //Catch and display a CryptographicException  
@@ -131,6 +131,5 @@ namespace Encryption.Shared
             // Return the encrypted bytes from the memory stream.
             return encrypted;
         }
-        
     }
 }

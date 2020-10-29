@@ -1,6 +1,6 @@
 ﻿namespace BikeApp.command.scene
 {
-    internal static class Terrain
+    public static class Terrain
     {
         /*
          * A prefix to not repeat the same string over and over.
@@ -14,7 +14,7 @@
         {
             dynamic packetData = new
             {
-                size = size,
+                size,
                 heights = heightMap
             };
             return CommandUtils.Wrap(packetData, Prefix + "add");
@@ -25,7 +25,7 @@
          */
         public static dynamic Update()
         {
-            dynamic packetData = new {};
+            dynamic packetData = new { };
             return CommandUtils.Wrap(packetData, Prefix + "update");
         }
 
@@ -34,7 +34,7 @@
          */
         public static dynamic Delete()
         {
-            dynamic packetData = new {};
+            dynamic packetData = new { };
             return CommandUtils.Wrap(packetData, Prefix + "delete");
         }
 
@@ -45,8 +45,7 @@
         {
             dynamic packetData = new
             {
-                position = position,
-                positions = positions
+                position, positions
             };
             return CommandUtils.Wrap(packetData, Prefix + "update");
         }

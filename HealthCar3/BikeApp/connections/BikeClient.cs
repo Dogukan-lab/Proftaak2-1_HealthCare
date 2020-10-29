@@ -1,11 +1,9 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Windows.Forms;
 using BikeApp.connections.bluetooth;
 using BikeApp.vr_environment;
-using SimulatorGui;
 using ClientApplication;
-using System.Diagnostics;
+using SimulatorGui;
 
 namespace BikeApp.connections
 {
@@ -32,7 +30,6 @@ namespace BikeApp.connections
                             serverCon.LoginToServer(mainWindow.Username, mainWindow.Password);
                             mainWindow.Hide();
                             connector = new Bluetooth("Avans Bike AC74", "Avans Bike AC74", serverCon);
-
                         }
                         else if (mainWindow.SimulatorEnabled())
                         {
@@ -45,6 +42,7 @@ namespace BikeApp.connections
                             simForm = new SimForm();
                             connector = new Simulator(serverCon, simForm);
                         }
+
                         break;
                     case ClientApplication.LoginEnum.Register:
                         if (mainWindow.BluetoothEnabled())
@@ -52,7 +50,6 @@ namespace BikeApp.connections
                             serverCon.RegisterToServer(mainWindow.Username, mainWindow.Password);
                             mainWindow.Hide();
                             connector = new Bluetooth("Avans Bike AC74", "Avans Bike AC74", serverCon);
-
                         }
                         else if (mainWindow.SimulatorEnabled())
                         {
@@ -65,6 +62,7 @@ namespace BikeApp.connections
                             simForm = new SimForm();
                             connector = new Simulator(serverCon, simForm);
                         }
+
                         break;
                 }
             }
@@ -86,6 +84,3 @@ namespace BikeApp.connections
         }
     }
 }
-
-
-

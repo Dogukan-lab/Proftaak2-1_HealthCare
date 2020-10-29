@@ -1,6 +1,6 @@
 ﻿namespace BikeApp.command.scene
 {
-    static class Route
+    public static class Route
     {
         private const string Prefix = "route/";
 
@@ -9,7 +9,7 @@
          */
         public static dynamic Add(object[] nodes)
         {
-            dynamic packetData = new { nodes = nodes };
+            dynamic packetData = new {nodes};
             return CommandUtils.Wrap(packetData, Prefix + "add");
         }
 
@@ -31,14 +31,14 @@
          */
         public static dynamic Delete(string routeUuid)
         {
-            dynamic packetData = new { uuid = routeUuid };
+            dynamic packetData = new {uuid = routeUuid};
             return CommandUtils.Wrap(packetData, Prefix + "delete");
         }
 
         /**
          * This method makes a node follow the route
          */
-        public static dynamic Follow(string routeUuid, string nodeId, double desiredSpeed, 
+        public static dynamic Follow(string routeUuid, string nodeId, double desiredSpeed,
             double offset, string rotation, double smoothing,
             bool followHeight, int[] rotationOffset, int[] positionOffset)
         {
@@ -47,12 +47,12 @@
                 route = routeUuid,
                 node = nodeId,
                 speed = desiredSpeed,
-                offset = offset,
+                offset,
                 rotate = rotation,
-                smoothing = smoothing,
-                followHeight = followHeight,
+                smoothing,
+                followHeight,
                 rotateOffset = rotationOffset,
-                positionOffset = positionOffset
+                positionOffset
             };
             return CommandUtils.Wrap(packetData, Prefix + "follow");
         }
@@ -75,7 +75,7 @@
          */
         public static dynamic ShowRoute(bool showRoute)
         {
-            dynamic packetData = new { show = showRoute };
+            dynamic packetData = new {show = showRoute};
             return CommandUtils.Wrap(packetData, Prefix + "show");
         }
     }

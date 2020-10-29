@@ -9,29 +9,23 @@ using PackageUtils;
 
 namespace BikeApp.connections
 {
-    internal class ServerConnection
+    public class ServerConnection
     {
-        private readonly TcpClient clientConnection;
-        private NetworkStream stream;
         private const string IpAddress = "127.0.0.1";
         private const int Port = 1330;
-        private int totalTries;
         private const int MaxReconTries = 3;
         private readonly byte[] buffer = new byte[4];
-        private bool connected;
-        private bool loggedIn;
-        private bool keyExchanged;
-        private ConnectorOption co;
-        private VpnConnector vpnConnector;
-        private readonly Encryptor encryptor;
+        private readonly TcpClient clientConnection;
         private readonly Decryptor decryptor;
+        private readonly Encryptor encryptor;
+        private ConnectorOption co;
+        private bool connected;
+        private bool keyExchanged;
+        private bool loggedIn;
+        private NetworkStream stream;
+        private int totalTries;
+        private readonly VpnConnector vpnConnector;
 
-        public void SetConnectorOption(ConnectorOption connector) 
-        {   co = connector;
-            vpnConnector.SetConnectorOptions(co);
-        }
-
-        public bool IsLoggedIn() { return loggedIn; }
         public ServerConnection()
         {
             clientConnection = new TcpClient();
@@ -39,6 +33,17 @@ namespace BikeApp.connections
             decryptor = new Decryptor();
             vpnConnector = new VpnConnector(new JsonSerializerSettings());
             Connect(IpAddress, Port);
+        }
+
+        public void SetConnectorOption(ConnectorOption connector)
+        {
+            co = connector;
+            vpnConnector.SetConnectorOptions(co);
+        }
+
+        public bool IsLoggedIn()
+        {
+            return loggedIn;
         }
 
         /*
@@ -51,10 +56,7 @@ namespace BikeApp.connections
                 clientConnection.Connect(ipAddress, port);
                 stream = clientConnection.GetStream();
 
-                if (clientConnection.Connected)
-                {
-                    OnConnected();
-                }
+                if (clientConnection.Connected) OnConnected();
             }
             catch (Exception ex)
             {
@@ -85,8 +87,9 @@ namespace BikeApp.connections
 
         private void OnRead(IAsyncResult ar)
         {
-            try {
-                int lengthPreFix = BitConverter.ToInt32(buffer);
+            try
+            {
+                var lengthPreFix = BitConverter.ToInt32(buffer);
                 var receivedBytes = ReadTotalBytes(lengthPreFix);
                 dynamic receivedData;
 
@@ -99,8 +102,9 @@ namespace BikeApp.connections
                     var receivedText = Encoding.ASCII.GetString(receivedBytes, 0, lengthPreFix);
                     receivedData = JsonConvert.DeserializeObject(receivedText);
                 }
+
                 HandleData(receivedData);
-                stream.BeginRead(buffer, 0, buffer.Length, OnRead, null);              
+                stream.BeginRead(buffer, 0, buffer.Length, OnRead, null);
             }
             catch (IOException)
             {
@@ -116,7 +120,7 @@ namespace BikeApp.connections
                 case "encrypt/key/success":
                     byte[] key = decryptor.DecryptRsa(data.data.key.ToObject<byte[]>());
                     byte[] iv = decryptor.DecryptRsa(data.data.iv.ToObject<byte[]>());
-                    
+
                     encryptor.AesKey = key;
                     encryptor.AesIv = iv;
 
@@ -179,7 +183,7 @@ namespace BikeApp.connections
          */
         public void RegisterToServer(string name, string password)
         {
-            var bytes = PackageWrapper.SerializeData("client/register", new {name, password }, encryptor);
+            var bytes = PackageWrapper.SerializeData("client/register", new {name, password}, encryptor);
             stream.Write(bytes, 0, bytes.Length);
         }
 
@@ -199,15 +203,15 @@ namespace BikeApp.connections
         {
             var bytes = PackageWrapper.SerializeData("client/update/heartRate", new {heartRate}, encryptor);
 
-            if(connected)
+            if (connected)
                 stream.Write(bytes, 0, bytes.Length);
         }
-        
+
         public void UpdateSpeed(float speed)
         {
             var bytes = PackageWrapper.SerializeData("client/update/speed", new {speed}, encryptor);
 
-            if(connected)
+            if (connected)
                 stream.Write(bytes, 0, bytes.Length);
         }
 
@@ -228,8 +232,8 @@ namespace BikeApp.connections
                     modulus = pubKey.Modulus
                 }
             );
-            
-            stream.Write(bytes, 0 , bytes.Length);
+
+            stream.Write(bytes, 0, bytes.Length);
         }
     }
 }

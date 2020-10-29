@@ -1,6 +1,6 @@
 ﻿namespace BikeApp.command.scene
 {
-    internal static class Scene
+    public static class Scene
     {
         /*
          * A prefix to not repeat the same string over and over.
@@ -12,7 +12,7 @@
          */
         public static dynamic Get()
         {
-            dynamic packetData = new {};
+            dynamic packetData = new { };
             return CommandUtils.Wrap(packetData, Prefix + "get");
         }
 
@@ -21,7 +21,7 @@
          */
         public static dynamic Reset()
         {
-            dynamic packetData = new {};
+            dynamic packetData = new { };
             return CommandUtils.Wrap(packetData, Prefix + "reset");
         }
 
@@ -32,7 +32,7 @@
         {
             dynamic packetData = new
             {
-                filename = filename,
+                filename,
                 overwrite = true
             };
             return CommandUtils.Wrap(packetData, Prefix + "save");
@@ -43,7 +43,7 @@
          */
         public static dynamic Load(string filename)
         {
-            dynamic packetData = new { filename = filename };
+            dynamic packetData = new {filename};
             return CommandUtils.Wrap(packetData, Prefix + "load");
         }
 
@@ -54,9 +54,9 @@
         {
             dynamic packetData = new
             {
-                start = start,
-                direction = direction,
-                physics = physics
+                start,
+                direction,
+                physics
             };
             return CommandUtils.Wrap(packetData, Prefix + "raycast");
         }

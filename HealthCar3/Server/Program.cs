@@ -1,10 +1,10 @@
-﻿using Encryption.Shared;
-using PackageUtils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
+using Encryption.Shared;
+using PackageUtils;
 
 namespace Server
 {
@@ -13,21 +13,21 @@ namespace Server
      */
     public class Program
     {
-        private TcpListener listener;
         private static List<Client> clients;
         public static Dictionary<(string name, string password), string> registeredClients; //<(name, password), id>
         private static List<SessionData> savedSession;
         public static List<ClientCredentials> savedClientData;
         public static Client doctorClient;
         private static List<dynamic> tempRecords;
-        
+        private TcpListener listener;
+
         private static void Main(string[] args)
         {
             Console.WriteLine("Hello Server!");
             savedSession = StorageController.Load();
             savedClientData = StorageController.LoadClientData();
             registeredClients = SetRegisteredClients();
-            new Program().Listen();     
+            new Program().Listen();
         }
 
         /*
@@ -35,15 +35,11 @@ namespace Server
          */
         private static Dictionary<(string name, string password), string> SetRegisteredClients()
         {
-            Dictionary<(string name, string password), string> registeredClients = new Dictionary<(string name, string password), string>();
-            if ((savedClientData != null) || savedClientData.Any())
-            {
+            var registeredClients = new Dictionary<(string name, string password), string>();
+            if (savedClientData != null || savedClientData.Any())
                 foreach (var item in savedClientData)
-                {
-                    if(!registeredClients.ContainsKey((item.username, item.password)))
-                    registeredClients.Add((item.username, item.password), item.id);
-                }
-            }
+                    if (!registeredClients.ContainsKey((item.username, item.password)))
+                        registeredClients.Add((item.username, item.password), item.id);
 
             return registeredClients;
         }
@@ -54,31 +50,31 @@ namespace Server
         public void Listen()
         {
             clients = new List<Client>();
-            
+
             //TODO don't know which ip address and port
             listener = new TcpListener(IPAddress.Any, 1330);
-            
+
             listener.Start();
-            listener.BeginAcceptTcpClient(new AsyncCallback(Connect), null);
+            listener.BeginAcceptTcpClient(Connect, null);
             Console.ReadLine();
         }
-        
+
         /*
         * Method that shows the connection to the server
         */
         private void Connect(IAsyncResult ar)
         {
-            TcpClient tcpClient = listener.EndAcceptTcpClient(ar);
-            SessionData cd = new SessionData();
-            ClientCredentials data = new ClientCredentials();
+            var tcpClient = listener.EndAcceptTcpClient(ar);
+            var cd = new SessionData();
+            var data = new ClientCredentials();
             Console.WriteLine($"Client connected from {tcpClient.Client.RemoteEndPoint}");
             clients.Add(new Client(tcpClient));
-            listener.BeginAcceptTcpClient(new AsyncCallback(Connect), null);
+            listener.BeginAcceptTcpClient(Connect, null);
         }
-        
-       /*
-        * Method that removes the client when it disconnects
-        */
+
+        /*
+         * Method that removes the client when it disconnects
+         */
         internal static void Disconnect(Client client)
         {
             if (client == doctorClient)
@@ -87,7 +83,8 @@ namespace Server
             }
             else if (doctorClient != null)
             {
-                byte[] bytes = PackageWrapper.SerializeData("client/disconnect", new { clientId = client.GetId() }, doctorClient.GetEncryptor());
+                var bytes = PackageWrapper.SerializeData("client/disconnect", new {clientId = client.GetId()},
+                    doctorClient.GetEncryptor());
                 doctorClient.GetClientStream().Write(bytes, 0, bytes.Length);
             }
 
@@ -101,12 +98,9 @@ namespace Server
          */
         public static string GenerateId(string name)
         {
-            Random random = new Random();
-            string id = "";
-            for(var i = 0; i < 10; i++)
-            {
-                id += random.Next(0, 9);
-            }
+            var random = new Random();
+            var id = "";
+            for (var i = 0; i < 10; i++) id += random.Next(0, 9);
             return id;
         }
 
@@ -115,9 +109,10 @@ namespace Server
          */
         internal static void Broadcast(string tag, dynamic message)
         {
-            foreach (Client client in clients)
+            foreach (var client in clients)
                 if (client.IsLoggedIn())
-                    SendMessageToSpecificClient(client.GetId(), PackageWrapper.SerializeData(tag, message, client.GetEncryptor()));
+                    SendMessageToSpecificClient(client.GetId(),
+                        PackageWrapper.SerializeData(tag, message, client.GetEncryptor()));
         }
 
         /*
@@ -126,17 +121,15 @@ namespace Server
          */
         internal static bool SendMessageToSpecificClient(string id, byte[] bytes)
         {
-            foreach (Client client in clients)
-            {
+            foreach (var client in clients)
                 if (client.GetId() == id)
                 {
                     client.GetClientStream().Write(bytes, 0, bytes.Length);
                     return true;
                 }
-            }
-            
+
             //No client found with the given id.
-            return false; 
+            return false;
         }
 
         /*
@@ -151,15 +144,13 @@ namespace Server
         internal static bool ActiveSession(string id, out Client targetClient)
         {
             targetClient = null;
-            foreach(Client client in clients)
-            {
-                if(client.GetId() == id)
+            foreach (var client in clients)
+                if (client.GetId() == id)
                 {
                     targetClient = client;
                     return client.IsSessionActive();
                 }
-            }
-            
+
             //No client found with the given id.
             return false;
         }
@@ -178,17 +169,15 @@ namespace Server
          */
         internal static dynamic[] GetSession(string id)
         {
-            List<dynamic> records = new List<dynamic>();
-            foreach(dynamic sd in savedSession)
-            {
+            var records = new List<dynamic>();
+            foreach (dynamic sd in savedSession)
                 if (sd.clientId == id)
                     records.Add(sd);
-            }
             if (records.Count > 0)
                 return records.ToArray();
-            
+
             // return null if no records were found with the given id.
-            return null; 
+            return null;
         }
 
         /*
@@ -196,20 +185,18 @@ namespace Server
          */
         internal static void EmergencyStop()
         {
-            foreach(var client in clients)
-            {
+            foreach (var client in clients)
                 if (client.IsSessionActive())
                 {
                     // Send stop message to client
                     //SendMessageToSpecificClient(client.GetId(), bytes);
-                    byte[] bytes = PackageWrapper.SerializeData("session/stop", new { }, client.GetEncryptor());
+                    var bytes = PackageWrapper.SerializeData("session/stop", new { }, client.GetEncryptor());
                     client.GetClientStream().Write(bytes, 0, bytes.Length);
                     // Save the data
                     SaveSession(client);
                     // End session server side
                     client.SetSession(false);
                 }
-            }
         }
 
         /*
@@ -225,13 +212,9 @@ namespace Server
          */
         internal static Encryptor GetTargetClientEncryptor(string id)
         {
-            foreach(var client in clients)
-            {
-                if(client.GetId() == id)
-                {
+            foreach (var client in clients)
+                if (client.GetId() == id)
                     return client.GetEncryptor();
-                }
-            }
             return null;
         }
 
@@ -239,7 +222,8 @@ namespace Server
         {
             if (doctorClient != null)
             {
-                byte[] bytes = PackageWrapper.SerializeData("doctor/newClient", new { clientId = id, name = name }, doctorClient.GetEncryptor());
+                var bytes = PackageWrapper.SerializeData("doctor/newClient", new {clientId = id, name},
+                    doctorClient.GetEncryptor());
                 doctorClient.GetClientStream().Write(bytes, 0, bytes.Length);
             }
         }
@@ -255,15 +239,17 @@ namespace Server
             byte[] bytes;
             if (tempRecords.Count > 2)
             {
-                dynamic[] nextRecords = { tempRecords[0], tempRecords[1] };
-                bytes = PackageWrapper.SerializeData("doctor/getSessions/fragment", new { records = nextRecords }, doctorClient.GetEncryptor());
+                dynamic[] nextRecords = {tempRecords[0], tempRecords[1]};
+                bytes = PackageWrapper.SerializeData("doctor/getSessions/fragment", new {records = nextRecords},
+                    doctorClient.GetEncryptor());
                 doctorClient.GetClientStream().Write(bytes, 0, bytes.Length);
                 tempRecords.RemoveAt(0);
                 tempRecords.RemoveAt(0);
             }
             else
             {
-                bytes = PackageWrapper.SerializeData("doctor/getSessions/success", new { records = tempRecords }, doctorClient.GetEncryptor());
+                bytes = PackageWrapper.SerializeData("doctor/getSessions/success", new {records = tempRecords},
+                    doctorClient.GetEncryptor());
                 doctorClient.GetClientStream().Write(bytes, 0, bytes.Length);
                 tempRecords.Clear();
             }

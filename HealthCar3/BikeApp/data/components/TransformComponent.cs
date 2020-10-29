@@ -3,22 +3,23 @@
     /*
      * A transform component to be used inside of the VR environment.
      */
-    internal class TransformComponent
+    public class TransformComponent
     {
         public double[] position;
-        public double scale;
         public double[] rotation;
+        public double scale;
 
         /*
          * Initializes the values.
          */
-        public TransformComponent(double posX, double posY, double posZ, double scaling, double rotX, double rotY, double rotZ)
+        public TransformComponent(double posX, double posY, double posZ, double scaling, double rotX, double rotY,
+            double rotZ)
         {
-            position = new [] { posX, posY, posZ };
+            position = new[] {posX, posY, posZ};
             scale = scaling;
-            rotation = new [] { rotX, rotY, rotZ };
+            rotation = new[] {rotX, rotY, rotZ};
         }
-        
+
         public TransformComponent(dynamic pos, double scaling, dynamic rot)
         {
             position = pos;
@@ -38,19 +39,13 @@
 
         public override string ToString()
         {
-            string position = "";
-            string rotation = "";
-            
-            foreach (var pos in GetPos())
-            {
-                position += pos;
-            }
+            var position = "";
+            var rotation = "";
 
-            foreach (var rot in GetRot())
-            {
-                rotation += rot;
-            }
-            
+            foreach (var pos in GetPos()) position += pos;
+
+            foreach (var rot in GetRot()) rotation += rot;
+
             return $"Position: {position}\t Rotation: {rotation}";
         }
     }

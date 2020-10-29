@@ -1,6 +1,6 @@
 ﻿namespace BikeApp.command.scene
 {
-    internal static class Skybox
+    public static class Skybox
     {
         /*
          * A prefix to not repeat the same string over and over.
@@ -12,14 +12,15 @@
          */
         public static dynamic SetTime(int time)
         {
-            dynamic packetData = new { time = time };
+            dynamic packetData = new {time};
             return CommandUtils.Wrap(packetData, Prefix + "settime");
         }
 
         /*
          * This method updates or changes the skybox. For instance update the time to change the skybox to night.
          */
-        public static dynamic Update(string skyboxType, string xPos, string xNeg, string yPos, string yNeg, string zPos, string zNeg)
+        public static dynamic Update(string skyboxType, string xPos, string xNeg, string yPos, string yNeg, string zPos,
+            string zNeg)
         {
             dynamic packetData = new
             {

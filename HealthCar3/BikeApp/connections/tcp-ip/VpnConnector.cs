@@ -14,21 +14,25 @@ namespace BikeApp.connections
     /**
      * Connects to the remote server and manages this connection
      */
-    internal class VpnConnector
+    public class VpnConnector
     {
-        private dynamic jsonData;
-        public CommandCenter CommandCenter { get; set; }
-        private readonly JsonSerializerSettings serializerSettings;
-        private TcpClient client;
-        private readonly MessageParser parser;
-        private NetworkStream stream;
         private const string Address = "145.48.6.10";
         private const int Port = 6666;
-        private string responseId;
-        private int timeoutCounter;
         private const int TimeoutMax = 3;
-        private bool running;
+
+        // Dictionary to keep track of the callbacks
+        private readonly Dictionary<int, Action<JObject>> callbacks = new Dictionary<int, Action<JObject>>();
+        private readonly MessageParser parser;
+        private readonly JsonSerializerSettings serializerSettings;
+        private TcpClient client;
+        private int currentSerial;
+        private dynamic jsonData;
         private Thread listenThread;
+        private string responseId;
+        private bool running;
+        private NetworkStream stream;
+        private int timeoutCounter;
+
         public VpnConnector(JsonSerializerSettings jsonSerializerSettings)
         {
             serializerSettings = jsonSerializerSettings;
@@ -37,7 +41,9 @@ namespace BikeApp.connections
             CommandCenter = new CommandCenter(this);
             parser = new MessageParser(this, CommandCenter);
         }
-        
+
+        public CommandCenter CommandCenter { get; set; }
+
         public void SetConnectorOptions(ConnectorOption co)
         {
             CommandCenter.SetConnectorOption(co);
@@ -54,7 +60,7 @@ namespace BikeApp.connections
                 client = new TcpClient();
                 client.Connect(Address, Port); //attempts to connect to the VPN server.
                 if (!client.Connected) return;
-                Send(new { id = "session/list" });
+                Send(new {id = "session/list"});
                 running = true;
                 listenThread.Start();
             }
@@ -65,13 +71,9 @@ namespace BikeApp.connections
                 if (timeoutCounter < TimeoutMax) //Retries the connection up to the given maximum.
                 {
                     if (client.Connected)
-                    {
                         Console.WriteLine(@"Connection restored. Sending message.");
-                    }
                     else
-                    {
                         Connect();
-                    }
                 }
                 else
                 {
@@ -86,25 +88,27 @@ namespace BikeApp.connections
          */
         public void Send(dynamic command)
         {
-            byte[] bytes = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(command, serializerSettings)); //converts the command to bytes.
+            byte[] bytes =
+                Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(command,
+                    serializerSettings)); //converts the command to bytes.
             try
             {
                 stream = client.GetStream();
-                stream.Write(BitConverter.GetBytes(bytes.Length), 0, 4); //writes the length of the command to the server.
+                stream.Write(BitConverter.GetBytes(bytes.Length), 0,
+                    4); //writes the length of the command to the server.
                 stream.Write(bytes, 0, bytes.Length); //writes the message to the server.
                 responseId = command.id;
-
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 if (!client.Connected)
                 {
-                    Console.WriteLine(@"Connection error. Attempting to reconnect."); //if not connected will attempt to reconnect once before failing.
+                    Console.WriteLine(
+                        @"Connection error. Attempting to reconnect."); //if not connected will attempt to reconnect once before failing.
                     Connect();
                 }
             }
-
         }
 
         /**
@@ -131,7 +135,8 @@ namespace BikeApp.connections
                 var bytes = ReadTotalBytes(byteSize); //read the all the bytes
                 try
                 {
-                    jsonData = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(bytes), serializerSettings); //converts the response bytes to string data.
+                    jsonData = JsonConvert.DeserializeObject(Encoding.ASCII.GetString(bytes),
+                        serializerSettings); //converts the response bytes to string data.
                 }
                 catch (Exception ex)
                 {
@@ -141,9 +146,7 @@ namespace BikeApp.connections
                 {
                     // if init command, no callback
                     if (responseId == "session/list" || responseId == "tunnel/create")
-                    {
                         parser.Parse(responseId, jsonData); //sends the response to the parser.
-                    }
                     else HandleCallBack(jsonData);
                 }
             }
@@ -161,9 +164,6 @@ namespace BikeApp.connections
             stream?.Close();
         }
 
-        // Dictionary to keep track of the callbacks
-        private readonly Dictionary<int, Action<JObject>> callbacks = new Dictionary<int, Action<JObject>>();
-        private int currentSerial;
         public void SendPacket(dynamic data, Action<JObject> callback)
         {
             dynamic packet = new
@@ -190,13 +190,12 @@ namespace BikeApp.connections
         {
             var packetData = data as JObject;
 
-            if (packetData?["data"]?.ToObject<JObject>()?["data"]?.ToObject<JObject>()?["id"]?.ToObject<string>() == "callback")
-            {
-                CommandCenter.AttachCamera();
-            }
+            if (packetData?["data"]?.ToObject<JObject>()?["data"]?.ToObject<JObject>()?["id"]?.ToObject<string>() ==
+                "callback") CommandCenter.AttachCamera();
 
             // Find the matching serial number 
-            var receivedSerial = packetData?["data"]?.ToObject<JObject>()?["data"]?.ToObject<JObject>()?["serial"]?.ToObject<int>();
+            var receivedSerial = packetData?["data"]?.ToObject<JObject>()?["data"]?.ToObject<JObject>()?["serial"]
+                ?.ToObject<int>();
             // Execute the corresponding callback
             if (receivedSerial != null) callbacks[(int) receivedSerial].Invoke(packetData["data"] as JObject);
         }

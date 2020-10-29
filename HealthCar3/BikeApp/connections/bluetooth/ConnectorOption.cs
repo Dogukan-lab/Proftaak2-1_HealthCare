@@ -2,31 +2,8 @@
 
 namespace BikeApp.connections.bluetooth
 {
-    internal class ConnectorOption
+    public class ConnectorOption
     {
-        private float speed;
-        public float Speed
-        {
-            get { return speed;}
-            set { speed = value; }
-        }
-
-        private int heartRate;
-        public int HeartRate
-        {
-            get { return heartRate; }
-            set { heartRate = value; }
-        }
-
-        private float _resistance;
-
-        public float Resistance
-        {
-            get { return _resistance; }
-            set { _resistance = value; }
-        }
-
-
         private readonly ServerConnection sc;
 
         protected ConnectorOption(ServerConnection sc)
@@ -34,26 +11,33 @@ namespace BikeApp.connections.bluetooth
             this.sc = sc;
         }
 
+        public float Speed { get; set; }
+
+        public int HeartRate { get; set; }
+
+        public float Resistance { get; set; }
+
         protected void SetNewSpeed(float newSpeed)
         {
             if (newSpeed == 0xFFFF)
                 return;
 
-            speed = newSpeed;
+            Speed = newSpeed;
             //valueChangeListener.OnSpeedChange(speed);
             // Updates the value
-            sc.UpdateSpeed(speed);
+            sc.UpdateSpeed(Speed);
         }
+
         protected void SetNewHeartRate(int newHeartRate)
         {
             // Updates the value
-            heartRate = newHeartRate;
+            HeartRate = newHeartRate;
             sc.UpdateHeartRate(newHeartRate);
         }
 
         public virtual void WriteResistance(float resistance)
         {
-            _resistance = resistance;
+            Resistance = resistance;
             Console.WriteLine($@"Write {resistance}%");
         }
     }

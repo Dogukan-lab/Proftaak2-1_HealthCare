@@ -10,15 +10,12 @@ using Newtonsoft.Json.Linq;
 
 namespace BikeApp.vr_environment
 {
-    internal class CommandCenter
+    public class CommandCenter
     {
-        private string panelUuid;
         private string bikeUuid;
-        private VpnConnector connector;
+        private readonly VpnConnector connector;
+        private string panelUuid;
         private ConnectorOption updateValues;
-        public bool Running { get; set; }
-        public Task UpdateThread { get; set; }
-        public string ChatMsg { get; set; } = "";
 
 
         /*
@@ -30,6 +27,10 @@ namespace BikeApp.vr_environment
             panelUuid = "";
             bikeUuid = "";
         }
+
+        public bool Running { get; set; }
+        public Task UpdateThread { get; set; }
+        public string ChatMsg { get; set; } = "";
 
         public void SetConnectorOption(ConnectorOption connectorOption)
         {
@@ -91,6 +92,26 @@ namespace BikeApp.vr_environment
             UpdateThread = new Task(Update);
             UpdateThread.Start();
         }
+
+        #region Kinda useful code
+
+        /*
+         * This method is used to spawn in models such as: bikes, trees and/or cars.
+         */
+        private void CreateObject(string desiredModel, string modelObject)
+        {
+            connector.SendPacket(
+                Node.AddModel(desiredModel, "",
+                    new TransformComponent(2, 2, 2, 1, 0, 0, 0),
+                    new ModelComponent(GetModelObjects(modelObject), true, false, "")),
+                new Action<JObject>(parentData =>
+                {
+                    var uuid = parentData["data"]?["data"]?["uuid"]?.ToString();
+                    CreatePanel(uuid);
+                }));
+        }
+
+        #endregion
 
         #region Updatables
 
@@ -218,19 +239,11 @@ namespace BikeApp.vr_environment
 
             //Initializes the heightmap for the scene
             for (var i = 0; i < 256; i++)
-            {
-                for (var j = 0; j < 256; j++)
-                {
-                    if ((i == 0 || i == 255) || (j == 0 || j == 255))
-                    {
-                        heightMap[(i * 255) + j] = 0;
-                    }
-                    else
-                    {
-                        heightMap[(i * 255) + j] = random.NextDouble() / 8;
-                    }
-                }
-            }
+            for (var j = 0; j < 256; j++)
+                if (i == 0 || i == 255 || j == 0 || j == 255)
+                    heightMap[i * 255 + j] = 0;
+                else
+                    heightMap[i * 255 + j] = random.NextDouble() / 8;
 
             return heightMap;
         }
@@ -266,8 +279,7 @@ namespace BikeApp.vr_environment
         {
             var random = new Random();
             for (var i = 0; i < 100; i++)
-            {
-                connector.SendPacket(Node.AddModel(("Tree" + i),
+                connector.SendPacket(Node.AddModel("Tree" + i,
                         "", new TransformComponent(random.NextDouble() * 100, 0, random.NextDouble() * 100, 1, 0, 0, 0),
                         new ModelComponent(GetModelObjects("trees/fantasy/tree6.obj"), false, false, "")),
                     new Action<JObject>(data =>
@@ -277,7 +289,6 @@ namespace BikeApp.vr_environment
                             Node.AddLayer(uuid, GetModelObjects("trees/fantasy/Tree_10_Tree.png"), "", 0, 10, 0.2),
                             new Action<JObject>(treeData => { }));
                     }));
-            }
         }
 
         #endregion
@@ -366,7 +377,8 @@ namespace BikeApp.vr_environment
         private void DrawValues(string uuid, double speed, double heartRate, double resistance, string chatMsg)
         {
             connector.SendPacket(Panel.DrawText(uuid,
-                    $"Current speed: {String.Format("{0:0.00}", speed)}m/s", new[] {0, 100}, 32, new[] {0, 0, 0, 1}, "Arial"),
+                    $"Current speed: {string.Format("{0:0.00}", speed)}m/s", new[] {0, 100}, 32, new[] {0, 0, 0, 1},
+                    "Arial"),
                 new Action<JObject>(data =>
                 {
                     connector.SendPacket(Panel.DrawText(uuid, $"Heart rate: {heartRate}bpm",
@@ -377,36 +389,17 @@ namespace BikeApp.vr_environment
                                 new[] {0, 300}, 32, new[] {0, 0, 0, 1}, "Arial"),
                             new Action<JObject>(e =>
                             {
-                                connector.SendPacket(Panel.DrawText(uuid, $"MSG from Doctor: {ChatMsg}",new[] {0, 400}, 32, new[] {0, 0, 0, 1}, "Arial"),
-                                    new Action<JObject>( chatData =>
+                                connector.SendPacket(
+                                    Panel.DrawText(uuid, $"MSG from Doctor: {ChatMsg}", new[] {0, 400}, 32,
+                                        new[] {0, 0, 0, 1}, "Arial"),
+                                    new Action<JObject>(chatData =>
                                     {
                                         connector.SendPacket(Panel.Swap(uuid),
                                             new Action<JObject>(
-                                                o => 
-                                                { }));
+                                                o => { }));
                                     }));
                             }));
                     }));
-                }));
-        }
-
-        #endregion
-
-        #region Kinda useful code
-
-        /*
-         * This method is used to spawn in models such as: bikes, trees and/or cars.
-         */
-        private void CreateObject(string desiredModel, string modelObject)
-        {
-            connector.SendPacket(
-                Node.AddModel(desiredModel, "",
-                    new TransformComponent(2, 2, 2, 1, 0, 0, 0),
-                    new ModelComponent(GetModelObjects(modelObject), true, false, "")),
-                new Action<JObject>(parentData =>
-                {
-                    var uuid = parentData["data"]?["data"]?["uuid"]?.ToString();
-                    CreatePanel(uuid);
                 }));
         }
 
