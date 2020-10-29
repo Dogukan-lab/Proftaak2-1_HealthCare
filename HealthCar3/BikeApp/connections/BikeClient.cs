@@ -25,7 +25,7 @@ namespace BikeApp.connections
 
                 switch (mainWindow.LoginKind)
                 {
-                    case ClientApplication.LoginEnum.Login:
+                    case LoginEnum.Login:
                         if (mainWindow.BluetoothEnabled())
                         {
                             serverCon.LoginToServer(mainWindow.Username, mainWindow.Password);
@@ -43,9 +43,8 @@ namespace BikeApp.connections
                             simForm = new SimForm();
                             connector = new Simulator(serverCon, simForm);
                         }
-
                         break;
-                    case ClientApplication.LoginEnum.Register:
+                    case LoginEnum.Register:
                         if (mainWindow.BluetoothEnabled())
                         {
                             serverCon.RegisterToServer(mainWindow.Username, mainWindow.Password);
@@ -63,7 +62,6 @@ namespace BikeApp.connections
                             simForm = new SimForm();
                             connector = new Simulator(serverCon, simForm);
                         }
-
                         break;
                 }
             }
@@ -81,7 +79,7 @@ namespace BikeApp.connections
             else
             {
                 Thread.Sleep(4000);
-                Console.ReadLine();
+                Console.Read();
             }
         }
     }
