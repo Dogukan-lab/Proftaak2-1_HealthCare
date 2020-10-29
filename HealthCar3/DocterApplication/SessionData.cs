@@ -9,28 +9,28 @@ namespace DocterApplication
     {
         public SessionData(dynamic data)
         {
-            clientId = data.clientId;
-            name = data.name;
-            sessionStart = data.sessionStart;
-            sessionEnd = data.sessionEnd;
-            maxHeartRate = data.maxHeartRate;
-            maxSpeed = data.maxSpeed;
-            averageSpeed = data.averageSpeed;
-            averageHeartRate = data.averageHeartRate;
-            maxResistance = data.maxResistance;
-            lastResistance = data.lastResistance;
+            ClientId = data.ClientId;
+            Name = data.Name;
+            SessionStart = data.SessionStart;
+            SessionEnd = data.SessionEnd;
+            MaxHeartRate = data.MaxHeartRate;
+            MaxSpeed = data.MaxSpeed;
+            AverageSpeed = data.AverageSpeed;
+            AverageHeartRate = data.AverageHeartRate;
+            MaxResistance = data.MaxResistance;
+            LastResistance = data.LastResistance;
         }
 
-        public string clientId { get; set; }
-        public string name { get; set; }
-        public DateTime sessionStart { get; set; }
-        public DateTime sessionEnd { get; set; }
-        public int maxHeartRate { get; set; }
-        public int maxSpeed { get; set; }
-        public int averageSpeed { get; set; }
-        public int averageHeartRate { get; set; }
-        public int maxResistance { get; set; }
-        public int lastResistance { get; set; }
+        public string ClientId { get; set; }
+        public string Name { get; set; }
+        public DateTime SessionStart { get; set; }
+        public DateTime SessionEnd { get; set; }
+        public int MaxHeartRate { get; set; }
+        public int MaxSpeed { get; set; }
+        public int AverageSpeed { get; set; }
+        public int AverageHeartRate { get; set; }
+        public int MaxResistance { get; set; }
+        public int LastResistance { get; set; }
 
         /*
          * Puts all the data of the session into a dynamic and returns it.
@@ -39,16 +39,16 @@ namespace DocterApplication
         {
             return new
             {
-                clientId,
-                name,
-                sessionStart,
-                sessionEnd,
-                maxHeartRate,
-                maxSpeed,
-                averageHeartRate,
-                averageSpeed,
-                maxResistance,
-                lastResistance
+                clientId = ClientId,
+                name = Name,
+                sessionStart = SessionStart,
+                sessionEnd = SessionEnd,
+                maxHeartRate = MaxHeartRate,
+                maxSpeed = MaxSpeed,
+                averageHeartRate = AverageHeartRate,
+                averageSpeed = AverageSpeed,
+                maxResistance = MaxResistance,
+                lastResistance = LastResistance
             };
         }
     }

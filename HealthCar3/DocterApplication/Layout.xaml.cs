@@ -359,7 +359,7 @@ namespace DocterApplication
             {
                 var alreadyAdded = false;
                 foreach (var client in addedClients)
-                    if (client.clientId == rec.clientId)
+                    if (client.ClientId == rec.ClientId)
                     {
                         alreadyAdded = true;
                         break;
@@ -370,7 +370,7 @@ namespace DocterApplication
 
             var clients = new List<string>();
             foreach (var client in addedClients)
-                clients.Add(client.name + "\t\t" + client.clientId);
+                clients.Add(client.Name + "\t\t" + client.ClientId);
 
             ((ListBox) historyUserControl.FindName("ClientListBox")).ItemsSource = clients;
             historyUserControl.Records = records;

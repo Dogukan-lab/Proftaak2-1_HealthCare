@@ -34,8 +34,8 @@ namespace DocterApplication
         {
             var personalRecords = new List<string>();
             foreach (var record in Records)
-                if (record.clientId == clientId)
-                    personalRecords.Add($"{record.sessionStart:dd/MM/yy H:mm:ss}");
+                if (record.ClientId == clientId)
+                    personalRecords.Add($"{record.SessionStart:dd/MM/yy H:mm:ss}");
 
             ClientRecordsComboBox.ItemsSource = personalRecords;
         }
@@ -52,7 +52,7 @@ namespace DocterApplication
         {
             SessionData selectedRecord = null;
             foreach (var record in Records)
-                if ($"{record.sessionStart:dd/MM/yy H:mm:ss}" == startDateTime)
+                if ($"{record.SessionStart:dd/MM/yy H:mm:ss}" == startDateTime)
                 {
                     selectedRecord = record;
                     break;
@@ -60,13 +60,13 @@ namespace DocterApplication
 
             Dispatcher.Invoke(delegate
             {
-                HeartrateLabel.Content = $"{selectedRecord.maxHeartRate} BPM";
-                HeartrateAverageLabel.Content = $"{selectedRecord.averageHeartRate} BPM";
-                SpeedLabel.Content = $"{selectedRecord.maxSpeed} m/s";
-                SpeedAverageLabel.Content = $"{selectedRecord.averageSpeed} m/s";
-                ResistanceLabel.Content = $"{selectedRecord.maxResistance}%";
-                StartDateLabel.Content = $"{selectedRecord.sessionStart:H:mm:ss}";
-                StopDateLabel.Content = $"{selectedRecord.sessionEnd:H:mm:ss}";
+                HeartrateLabel.Content = $"{selectedRecord.MaxHeartRate} BPM";
+                HeartrateAverageLabel.Content = $"{selectedRecord.AverageHeartRate} BPM";
+                SpeedLabel.Content = $"{selectedRecord.MaxSpeed} m/s";
+                SpeedAverageLabel.Content = $"{selectedRecord.AverageSpeed} m/s";
+                ResistanceLabel.Content = $"{selectedRecord.MaxResistance}%";
+                StartDateLabel.Content = $"{selectedRecord.SessionStart:H:mm:ss}";
+                StopDateLabel.Content = $"{selectedRecord.SessionEnd:H:mm:ss}";
             });
         }
     }

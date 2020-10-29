@@ -84,6 +84,5 @@ namespace Server
                 lastResistance = LastResistance
             };
         }
-
     }
 }
