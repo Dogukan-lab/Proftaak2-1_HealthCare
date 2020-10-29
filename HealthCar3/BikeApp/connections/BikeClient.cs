@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Windows.Forms;
 using BikeApp.connections.bluetooth;
 using BikeApp.vr_environment;
@@ -80,6 +81,7 @@ namespace BikeApp.connections
             else
             {
                 Thread.Sleep(4000);
+                Console.ReadLine();
             }
         }
     }

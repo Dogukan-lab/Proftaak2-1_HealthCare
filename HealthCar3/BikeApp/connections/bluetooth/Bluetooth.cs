@@ -16,8 +16,9 @@ namespace BikeApp.connections.bluetooth
             BleHeart = new BLE();
 
             // Connect to the devices
-            var connectionTask = ConnectToDevices(bikeId, heartMonitorId);
-            connectionTask.Start();
+            //var connectionTask = ConnectToDevices(bikeId, heartMonitorId);
+            //connectionTask.Start();
+            Task.Run(() => ConnectToDevices(bikeId, heartMonitorId));
         }
 
         private BLE BleBike { get; }
