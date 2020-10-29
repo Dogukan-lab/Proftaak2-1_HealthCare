@@ -284,8 +284,8 @@
                        Name="ResistanceBox6" Height="35" VerticalAlignment="Top" />
             </Grid>
         </Grid>
-        <TextBox Height="40" Text="Text to broadcast to all connected clients" TextAlignment="Center"
-                 TextWrapping="Wrap" Margin="170,5,170,5" Grid.Row="1" Grid.ColumnSpan="3" Name="BroadcastBox" />
+        <TextBox Height="40" TextAlignment="Center"
+                 TextWrapping="Wrap" Margin="170,5,170,5" Grid.Row="1" Grid.ColumnSpan="3" Name="BroadcastBox" TextChanged="BroadcastBox_TextChanged" />
         <Button Width="140" Height="40" Content="Broadcast" Grid.Column="2" Margin="180,5,20,5" Grid.Row="1"
                 Click="Broadcast_Click" />
     </Grid>
